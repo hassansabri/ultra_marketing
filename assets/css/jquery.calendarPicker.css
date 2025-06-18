@@ -1,0 +1,119 @@
+.calBox {
+    /*  background-color: #928d81;*/
+    padding: 2px;
+    -moz-border-radius: 4px;
+    text-align: center;
+    color: #000;
+}
+
+.calElement {
+    margin: 1px;
+    display: inline-block;
+    overflow:hidden;
+}
+
+.calYear {
+    font-size: 20px;
+    /*border-bottom: 1px dashed #666;*/
+    padding-bottom: 5px;
+    margin-bottom: 5px
+}
+
+.calYear .calElement {
+    border: 1px solid #999999;
+}
+
+.calMonth {
+    /*border-bottom: 1px dashed #666;*/
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.calMonth .calElement {
+    font-size: 14px;
+    border: 1px solid #999999;
+}
+
+.calDay {
+}
+
+.calDay .calElement {
+    font-size: 12px;
+    border: 1px solid #999999;
+}
+
+.calDay .calElement.prev {
+    background: transparent url(images/prev.png) no-repeat 0 18px !important;
+    width: 12px;
+height: 48px;
+}
+
+.calDay .calElement.next {
+    background: transparent url(images/next.png) no-repeat 0 18px !important;
+   width: 12px;
+height: 48px;
+}
+
+span.calElement.next:hover, span.calElement.prev:hover {
+    border: 1px solid #999999;
+    cursor: pointer;
+}
+
+.calDay .calElement .dayNumber {
+    font-size: 20px;
+}
+
+
+.calElement.selected {
+    /*background-color: #404040;*/
+    border: 1px solid #404040;
+    -moz-border-radius: 3px
+}
+
+span.calElement:hover {
+    /*background-color: #404040;*/
+    border: 1px solid #404040;
+    -moz-border-radius: 3px;
+    cursor: pointer;
+}
+
+.todays {
+    border: 2px solid #739e73 !important;
+    -moz-border-radius: 3px
+}
+
+.myclas{
+    /*padding: 0 20px;*/
+    margin: 0px;
+    width: 46px;
+    min-height: 50px;
+}
+.mystaric{
+    line-height: 48px;
+    vertical-align: middle;
+}
+.companies{
+    text-align: left;font-weight: bold;font-size: 14px;margin-bottom: 10px;border-bottom: 1px solid black;padding: 0 0 11px 13px;
+}
+.mystaricparent{
+    background: transparent none repeat scroll 0% 0%; 
+}
+.norecord{
+    margin-bottom: 5px;
+}
+.norecordchild{
+    line-height: 45px;text-align: center
+}
+.sidebars{
+    font-size: 12px;text-align: left;padding-top: 10px;
+}
+.innerdvs{
+    margin-bottom: 5px;
+}
+.gbgc{
+    background-color: #739e73;
+    color: #ffffff;
+}
+.modal-header .close {
+    margin-top: -27px;
+}

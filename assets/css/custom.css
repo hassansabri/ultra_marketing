@@ -1,0 +1,13 @@
+#logo{
+    width: 200px;
+}
+.custompdding{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+}
+    .modal-dialog {
+        width: 100%;
+        
+    }
+.select2-container{width: 100% !important;}
