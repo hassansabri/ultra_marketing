@@ -11,33 +11,40 @@
  *
  * @author Hassan
  */
-class m_attributes extends CI_Model {
+class m_brands extends CI_Model {
 
     //put your code here
     public function __construct() {
         parent::__construct();
     }
-    public function getbrands($status=false){
-        if($status){
-            $this->db->where('status',$status);
-        }
+     public function changestatus($brand_id = false, $data = false) {
+        $this->db->where('brand_id', $brand_id);
+        $this->db->update('brands', $data);
+        $afftectedRows = $this->db->affected_rows();
+        return $afftectedRows;
+    }
+    public function getallbrands(){
         $query = $this->db->get("brands");
             return $query->result_array();
     }
-    
-    public function getitembrands($item_id){
+    public function adddbrand($data){
+
+    $this->db->insert('brands',$data);
+         }
+    public function getbranddetail($brand_id){
         $this->db->where('status',1);
-        $this->db->where('item_fk',$item_id);
-         $this->db->where('item_type','brand');
-        $query = $this->db->get("items_attributes");
+        $this->db->where('brand_id',$brand_id);
+        $query = $this->db->get("brands");
       
             return $query->result_array();
     }
+public function updatebrand($data,$brand_id){
+  $this->db->where("brand_id", $brand_id);
+        $query = $this->db->update("brands",$data); 
 
-     public function getgrades($status=false){
-       if($status){
-            $this->db->where('status',$status);
-        }
+  }
+     public function getgrades(){
+       
         $query = $this->db->get("grades");
             return $query->result_array();
     }
@@ -49,10 +56,7 @@ class m_attributes extends CI_Model {
          $query = $this->db->get("items_attributes");
             return $query->result_array();
     }
-     public function getmodels($status=false){
-        if($status){
-            $this->db->where('status',$status);
-        }
+     public function getmodels(){
         $query = $this->db->get("models");
             return $query->result_array();
     }
@@ -64,10 +68,8 @@ class m_attributes extends CI_Model {
          $query = $this->db->get("items_attributes");
             return $query->result_array();
     }
-     public function getsizes($status=false){
-        if($status){
-            $this->db->where('status',$status);
-        }
+     public function getsizes(){
+        
         $query = $this->db->get("sizes");
        
         return $query->result_array();
@@ -81,10 +83,7 @@ class m_attributes extends CI_Model {
         return $query->result_array();
     }
 
-     public function gettypes($status=false){
-        if($status){
-            $this->db->where('status',$status);
-        }
+     public function gettypes(){
         $query = $this->db->get("types");
             return $query->result_array();
     }

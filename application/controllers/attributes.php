@@ -58,19 +58,19 @@ for($i=0; $i<sizeof($data); $i++){
     }
     public function add_new_attribute(){
         $this->data['itemid'] = $itemid= $this->input->post('item_id');
-       $this->data["all_brands"] = $this->model_attributes->getbrands();
+       $this->data["all_brands"] = $this->model_attributes->getbrands('1');
        $this->data['get_item_brands']=$this->model_attributes->getitembrands($itemid);
 
-       $this->data["all_grades"] = $this->model_attributes->getgrades();
+       $this->data["all_grades"] = $this->model_attributes->getgrades('1');
        $this->data['get_item_grades']=$this->model_attributes->getitemgrades($itemid);
 
-       $this->data["all_models"] = $this->model_attributes->getmodels();
+       $this->data["all_models"] = $this->model_attributes->getmodels('1');
        $this->data['get_item_models']=$this->model_attributes->getitemmodels($itemid);
 
-       $this->data["all_sizes"] = $this->model_attributes->getsizes();
+       $this->data["all_sizes"] = $this->model_attributes->getsizes('1');
        $this->data['get_item_sizes'] = $this->model_attributes->getitemsizes($itemid);
 
-       $this->data["all_types"] = $this->model_attributes->gettypes();
+       $this->data["all_types"] = $this->model_attributes->gettypes('1');
        $this->data['get_item_types'] = $this->model_attributes->getitemtypes($itemid);
 
       

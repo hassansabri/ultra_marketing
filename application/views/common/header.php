@@ -228,6 +228,19 @@
                                 </li>
                             </ul>	
                         </li> 
+                    <?php } ?>
+                     <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Brands</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/brands" title=""><span class="menu-item-parent">All Brands</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/brands/addbrand" title=""><span class="menu-item-parent">Add new Brand</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
                     <?php } ?> 
                 </ul>
             </nav>

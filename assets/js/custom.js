@@ -230,6 +230,32 @@ var attributes={
 }
     
 };
+var brands={
+    init:function(){
+         $(document).on("change", ".changestatusbrand", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var brandid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/brands/changestatus',
+                data: "brand_id=" + brandid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    }
+};
 var items={
     init:function () {
               $(document).on("change", ".changestatusitems", function () {
