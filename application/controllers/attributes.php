@@ -6,12 +6,8 @@
  *  @property m_attributes $model_attributs
 * @property CI_Session $session
  * @property CI_Input $input
-<<<<<<< HEAD
- 
- */
-=======
+
                           */
->>>>>>> 6e0fdaa5844bcff65ccb8beb234ef2b5df91eb99
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates

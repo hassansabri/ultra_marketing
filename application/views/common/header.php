@@ -242,6 +242,58 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Models</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/models" title=""><span class="menu-item-parent">All Models</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/models/addmodel" title=""><span class="menu-item-parent">Add new Model</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?> 
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Grades</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/grades" title=""><span class="menu-item-parent">All Grades</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/grades/addgrade" title=""><span class="menu-item-parent">Add new grade</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?>
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Sizes</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/sizes" title=""><span class="menu-item-parent">All Sizes</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/sizes/addsize" title=""><span class="menu-item-parent">Add new size</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?>
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Types</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/types" title=""><span class="menu-item-parent">All Types</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/types/addtype" title=""><span class="menu-item-parent">Add new type</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?> 
                 </ul>
             </nav>
             <span class="minifyme" data-action="minifyMenu"> 

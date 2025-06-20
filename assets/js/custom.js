@@ -230,6 +230,112 @@ var attributes={
 }
     
 };
+var sizes={
+init:function(){
+         $(document).on("change", ".changestatussize", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var sizeid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/sizes/changestatus',
+                data: "size_id=" + sizeid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    } 
+
+};
+var types={
+init:function(){
+         $(document).on("change", ".changestatustype", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var typeid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/types/changestatus',
+                data: "type_id=" + typeid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    } 
+
+};
+var grades={
+   init:function(){
+         $(document).on("change", ".changestatusgrade", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var gradeid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/grades/changestatus',
+                data: "grade_id=" + gradeid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    } 
+};
+var models={
+   init:function(){
+         $(document).on("change", ".changestatusmodel", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var modelid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/models/changestatus',
+                data: "model_id=" + modelid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    } 
+};
 var brands={
     init:function(){
          $(document).on("change", ".changestatusbrand", function () {

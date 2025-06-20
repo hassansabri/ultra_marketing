@@ -45,6 +45,8 @@
          public function editbrand($brand_id=false){
             $this->data["update"]  = "no";
              $this->data["brand_detail"] =      $this->model_brand->getbranddetail($brand_id);
+            //  print_r($this->data["brand_detail"]);
+            //  exit;
                $this->load->view('brands/editbrand', $this->data);
          }
          public function updatebrand($brand_id=false){
