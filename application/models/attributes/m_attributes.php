@@ -80,7 +80,21 @@ class m_attributes extends CI_Model {
        
         return $query->result_array();
     }
+    public function getcolours($status=false){
+        if($status){
+            $this->db->where('status',$status);
+        }
+        $query = $this->db->get("colours");
+            return $query->result_array();
+    }
 
+     public function getitemcolours($item_id){
+         $this->db->where('status',1);
+        $this->db->where('item_fk',$item_id);
+        $this->db->where('item_type','colour');
+        $query = $this->db->get("items_attributes");
+            return $query->result_array();
+    } 
      public function gettypes($status=false){
         if($status){
             $this->db->where('status',$status);

@@ -6,6 +6,7 @@
                                     $models_attribute_fk=array();
                                     $sizes_attribute_fk=array();
                                     $types_attribute_fk=array();
+                                    $colours_attribute_fk=array();
                                     foreach($get_item_brands as $value){
                                         $brands_attribute_fk[] = $value['attribute_fk'];
                                          
@@ -22,6 +23,9 @@
                                     }
                                     foreach($get_item_types as $value){
                                         $types_attribute_fk[] = $value['attribute_fk'];
+                                    }
+                                    foreach($get_item_colours as $value){
+                                        $colours_attribute_fk[] = $value['attribute_fk'];
                                     }
                                  //    print_r($brands_attribute_fk);
                                      ?>
@@ -77,6 +81,17 @@
                                                 <?php if ($all_types) { ?>
                                                     <?php foreach ($all_types as $value) { ?>
                                                         <option  value="<?php echo $value["type_id"]; ?>" <?php if( in_array( $value['type_id'],$types_attribute_fk ) ){ ?> selected <?php } ?>  ><?php echo $value["type_title"]; ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 custompdding sect2" >
+                                            <label>select Colour</label>
+                                            <select class="form-control js-example-basic-multiple select2" multiple name="type_id[]" id="type_id">
+                                                
+                                                <?php if ($all_colours) { ?>
+                                                    <?php foreach ($all_colours as $value) { ?>
+                                                        <option  value="<?php echo $value["colour_id"]; ?>" <?php if( in_array( $value['colour_id'],$colours_attribute_fk ) ){ ?> selected <?php } ?>  ><?php echo $value["colour_title"]; ?></option>
                                                     <?php } ?>
                                                 <?php } ?>
                                             </select>

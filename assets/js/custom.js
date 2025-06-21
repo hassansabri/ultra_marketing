@@ -257,8 +257,8 @@ init:function(){
     } 
 
 };
-var types={
-init:function(){
+var colours={
+    init:function(){
          $(document).on("change", ".changestatustype", function () {
             var status;
 
@@ -275,6 +275,32 @@ init:function(){
                 type: "POST",
                 url: baseurl + '/types/changestatus',
                 data: "type_id=" + typeid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    }
+};
+var colours={
+init:function(){
+         $(document).on("change", ".changestatuscolour", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var colourid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/colours/changestatus',
+                data: "colour_id=" + colourid + "&status=" + status,
                 success: function (response)
                 {
                     $.LoadingOverlay("hide");

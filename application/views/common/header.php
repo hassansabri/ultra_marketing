@@ -293,6 +293,19 @@
                                 </li>
                             </ul>	
                         </li> 
+                    <?php } ?>
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Colours</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/colours" title=""><span class="menu-item-parent">All Colours</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/colours/addcolour" title=""><span class="menu-item-parent">Add new colour</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
                     <?php } ?> 
                 </ul>
             </nav>
