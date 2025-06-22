@@ -306,6 +306,16 @@
                                 </li>
                             </ul>	
                         </li> 
+                    <?php } ?>
+                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                        <li class="">      
+                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Stock</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/stocks" title=""><span class="menu-item-parent">All Stocks</span></a>
+                                </li> 
+                            </ul>	
+                        </li> 
                     <?php } ?> 
                 </ul>
             </nav>

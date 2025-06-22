@@ -11,3 +11,24 @@
         
     }
 .select2-container{width: 100% !important;}
+.main-div{
+      height: auto;
+  border-bottom: 1px solid black;
+  padding: 0px;
+  text-align: center;
+  font-weight: bold;
+}
+.sub-div{
+      background-color: #000;
+  color: #fff;
+  padding: 10px;
+  font-size: 15px;
+  margin:1px;
+}
+.values{
+      margin-bottom: 10px;
+  border-bottom: 1px dotted #000;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+}

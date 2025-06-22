@@ -283,6 +283,25 @@ var colours={
         });
     }
 };
+var stock ={
+    init:function(){
+         $(document).on("change", ".items", function () {
+            $('#stock').html('');
+            var item_id = $(this).val();
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/stocks/getallstock',
+                data: "item_id=" + item_id,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                    $('#stock').html(response);
+                }
+            });
+        });
+    } 
+};
 var colours={
 init:function(){
          $(document).on("change", ".changestatuscolour", function () {
