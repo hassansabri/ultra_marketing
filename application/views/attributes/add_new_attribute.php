@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="col-md-2 custompdding sect2" >
                                             <label>select Colour</label>
-                                            <select class="form-control js-example-basic-multiple select2" multiple name="type_id[]" id="type_id">
+                                            <select class="form-control js-example-basic-multiple select2" multiple name="colour_id[]" id="colour_id">
                                                 
                                                 <?php if ($all_colours) { ?>
                                                     <?php foreach ($all_colours as $value) { ?>

@@ -55,7 +55,7 @@
                                             
                                         <div>
                                             <select id="items" name="items" class="items form-control">
-                                                <option value="0">Please Select</option>
+                                                <option value="0">Please Select Item</option>
                                             <?php 
                                             foreach($all_items as $value){?>
 <option value="<?php echo $value['item_id']; ?>"><?php echo $value['item_name']; ?></option>
