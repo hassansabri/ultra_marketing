@@ -165,7 +165,6 @@
                 </span>
             </div>
             <!-- end user info -->
-            <?php $user_type = $this->session->userdata('user_type'); ?>
             <!-- NAVIGATION : This navigation is also responsive-->
             <nav>
                 <!-- 
@@ -176,7 +175,7 @@
                
                 <ul>                     
                     <!-- 2 is for users management-->
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">manage all users</span></a>
                             <ul>
@@ -190,7 +189,7 @@
                         </li> 
                     <?php } ?> 
 
-                       <?php  if ($this->session->userdata('access') != ''){ ?>
+                       <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">manage all Shops</span></a>
                             <ul>
@@ -203,7 +202,7 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
-                     <?php  if ($this->session->userdata('access') != ''){ ?>
+                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Categories</span></a>
                             <ul>
@@ -216,7 +215,7 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
-                 <?php  if ($this->session->userdata('access') != ''){ ?>
+                 <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Items</span></a>
                             <ul>
@@ -229,7 +228,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                     <?php  if ($this->session->userdata('access') != ''){ ?>
+                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Brands</span></a>
                             <ul>
@@ -242,7 +241,7 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Models</span></a>
                             <ul>
@@ -255,7 +254,7 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Grades</span></a>
                             <ul>
@@ -268,7 +267,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Sizes</span></a>
                             <ul>
@@ -281,7 +280,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Types</span></a>
                             <ul>
@@ -294,7 +293,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Colours</span></a>
                             <ul>
@@ -307,7 +306,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                    <?php  if ($this->session->userdata('access') != ''){ ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Stock</span></a>
                             <ul>

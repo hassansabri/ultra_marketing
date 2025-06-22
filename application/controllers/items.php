@@ -23,6 +23,7 @@
     //put your code here
         public function __construct() {
             parent::__construct();
+            if (!$this->session->userdata('logged_in'))redirect('login');
             $this->load->model("items/m_items", "model_item");
               $this->load->model("categories/m_categories", "model_category");
 

@@ -8,7 +8,7 @@
 class login extends CI_Controller{
     public function __construct() {
         parent::__construct();
-       
+       if ($this->session->userdata('logged_in'))redirect('login');
         $this->load->model("users/m_login", "model_login");
         $this->load->model("users/m_users", "model_users");
     }
@@ -56,9 +56,8 @@ class login extends CI_Controller{
                         'email' => $reutn["email"],
                         'uid' => $reutn["users_id"],
                         'user_type' => $reutn["user_type"],
-                         'access' => $access_rights,
                         'logged_in' => TRUE,
-                        'website' => 'survey'
+                        'website' => 'ultra_marketing'
                     );
             
                     $this->session->set_userdata($newdata);

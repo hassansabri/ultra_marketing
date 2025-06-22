@@ -25,10 +25,11 @@
     //put your code here
         public function __construct() {
             parent::__construct();
+            if (!$this->session->userdata('logged_in'))redirect('login');
             $this->load->model("categories/m_categories", "model_category");
                $this->load->model("attributes/m_attributes", "model_attributes");
-
-    }    
+        }
+    
     public function index() {
  
       
