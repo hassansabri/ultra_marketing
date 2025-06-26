@@ -284,6 +284,108 @@ var colours={
     }
 };
 var stock ={
+    showstocklogs:function(){
+var item_id = $('#items').val();
+            var brand_id = $('#brand-aj').attr('attid');
+            if(!brand_id){brand_id=0}
+            var grade_id = $('#grade-aj').attr('attid');
+            if(!grade_id){grade_id=0}
+            var model_id = $('#model-aj').attr('attid');
+            if(!model_id){model_id=0}
+            var size_id = $('#size-aj').attr('attid');
+            if(!size_id){size_id=0}
+            var type_id = $('#type-aj').attr('attid');
+            if(!type_id){type_id=0}
+            var colour_id = $('#colour-aj').attr('attid');
+            if(!colour_id){colour_id=0}
+            var unit_id = $('#unit-aj').attr('attid');
+            if(!unit_id){unit_id=0}
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/stocks/getlogs',
+                data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id,
+                success: function (response)
+                {
+                    // $.LoadingOverlay("hide");
+                    var obj = JSON.parse(response);
+                //    $('#balance').val(obj);
+                //    alert(obj);
+
+
+                }
+            });
+    },
+    add:function(){
+ var item_id = $('#items').val();
+            var brand_id = $('#brand-aj').attr('attid');
+            if(!brand_id){brand_id=0}
+            var grade_id = $('#grade-aj').attr('attid');
+            if(!grade_id){grade_id=0}
+            var model_id = $('#model-aj').attr('attid');
+            if(!model_id){model_id=0}
+            var size_id = $('#size-aj').attr('attid');
+            if(!size_id){size_id=0}
+            var type_id = $('#type-aj').attr('attid');
+            if(!type_id){type_id=0}
+            var colour_id = $('#colour-aj').attr('attid');
+            if(!colour_id){colour_id=0}
+            var unit_id = $('#unit-aj').attr('attid');
+            if(!unit_id){unit_id=0}
+            var entry_date = $('#entry_date').val();
+            var stock_type = $('#stock_type').val();
+            var balance = $('#balance').val();
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/stocks/addstock',
+                data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id+'&entry_date='+ entry_date+'&stock_type='+stock_type+'&balance='+balance,
+                success: function (response)
+                {
+             $('#entry_date').val('');
+             $('#stock_type').val(0);
+            $('#balance').val('');
+                    // $.LoadingOverlay("hide");
+                    // var obj = JSON.parse(response);
+                    // alert(obj);
+                //    $('#balance').val(obj);
+
+
+                }
+            });
+    },
+    check:function(){
+    // $('#stock').html('');
+    // $.LoadingOverlay("show");
+
+            var item_id = $('#items').val();
+            var brand_id = $('#brand-aj').attr('attid');
+            if(!brand_id){brand_id=0}
+            var grade_id = $('#grade-aj').attr('attid');
+            if(!grade_id){grade_id=0}
+            var model_id = $('#model-aj').attr('attid');
+            if(!model_id){model_id=0}
+            var size_id = $('#size-aj').attr('attid');
+            if(!size_id){size_id=0}
+            var type_id = $('#type-aj').attr('attid');
+            if(!type_id){type_id=0}
+            var colour_id = $('#colour-aj').attr('attid');
+            if(!colour_id){colour_id=0}
+            var unit_id = $('#unit-aj').attr('attid');
+            if(!unit_id){unit_id=0}
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/stocks/checkstock',
+                data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id,
+                success: function (response)
+                {
+                    // $.LoadingOverlay("hide");
+                    var obj = JSON.parse(response);
+                //    $('#balance').val(obj);
+                   alert(obj);
+
+
+                }
+            });
+    },
     init:function(){
          $(document).on("change", ".items", function () {
             $('#stock').html('');
@@ -297,8 +399,24 @@ var stock ={
                 {
                     $.LoadingOverlay("hide");
                     $('#stock').html(response);
+                     $("#entry_date").datepicker({
+                        dateFormat: "yy-m-d",
+
+                    });
                 }
             });
+        });
+        $(document).on("change", ".show", function () {
+            var id = $(this).val();
+            var html = $.trim($(this).find('option:selected').text());
+           var attrid =$(this).attr('atttype');
+        //    $('.att').prepend('<span>'+html+'</span>->');
+        if(id==0){
+            $('#'+attrid+'-id').remove();
+               }else{
+
+            $('#'+attrid+'-id').html('<input style="width:100%;" type="text" attid="'+id+'" id="'+attrid+'-aj" name="'+attrid+'" value="'+html+'"/>');
+        }
         });
     } 
 };

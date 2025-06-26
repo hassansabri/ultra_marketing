@@ -50,6 +50,8 @@ $this->model_attributes->submitattributes($data['all_grades'],$item_id,'grade');
            $this->model_attributes->submitattributes($data['all_types'],$item_id,'type');
  $data["all_colours"]=   $this->input->post('colour_id');
            $this->model_attributes->submitattributes($data['all_colours'],$item_id,'colour');
+$data["all_units"]=   $this->input->post('unit_id');
+           $this->model_attributes->submitattributes($data['all_units'],$item_id,'unit');
 
 //  $data['proc'] = $this->input->post('proc');
 $I=0;
@@ -78,6 +80,9 @@ for($i=0; $i<sizeof($data); $i++){
 
        $this->data["all_colours"] = $this->model_attributes->getcolours('1');
        $this->data['get_item_colours'] = $this->model_attributes->getitemcolours($itemid);
+
+       $this->data["all_units"] = $this->model_attributes->getunits('1');
+       $this->data['get_item_units'] = $this->model_attributes->getitemunits($itemid);
 
         $html =  $this->load->view('attributes/add_new_attribute',$this->data,true);
          

@@ -8,9 +8,7 @@
 class login extends CI_Controller{
     public function __construct() {
         parent::__construct();
-       if ($this->session->userdata('logged_in'))redirect('login');
         $this->load->model("users/m_login", "model_login");
-        $this->load->model("users/m_users", "model_users");
     }
     public function logout() {
         $this->session->unset_userdata('user_name');
@@ -27,6 +25,7 @@ class login extends CI_Controller{
     $this->session->sess_destroy();
 }
     public function index(){
+        if ($this->session->userdata('logged_in'))redirect('users');
         $this->load->view('login/loginscreen');
     }
     public function verify() {
@@ -87,13 +86,6 @@ class login extends CI_Controller{
                 $this->load->view("login/loginscreen", $message);
             }
      //   }
-    }
-
-    public function allusers() {
-        $users_id = $this->session->userdata('uid');
-        $user_type = $this->session->userdata('user_type');
-        $this->data["all_users"] = $this->model_users->getAllUsers($users_id, $user_type);
-        $this->load->view("users/allusers", $this->data);
     }
 
 

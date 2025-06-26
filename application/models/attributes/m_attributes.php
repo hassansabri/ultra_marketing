@@ -17,6 +17,23 @@ class m_attributes extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+        public function getunits($status=false){
+        if($status){
+            $this->db->where('status',$status);
+        }
+        $query = $this->db->get("units");
+            return $query->result_array();
+    }
+    
+    public function getitemunits($item_id){
+        $this->db->where('status',1);
+        $this->db->where('item_fk',$item_id);
+         $this->db->where('item_type','unit');
+        $query = $this->db->get("items_attributes");
+      
+            return $query->result_array();
+    }
+
     public function getbrands($status=false){
         if($status){
             $this->db->where('status',$status);
