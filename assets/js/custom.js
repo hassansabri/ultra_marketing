@@ -307,7 +307,7 @@ var item_id = $('#items').val();
                 success: function (response)
                 {
                     // $.LoadingOverlay("hide");
-                    var obj = JSON.parse(response);
+                    // var obj = JSON.parse(response);
                 //    $('#balance').val(obj);
                 //    alert(obj);
 
@@ -379,8 +379,8 @@ var item_id = $('#items').val();
                 {
                     // $.LoadingOverlay("hide");
                     var obj = JSON.parse(response);
-                //    $('#balance').val(obj);
-                   alert(obj);
+                   alert(obj.balance);
+                   $('#mylogs').html(obj.logs);
 
 
                 }

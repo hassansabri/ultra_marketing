@@ -16,6 +16,39 @@ if (!function_exists('getProcess')) {
             return 0;
         }
     }
+    function get_item_name($item_id){
+        $CI = & get_instance();
+        $CI->db->select('item_name')->from('items');
+        $CI->db->where('item_id',$item_id);
+         $query = $CI->db->get();
+         if ($query->num_rows() > 0) {
+            $result= $query->result_array();
+            if($result){
+                return $result[0]['item_name'];
+            }else{
+                return '?';
+            }
+        } else {
+            return '--';
+        }
+    }
+    function get_att_name($att_id,$table_name,$title,$type){
+        
+        $CI = & get_instance();
+        $CI->db->select($title)->from($table_name);
+        $CI->db->where($type.'_id',$att_id);
+         $query = $CI->db->get();
+        if ($query->num_rows() > 0) {
+            $result= $query->result_array();
+            if($result){
+                return $result[0][$title];
+            }else{
+                return '?';
+            }
+        } else {
+            return '--';
+        }
+    }
     function getGendersDetail($gender_id) {
         $CI = & get_instance();
         $CI->db->select('*')->from('genders');

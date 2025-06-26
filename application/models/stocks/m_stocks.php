@@ -16,8 +16,8 @@ class m_stocks extends CI_Model {
         $this->db->where('item_fk',$data['item_fk']);
         $this->db->where('unit_fk',$data['unit_fk']);
         $query = $this->db->get("stocks_logs");
-        $stock= $query->result_array();
-        echo json_encode($stock);
+        return $query->result_array();
+        
     }
     public function checkstock($data ){
         $this->db->select_sum('balance');

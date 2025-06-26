@@ -69,13 +69,18 @@
         $this->data['colour_fk']=$this->input->post('colour');
         $this->data['unit_fk']=$this->input->post('unit');
      $stock_arr = $this->model_stock->checkstock($this->data);
-     $logs=$this->model_stock->getlogs($this->data);
+     $this->ldata['all_logs']=$this->model_stock->getlogs($this->data);
+     $log_view = $this->load->view('stocks/logs_values',$this->ldata,true);
      if(!isset($stock_arr[0]['balance'])){
 $stock=0;
      }else{
         $stock=$stock_arr[0]['balance'];
      }
-     echo json_encode($stock);
+     $rdata=array(
+        'balance'=>$stock,
+        'logs'=>$log_view
+     );
+     echo json_encode($rdata);
     }
     public function getallstock(){
     $item_id=    $this->input->post('item_id');
@@ -101,6 +106,15 @@ $stock=0;
 
        $this->data["all_units"] = $this->model_stock->getunits('1');
        $this->data['get_item_units'] = $this->model_stock->getitemunits($itemid);
+        $this->data['item_fk']=$this->input->post('item_id');
+        $this->data['brand_fk']=$this->input->post('brand');
+        $this->data['grade_fk']=$this->input->post('grade');
+        $this->data['model_fk']=$this->input->post('model');
+        $this->data['size_fk']=$this->input->post('size');
+        $this->data['type_fk']=$this->input->post('type');
+        $this->data['colour_fk']=$this->input->post('colour');
+        $this->data['unit_fk']=$this->input->post('unit');
+       $this->data['all_logs'] = $this->model_stock->getlogs($this->data);
     echo   $this->load->view('stocks/update_stock',$this->data,true);
 
     }

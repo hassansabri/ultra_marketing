@@ -151,7 +151,8 @@
 	<div class="sub-div">
 			Logs
 	</div>
-	<div id="mylogs"></div>
+	<div ></div>
+	<?php $this->load->view("stocks/logs"); ?>
 	</div>
  <div class="main-div">
 	<div class="sub-div">

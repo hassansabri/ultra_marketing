@@ -15,29 +15,8 @@
                                                 </tr>
                                                 </thead>
 
-                                                <tbody>
-                                                    <?php 
-                                                
-                                                    if (sizeof($all_logs) > 0) { ?>
-                                                        <?php foreach ($all_logs as $value) {  
-                                                    ?>
-                                                            <tr>
-                                                                <td><?php echo $value["item_fk"]; ?></td>
-                                                                <td><?php echo $value["brand_fk"]; ?></td>
-                                                                <td><?php echo $value["grade_fk"]; ?></td>
-                                                                <td><?php echo $value["model_fk"]; ?></td>
-                                                                <td><?php echo $value["size_fk"]; ?></td>
-                                                                <td><?php echo $value["type_fk"]; ?></td>
-                                                                <td><?php echo $value["colour_fk"]; ?></td>
-                                                                <td><?php echo $value["unit_fk"]; ?></td>
-                                                                <td><?php echo $value["stock_type"]; ?></td>
-                                                                <td><?php echo $value["balance"]; ?></td>
-                                                                
-                                                            </tr>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-
-                                                    <?php } ?>
+                                                <tbody id="mylogs">
+                                                    <?php $this->load->view("stocks/logs_values"); ?>
                                                 </tbody>
 
                                             </table>
