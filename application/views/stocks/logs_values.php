@@ -27,6 +27,7 @@
                                                                 <td><?php
                                                                 $val = get_att_name($value["unit_fk"],'units','unit_title','unit');
                                                                 echo $val; ?></td>
+                                                                <td><?php echo $value["entry_date"]; ?></td>
                                                                 <td><?php echo $value["stock_type"]; ?></td>
                                                                 <td><?php echo $value["balance"]; ?></td>
                                                                 

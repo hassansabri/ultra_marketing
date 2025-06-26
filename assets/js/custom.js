@@ -316,6 +316,7 @@ var item_id = $('#items').val();
             });
     },
     add:function(){
+        $.LoadingOverlay("show");
  var item_id = $('#items').val();
             var brand_id = $('#brand-aj').attr('attid');
             if(!brand_id){brand_id=0}
@@ -334,6 +335,11 @@ var item_id = $('#items').val();
             var entry_date = $('#entry_date').val();
             var stock_type = $('#stock_type').val();
             var balance = $('#balance').val();
+            if ($.trim($("#entry_date").val()) == "") {
+            alert('Field with sign(*) required');
+            $.LoadingOverlay("hide");
+            return false;
+        }
             $.ajax({
                 type: "POST",
                 url: baseurl + '/stocks/addstock',
@@ -343,8 +349,9 @@ var item_id = $('#items').val();
              $('#entry_date').val('');
              $('#stock_type').val(0);
             $('#balance').val('');
-                    // $.LoadingOverlay("hide");
-                    // var obj = JSON.parse(response);
+                    $.LoadingOverlay("hide");
+                    var obj = JSON.parse(response);
+                     $('#mylogs').html(obj.logs);
                     // alert(obj);
                 //    $('#balance').val(obj);
 
@@ -354,7 +361,7 @@ var item_id = $('#items').val();
     },
     check:function(){
     // $('#stock').html('');
-    // $.LoadingOverlay("show");
+    $.LoadingOverlay("show");
 
             var item_id = $('#items').val();
             var brand_id = $('#brand-aj').attr('attid');
@@ -377,9 +384,9 @@ var item_id = $('#items').val();
                 data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id,
                 success: function (response)
                 {
-                    // $.LoadingOverlay("hide");
+                    $.LoadingOverlay("hide");
                     var obj = JSON.parse(response);
-                   alert(obj.balance);
+                   alert('Stock contain = '+obj.balance);
                    $('#mylogs').html(obj.logs);
 
 
@@ -412,7 +419,7 @@ var item_id = $('#items').val();
            var attrid =$(this).attr('atttype');
         //    $('.att').prepend('<span>'+html+'</span>->');
         if(id==0){
-            $('#'+attrid+'-id').remove();
+            $('#'+attrid+'-id').html('');
                }else{
 
             $('#'+attrid+'-id').html('<input style="width:100%;" type="text" attid="'+id+'" id="'+attrid+'-aj" name="'+attrid+'" value="'+html+'"/>');

@@ -52,12 +52,17 @@
         $this->data['colour_fk']=$this->input->post('colour');
         $this->data['unit_fk']=$this->input->post('unit');
         $this->data['balance']=$this->input->post('balance');
-
         $this->data['stock_type'] = $this->input->post('stock_type');
            $this->data['entry_date'] =  date('Y-m-d',strtotime($this->input->post('entry_date')));
         $this->model_stock->addstock($this->data);
+        $this->ldata['all_logs']=$this->model_stock->getlogs($this->data);
         // update logs
-      $logs=$this->model_stock->getlogs($this->data);
+      
+     $log_view = $this->load->view('stocks/logs_values',$this->ldata,true);
+     $rdata=array(
+        'logs'=>$log_view
+     );
+     echo json_encode($rdata);
     }
     public function checkstock(){
         $this->data['item_fk']=$this->input->post('item_id');

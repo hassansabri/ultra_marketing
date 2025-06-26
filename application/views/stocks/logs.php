@@ -10,6 +10,7 @@
                                                     <th>Type</th>
                                                     <th>colour</th>
                                                     <th>Unit</th>
+                                                    <th>Entry Date</th>
                                                     <th>stock Type</th>
                                                     <th>Balance</th>
                                                 </tr>
