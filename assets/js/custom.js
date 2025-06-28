@@ -184,6 +184,44 @@ $(document).ready(function () {
 
     });
 });
+var orders={
+    applyautocomoplete: function (services) {
+      services.forEach((services) => {
+     
+let myVariable = 4;
+
+});
+        availableDates=services;
+        // var availableTags = services;
+        $(".tags")
+                // don't navigate away from the field on tab when selecting an item
+                .bind("keydown", function (event) {
+
+//    if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
+//        event.preventDefault();
+//    }
+                }).autocomplete({
+            minLength: minWordLength,
+            source: function (request, response) {
+                // delegate back to autocomplete, but extract the last term
+                var term = extractLast(request.term);
+                if (term.length >= minWordLength) {
+                    response($.ui.autocomplete.filter(availableTags, term));
+                }
+            },
+            focus: function () {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function (event, ui) {
+              // When an item is selected, you can access both label and value
+              console.log(ui);
+    console.log("Selected label:", ui.item.label);
+    console.log("Selected value:", ui.item.value);
+            }
+        });
+    },
+};
 var attributes={
     init:function(){
   
@@ -675,8 +713,18 @@ var assign_survey = {
         }
     },
     applyautocplete: function (services) {
-        console.log(services);
-        var availableTags = services;
+        //  availableTags = [];
+      services.forEach((services) => {
+     
+let myVariable = 4;
+
+// availableTags.push(services.title); 
+//   let sentence = `I am ${services.title}`;
+//   console.log(sentence);
+});
+        console.log(availableTags);
+        availableDates=services;
+        // var availableTags = services;
         $(".tags")
                 // don't navigate away from the field on tab when selecting an item
                 .bind("keydown", function (event) {
@@ -698,15 +746,10 @@ var assign_survey = {
                 return false;
             },
             select: function (event, ui) {
-                var terms = split(this.value);
-                // remove the current input
-                terms.pop();
-                // add the selected item
-                terms.push(ui.item.value);
-                // add placeholder to get the comma-and-space at the end
-                terms.push("");
-                this.value = terms.join(" ");
-                return false;
+              // When an item is selected, you can access both label and value
+              console.log(ui);
+    console.log("Selected label:", ui.item.label);
+    console.log("Selected value:", ui.item.value);
             }
         });
     },
