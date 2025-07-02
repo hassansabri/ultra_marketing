@@ -32,6 +32,9 @@
   padding-bottom: 10px;
   text-align: left;
 }
+.hide{
+	display:hidden;
+}
 
 .invoice-box {
 				/* max-width: 800px; */

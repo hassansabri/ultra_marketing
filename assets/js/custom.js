@@ -185,6 +185,36 @@ $(document).ready(function () {
     });
 });
 var orders={
+    init:function(){
+        $(document).on('change', '.show', function (ele) {
+        var id = $(this).val();
+        console.log(id);
+            var html = $.trim($(this).find('option:selected').text());
+            console.log(html);
+           var attrid =$(this).attr('atttype');
+           console.log(attrid);
+        if ($(this).is(':checked')) {
+            val = "yes";
+        } else {
+            val = "no";
+        }
+        // $.LoadingOverlay("show");
+        // $.ajax({
+        //     url: baseurl + '/survey/markQuestionAsRating',
+        //     type: 'post',
+        //     data: 'is_rating=' + val + '&question_id=' + question_id
+        // }).done(function (msg) {
+        //     $.LoadingOverlay("hide");
+        //     var obj = JSON.parse(msg);
+        //     if (obj.success == "yes") {
+
+        //     } else {
+        //         alert(obj.msg);
+        //     }
+        // });
+
+    });
+    },
     applyautocomoplete: function (services) {
       services.forEach((services) => {
      
@@ -214,13 +244,30 @@ let myVariable = 4;
                 return false;
             },
             select: function (event, ui) {
+                 event.preventDefault(); 
+                // Set the input field's value to the label
+                $(this).val(ui.item.label);
               // When an item is selected, you can access both label and value
-              console.log(ui);
-    console.log("Selected label:", ui.item.label);
-    console.log("Selected value:", ui.item.value);
+    //           console.log(ui);
+    // console.log("Selected label:", ui.item.label);
+    // console.log("Selected value:", ui.item.value);
+    orders.initorder(ui.item.value);
             }
         });
     },
+   initorder:function(value,item_id){
+    $.ajax({
+            url: baseurl + '/orders/initorder',
+            type: 'post',
+            data:'item_id=' + value
+        }).done(function (msg) {
+         //   $.LoadingOverlay("hide");
+            var obj = JSON.parse(msg);
+            $('#myorder').append('<div>'+obj+'</div><div style="clear:both"></div>');
+            
+            
+        });
+   }
 };
 var attributes={
     init:function(){
@@ -248,7 +295,7 @@ var attributes={
    
            $(document).on("click", "#att", function (ele) {
            $('#showModal').modal();
-           var itemid = $('#att').attr('itemid')
+           var itemid = $(this).attr('itemid')
                 $.LoadingOverlay("show");
             $.ajax({
                 type: "POST",
