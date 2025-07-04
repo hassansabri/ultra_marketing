@@ -27,10 +27,6 @@ class m_brands extends CI_Model {
         $query = $this->db->get("brands");
             return $query->result_array();
     }
-    public function adddbrand($data){
-
-    $this->db->insert('brands',$data);
-         }
     public function getbranddetail($brand_id,$status=false){
         if($status){$this->db->where('status',1);}
         $this->db->where('brand_id',$brand_id);
@@ -38,6 +34,10 @@ class m_brands extends CI_Model {
       
             return $query->result_array();
     }
+    public function adddbrand($data){
+
+    $this->db->insert('brands',$data);
+         }
 public function updatebrand($data,$brand_id){
   $this->db->where("brand_id", $brand_id);
         $query = $this->db->update("brands",$data); 

@@ -47,6 +47,7 @@ public function addnewitem(){
            $sdat['item_weight'] = $this->input->post('item_weight');
            $sdat['item_cat_fk'] = $this->input->post('category_id');
            $sdat['item_description'] = $this->input->post('item_description');
+           $sdat['item_brand_fk'] = $this->input->post('brand_id');
            $sdat['item_expire_date'] =  date('Y-m-d',strtotime($this->input->post('item_expire_date')));
         
             $this->model_item->addnewitems($sdat);
@@ -95,7 +96,9 @@ public function getstates(){
          
          public function edititem($item_id=false){
             $this->data["update"]  = "no";
+            
             $this->data["all_categories"] = $this->model_category->getallcategories();
+             $this->data["all_brands"] = $this->model_item->getallbrands();
              $this->data["item_detail"] =      $this->model_item->getitemdetail($item_id);
                $this->load->view('items/edititem', $this->data);
          }
@@ -104,6 +107,7 @@ public function getstates(){
              $sdat['item_code'] = $this->input->post('item_code');
              $sdat['item_weight'] = $this->input->post('item_weight');
              $sdat['item_description'] = $this->input->post('item_description');
+             $sdat['item_brand_fk'] = $this->input->post('brand_id');
            $sdat['item_cat_fk'] =  $this->input->post('parent_id');
             $sdat['item_expire_date'] =  date('Y-m-d',strtotime($this->input->post('item_expire_date')));
             $this->model_item->updateitem($sdat,$item_id);

@@ -17,6 +17,11 @@ class m_orders extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    public function getallbrands(){
+        $query = $this->db->get("brands");
+        $this->db->where('status',1);
+            return $query->result_array();
+    }
     public function getAllItems(){
         $this->db->where('item_status',1);
          $query = $this->db->get("items");

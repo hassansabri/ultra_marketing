@@ -42,7 +42,17 @@ $this->db->where("item_id", $items_id);
         $query = $this->db->update("items",$data); 
 
   }
-
+ public function getallbrands(){
+        $query = $this->db->get("brands");
+            return $query->result_array();
+    }
+    public function getbranddetail($brand_id,$status=false){
+        if($status){$this->db->where('status',1);}
+        $this->db->where('brand_id',$brand_id);
+        $query = $this->db->get("brands");
+      
+            return $query->result_array();
+    }
 }
   
   

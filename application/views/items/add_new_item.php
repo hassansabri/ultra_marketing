@@ -75,9 +75,23 @@
                                             ?>">
                                         </div>
                                         <div class="form-group">
-                                            <div class="" >
+                                            <div class="col-md-4 custompdding" >
+                                            <label>select Brand</label>
+                                            <select class="form-control" name="brand_id" id="brand_id">
+                                                <option value="0">Select Brand</option>
+                                                <?php if ($all_brands) { ?>
+                                                    <?php foreach ($all_brands as $value) { ?>
+                                                        <option value="<?php echo $value["brand_id"]; ?>" ><?php echo $value["brand_title"]; ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                            </div>
+                                          
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-4 custompdding" >
                                             <label>Item Category</label>
-                                            <select class="form-control select2" name="category_id" id="category_id">
+                                            <select class="form-control" name="category_id" id="category_id">
                                                 <?php if ($all_categories) { ?>
                                                     <?php foreach ($all_categories as $value) { ?>
                                                         <option  value="<?php echo $value["category_id"]; ?>" ><?php echo $value["category_name"]; ?></option>
@@ -85,7 +99,7 @@
                                                 <?php } ?>
                                             </select>
                                             </div>
-                                            
+                                            <div style="clear:both"></div>
                                             </div>
                                                 <div class="form-group" >
                                                 <label> Item Description</label>

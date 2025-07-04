@@ -191,8 +191,9 @@ var orders={
         console.log(id);
             var html = $.trim($(this).find('option:selected').text());
             console.log(html);
-           var attrid =$(this).attr('atttype');
-           console.log(attrid);
+           var attrid = $('option:selected', this).attr('atttype');
+           console.log('#'+attrid+'-div');
+           $('#'+attrid+'-div').show();
         if ($(this).is(':checked')) {
             val = "yes";
         } else {

@@ -74,6 +74,20 @@
                                             </div>
                                           
                                         </div>
+                                        <div class="form-group">
+                                            <div class="col-md-4 custompdding" >
+                                            <label>select Brand</label>
+                                            <select class="form-control" name="brand_id" id="brand_id">
+                                                <option value="0">Select Brand</option>
+                                                <?php if ($all_brands) { ?>
+                                                    <?php foreach ($all_brands as $value) { ?>
+                                                        <option <?php if($item_detail[0]['item_brand_fk'] == $value['brand_id'])echo 'selected'; ?> value="<?php echo $value["brand_id"]; ?>" ><?php echo $value["brand_title"]; ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                            </div>
+                                          
+                                        </div>
                                         </div>
                                                 <div class="form-group" >
                                                 <label> Item Description</label>

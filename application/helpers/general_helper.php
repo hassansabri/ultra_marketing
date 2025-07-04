@@ -32,11 +32,14 @@ if (!function_exists('getProcess')) {
             return '--';
         }
     }
-    function get_att_name($att_id,$table_name,$title,$type){
+    function get_att_name($att_id,$table_name,$title,$type=false){
         
         $CI = & get_instance();
         $CI->db->select($title)->from($table_name);
-        $CI->db->where($type.'_id',$att_id);
+        if($type){
+
+            $CI->db->where($type.'_id',$att_id);
+        }
          $query = $CI->db->get();
         if ($query->num_rows() > 0) {
             $result= $query->result_array();

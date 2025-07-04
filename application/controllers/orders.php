@@ -28,6 +28,7 @@
     }    
     public function index(){
         $this->data['all_items']=$this->model_order->getAllItems();
+        $this->data["all_brands"] = $this->model_order->getallbrands();
         $this->load->view('orders/new_order',$this->data);
     }
     public function show_invoice() {

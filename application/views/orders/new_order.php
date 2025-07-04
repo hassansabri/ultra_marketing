@@ -38,7 +38,11 @@
       <?php 
          if (sizeof($all_items) > 0) { ?>
             <?php foreach ($all_items as $value) { ?>
-             { label:  "<?php echo $value['item_name']; ?>",
+            <?php  
+            $title='';
+            $brand_title = get_att_name($value['item_brand_fk'],'brands','brand_title',$type='brand');
+            ?>
+             { label:  "<?php echo $brand_title;  ?> / <?php echo $value['item_name']; ?>",
               value:  "<?php echo $value['item_id']; ?>"},
              <?php }
             
