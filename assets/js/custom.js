@@ -262,9 +262,20 @@ let myVariable = 4;
             type: 'post',
             data:'item_id=' + value
         }).done(function (msg) {
+            // console.log(ui.item.value);
          //   $.LoadingOverlay("hide");
             var obj = JSON.parse(msg);
+            if($("#abcdiv").hasClass('m'+value)){
+                return false;
+            }
             $('#myorder').append('<div>'+obj+'</div><div style="clear:both"></div>');
+
+            $(".number").keypress(function (e) {
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+    //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
+      return false;
+    }
+   });
             
             
         });

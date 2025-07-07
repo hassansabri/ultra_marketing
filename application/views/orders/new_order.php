@@ -5,7 +5,7 @@
     <div id="ribbon">
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li><?php echo $this->lang->line("home"); ?></li><li>All Shops</li><li><?php echo $this->lang->line("create_new"); ?></li>
+            <li><?php echo $this->lang->line("home"); ?></li><li>All Orders</li><li><?php echo $this->lang->line("create_new"); ?></li>
         </ol>
         <!-- end breadcrumb -->
     </div>
@@ -17,13 +17,28 @@
             <!-- row -->
             <div class="row">
                 <div id="wrapper">
+                    <form id="adduser-form" method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
-                                <input class="tags"/><span><button class="btn btn-peimary" value="Add More"><i class="fa fa-plus"></i>Add More</button></span>
+                                Type Item Name : <input class="tags"/><span> Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo rand(0000,9999) ?>"/></span>
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-md-12">
+							<input type="hidden" value="sbmt" name="sbmt" />
+							<button class="btn btn-default" type="submit">
+								<i class="fa fa-eye"></i>
+								<?php echo $this->lang->line("Submit"); ?>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
                     <!-- <div id="myorder"></div> -->
                     
                 </div>

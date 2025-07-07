@@ -18,8 +18,8 @@ class m_orders extends CI_Model {
         parent::__construct();
     }
     public function getallbrands(){
-        $query = $this->db->get("brands");
         $this->db->where('status',1);
+        $query = $this->db->get("brands");
             return $query->result_array();
     }
     public function getAllItems(){
@@ -75,6 +75,7 @@ class m_orders extends CI_Model {
         return $query->result_array();
     }
     public function getitemdetail($items_id){
+$this->db->select("*");
 $this->db->where("item_id", $items_id);
         $query = $this->db->get("items");
         return $query->result_array();
