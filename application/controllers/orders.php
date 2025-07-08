@@ -123,41 +123,48 @@ if($attribute_fk[1]){
               return $this->data;
         }
         public function draft_order(){
+         $order_number =  $this->input->post('order_number');
          $item_ids =  $this->input->post('item_ids');
          foreach($item_ids as $value){
-          $item_id=$value;
+        echo  $item_id=$value;
            $data=$this->allattributes($item_id);
            if($data['grades']){
+            $grade_quantity=array();
              foreach($data['grades'] as $value){
                $grade_quantity[]=$this->input->post("grade-". $value['grade_id'] ."-". $item_id);
              }
            }
            print_r($grade_quantity);
            if($data['models']){
+            $model_quantity=array();
              foreach($data['models'] as $value){
                $model_quantity[]=$this->input->post("model-". $value['model_id'] ."-". $item_id);
              }
            }
            print_r($model_quantity);
            if($data['sizes']){
+            $size_quantity=array();
              foreach($data['sizes'] as $value){
                $size_quantity[]=$this->input->post("size-". $value['size_id'] ."-". $item_id);
              }
            }
            print_r($size_quantity);
            if($data['types']){
+             $type_quantity=array();
              foreach($data['types'] as $value){
                $type_quantity[]=$this->input->post("type-". $value['type_id'] ."-". $item_id);
              }
            }
            print_r($type_quantity);
            if($data['colours']){
+             $colour_quantity=array();
              foreach($data['colours'] as $value){
                $colour_quantity[]=$this->input->post("colour-". $value['colour_id'] ."-". $item_id);
              }
            }
            print_r($colour_quantity);
            // if($grades){}
+           echo "<br>";
          }
          }
         

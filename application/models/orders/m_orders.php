@@ -222,6 +222,9 @@ $this->db->where("item_id", $items_id);
       
             return $query->result_array();
     }
+    public function insertorder(){
+        
+    }
 
 
 }
