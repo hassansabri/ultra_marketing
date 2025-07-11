@@ -328,6 +328,14 @@
                             </ul>	
                         </li> 
                     <?php } ?>
+                    <!-- FAQ Management -->
+                    <?php if ($this->session->userdata('logged_in')) { ?>
+                        <li class="">
+                            <a href="<?php echo site_url('faq/index'); ?>" title="FAQ Management">
+                                <i class="fa fa-lg fa-fw fa-question-circle"></i> <span class="menu-item-parent">FAQ Management</span>
+                            </a>
+                        </li>
+                    <?php } ?>
                 </ul>
             </nav>
             <span class="minifyme" data-action="minifyMenu"> 

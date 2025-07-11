@@ -50,10 +50,6 @@ class m_orders extends CI_Model {
         return $data;
     }
     public function getitemattributes($item_id){
-        $brand=array();
-    $data= $this->getitemattributesgeneral($item_id,'brand');
-    $brand=$data;
-     $da[]=$brand;
     $data= $this->getitemattributesgeneral($item_id,'grade');
     // $da['grade']=array('grade');    
     $da[] = $data;

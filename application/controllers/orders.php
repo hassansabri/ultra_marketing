@@ -178,47 +178,41 @@ if($attribute_fk[1]){
         public function editorder($order_number){
           $this->data['order_info'] = $this->model_order->getOrder($order_number);
            $itemids = $this->model_order->getitemidsfromordernumber($order_number);
-              foreach($itemids as $value){
-            $item_id=$value['item_fk'];
-                $attribute_fk=$this->model_order->getitemattributes($item_id);
-                print_r($attribute_fk);
-                  $this->data['item_id']=$item_id;
-         if($attribute_fk){
-                      foreach($attribute_fk[0] as $value2){
-                          $this->data['brands'][]=$this->model_order->getbranddetail($value2,'1');
+           foreach($this->data['order_info'] as $oi){
+            $item_id=$oi['item_id'];
           
-                      }
-          }
-// print_r($attribute_fk[1]);
-if($attribute_fk[1]){
-  foreach($attribute_fk[1] as $value){
-                        $this->data['grades'][]=$this->model_order->getgradedetail($value,'1');
+                $attribute_fk=$this->model_order->getitemattributes($item_id);
+                  $this->data['item_id']=$item_id;
+ //print_r($attribute_fk[0]);
+if($attribute_fk[0]){
+  foreach($attribute_fk[0] as $value){
+                        $this->data['grades'][$item_id][]=$this->model_order->getgradedetail($value,'1');
              }
           }
-         
-          if($attribute_fk[2]){
-              foreach($attribute_fk[2] as $value){
-                $this->data['models'][]=$this->model_order->getmodeldetail($value,'1');
+        //  print_r($this->data['grades'][$item_id]);
+          if($attribute_fk[1]){
+              foreach($attribute_fk[1] as $value){
+                $this->data['models'][$item_id][]=$this->model_order->getmodeldetail($value,'1');
+                }
+              }
+              if($attribute_fk[2]){
+                foreach($attribute_fk[2] as $value){
+                  $this->data['sizes'][$item_id][]=$this->model_order->getsizedetail($value,'1');
                 }
               }
               if($attribute_fk[3]){
                 foreach($attribute_fk[3] as $value){
-                  $this->data['sizes'][]=$this->model_order->getsizedetail($value,'1');
+                  $this->data['types'][$item_id][]=$this->model_order->gettypedetail($value,'1');
                 }
               }
               if($attribute_fk[4]){
                 foreach($attribute_fk[4] as $value){
-                  $this->data['types'][]=$this->model_order->gettypedetail($value,'1');
+                  $this->data['colours'][$item_id][]=$this->model_order->getcolourdetail($value,'1');
                 }
               }
               if($attribute_fk[5]){
                 foreach($attribute_fk[5] as $value){
-                  $this->data['colours'][]=$this->model_order->getcolourdetail($value,'1');
-                }
-              }
-              if($attribute_fk[6]){
-                foreach($attribute_fk[6] as $value){
-                  $this->data['units'][]=$this->model_order->getunitdetail($value,'1');
+                  $this->data['units'][$item_id][]=$this->model_order->getunitdetail($value,'1');
                 }
               }
               
@@ -250,7 +244,8 @@ if($attribute_fk[1]){
      //   print_r($this->data);
           // }
           $this->data['order_number'] = $order_number;
-
+$this->data['all_items']=$this->model_order->getAllItems();
+        $this->data["all_brands"] = $this->model_order->getallbrands();
           $this->load->view('orders/editorder',$this->data);
 
         }
