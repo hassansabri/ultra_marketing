@@ -111,6 +111,7 @@ $this->db->where("item_id", $items_id);
         if($status){$this->db->where('status',1);}
         $this->db->where('model_id',$model_id);
         $query = $this->db->get("models");
+    //    echo $this->db->last_query();
         $data = $query->result_array();
       if (sizeof($query->result_array()) > 0) {
           return $data[0];
@@ -219,13 +220,98 @@ $this->db->where("item_id", $items_id);
         $this->db->where('item_fk',$item_id);
          $this->db->where('item_type','unit');
         $query = $this->db->get("items_attributes");
-      
             return $query->result_array();
     }
-    public function insertorder(){
+    public function getitemidsfromordernumber($order_number){
+        $this->db->select('item_fk');
+         $this->db->where('order_status','draft');
+         $this->db->group_by('item_fk');
+        $query = $this->db->get("orders");
+        return $query->result_array();
+    }
+    public function getAllDraftOrders(){
+        $this->db->where('order_status','draft');
+         $this->db->group_by('order_number');
+        $query = $this->db->get("orders");
+      if (sizeof($query->result_array()) > 0) {
+            foreach ($query->result_array() as $value) {
+                $data = array(
+                    "order_id" => $value["order_id"],
+                    "order_number" => $value["order_number"],
+                    "item_fk" => $value["item_fk"],
+                    "order_quantity" => $value["order_quantity"],
+                    "order_price" => $value["order_price"],
+                    "created_date" => $value["created_date"],
+                    "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"])
+                );
+                $dat[]=$data;
+            }
+            return $dat;
+        } else {
+            return array();
+        }
+    }
+    public function getOrder($order_number){
+        $this->db->where('order_number',$order_number);
+        $query = $this->db->get("orders");
+        $dat=array();
+      if (sizeof($query->result_array()) > 0) {
+            foreach ($query->result_array() as $value) {
+                $data = array(
+                    "order_id" => $value["order_id"],
+                    "order_number" => $value["order_number"],
+                    "item_id" => $value["item_fk"],
+                    "order_quantity" => $value["order_quantity"],
+                    "order_price" => $value["order_price"],
+                    "created_date" => $value["created_date"],
+                    "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
+                    "item_detail" => $this->getitemdetail($value["item_fk"])
+                );
+             $dat[]=$data;
+            }
+//              echo '<pre>';
+//             print_r($dat);
+//           echo '</pre>';
+// exit;
+            return $dat;
+        } else {
+            return  $data = array(
+                    "order_id" => '',
+                    "order_number" => '',
+                    "item_id" =>'',
+                    "order_quantity" => '',
+                    "order_price" => '',
+                    "created_date" => '',
+                    "order_detail" => '',
+                    "item_detail" => ''
+                );;
+        }
+    }
+    public function getorderdetail($order_number,$item_fk){
+        $this->db->where('order_number_fk',$order_number);
+        $this->db->where('item_fk',$item_fk);
+        $query = $this->db->get("order_detail");
+       //  echo $this->db->last_query();
+            return $query->result_array();
+    }
+    public function insertdraftorder($order_number,$item_id){
+        $data=array(
+            'order_number'=>$order_number,
+            'item_fk'=>$item_id,
+        );
+         $this->db->insert('orders',$data);
         
     }
-
+public function insertdraftorderdetail($order_number,$attribute_fk,$quantity,$item_id,$type){
+$data=array(
+            'order_number_fk'=>$order_number,
+            'attribute_fk'=>$attribute_fk,
+            'attribute_quantity'=>$quantity,
+            'item_fk'=>$item_id,
+            'attribute_type'=>$type,
+        );
+         $this->db->insert('order_detail',$data);
+}
 
 }
   

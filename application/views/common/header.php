@@ -191,7 +191,7 @@
 
                        <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">manage all Shops</span></a>
+                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage all Shops</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/shops" title="All Shops"><span class="menu-item-parent">All shops</span></a>
@@ -204,7 +204,7 @@
                     <?php } ?> 
                      <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Categories</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Categories</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/categories" title=""><span class="menu-item-parent">All Categories</span></a>
@@ -217,7 +217,7 @@
                     <?php } ?> 
                  <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Items</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Items</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/items" title=""><span class="menu-item-parent">All Items</span></a>
@@ -230,7 +230,7 @@
                     <?php } ?>
                      <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Brands</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Brands</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/brands" title=""><span class="menu-item-parent">All Brands</span></a>
@@ -243,7 +243,7 @@
                     <?php } ?> 
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Models</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Models</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/models" title=""><span class="menu-item-parent">All Models</span></a>
@@ -256,7 +256,7 @@
                     <?php } ?> 
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Grades</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Grades</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/grades" title=""><span class="menu-item-parent">All Grades</span></a>
@@ -269,7 +269,7 @@
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Sizes</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Sizes</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/sizes" title=""><span class="menu-item-parent">All Sizes</span></a>
@@ -282,7 +282,7 @@
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Types</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Types</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/types" title=""><span class="menu-item-parent">All Types</span></a>
@@ -295,7 +295,7 @@
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Colours</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Colours</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/colours" title=""><span class="menu-item-parent">All Colours</span></a>
@@ -308,7 +308,7 @@
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javascrip:t;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Stock</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Stock</span></a>
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/stocks" title=""><span class="menu-item-parent">All Stocks</span></a>
@@ -316,6 +316,18 @@
                             </ul>	
                         </li> 
                     <?php } ?> 
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
+                        <li class="">      
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Orders</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders/draftorders" title=""><span class="menu-item-parent">All Draft Orders</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders/completeorders" title=""><span class="menu-item-parent">All Complete Orders</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders" title=""><span class="menu-item-parent"> New Order</span></a>
+                                    </li> 
+                            </ul>	
+                        </li> 
+                    <?php } ?>
                 </ul>
             </nav>
             <span class="minifyme" data-action="minifyMenu"> 

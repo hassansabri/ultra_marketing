@@ -1,10 +1,9 @@
 <div>
-
     <div id="abcdiv" class="m<?php echo $item_detail[0]['item_id']?>">
         
         </div>
         <div class="main-div" style="">
-            <div class="sub-div"><?php echo $item_detail[0]['item_name']?><input style="color: #000;cursor: not-allowed;" name="item_ids[]" value="<?php echo $item_detail[0]['item_id']?>"/></div>
+            <div class="sub-div"><?php echo $item_detail[0]['item_name']?><input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="1"/><input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/></div>
             </div>
         <div class="col-md-2 hidee" id="grade-div">
             <lable>Grade</lable>
@@ -13,7 +12,7 @@
                 <?php if($grades){?>
                 <?php foreach($grades as $value){?>
                 <span><?php echo $value['grade_title'];?></span>
-                <input class="number" type="text" placeholder="grade" name="grade-<?php echo $value['grade_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;"
+                <input class="number gengrade" type="text" placeholder="grade" name="grade-<?php echo $value['grade_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;"
                     value="0" />
                 <?php } ?>
                 <?php } ?>

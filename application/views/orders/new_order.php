@@ -17,7 +17,12 @@
             <!-- row -->
             <div class="row">
                 <div id="wrapper">
-                    <form id="adduser-form" method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data">
+                    <script>
+        const availableTags1 = [
+   ];
+   console.log(availableTags1);
+</script>
+                    <form method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data" onsubmit="orders.checkquantity()">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">

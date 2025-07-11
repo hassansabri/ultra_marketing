@@ -269,7 +269,6 @@ let myVariable = 4;
                 return false;
             }
             $('#myorder').append('<div>'+obj+'</div><div style="clear:both"></div>');
-
             $(".number").keypress(function (e) {
      if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
     //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
@@ -279,7 +278,10 @@ let myVariable = 4;
             
             
         });
-   }
+   },
+checkquantity:function(){
+
+}
 };
 var attributes={
     init:function(){
