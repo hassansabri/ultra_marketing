@@ -186,6 +186,12 @@ $(document).ready(function () {
 });
 var orders={
     init:function(){
+        $(".number").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
+        return false;
+        }
+        });
         $(document).on('change', '.show', function (ele) {
         var id = $(this).val();
         console.log(id);
@@ -199,23 +205,9 @@ var orders={
         } else {
             val = "no";
         }
-        // $.LoadingOverlay("show");
-        // $.ajax({
-        //     url: baseurl + '/survey/markQuestionAsRating',
-        //     type: 'post',
-        //     data: 'is_rating=' + val + '&question_id=' + question_id
-        // }).done(function (msg) {
-        //     $.LoadingOverlay("hide");
-        //     var obj = JSON.parse(msg);
-        //     if (obj.success == "yes") {
-
-        //     } else {
-        //         alert(obj.msg);
-        //     }
-        // });
-
+        
     });
-    },
+},
     applyautocomoplete: function (services) {
       services.forEach((services) => {
      
@@ -269,12 +261,6 @@ let myVariable = 4;
                 return false;
             }
             $('#myorder').append('<div>'+obj+'</div><div style="clear:both"></div>');
-            $(".number").keypress(function (e) {
-     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-    //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
-      return false;
-    }
-   });
             
             
         });
@@ -661,6 +647,32 @@ var items={
                         dateFormat: "yy-m-d",
 
                     });
+        });
+    }
+};
+var units={
+    init:function () {
+              $(document).on("change", ".changestatusunits", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var unitid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/units/changestatus',
+                data: "unit_id=" + unitid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
         });
     }
 };

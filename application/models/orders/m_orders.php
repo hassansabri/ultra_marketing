@@ -309,6 +309,26 @@ $data=array(
          $this->db->insert('order_detail',$data);
 }
 
+public function deleteOrderDetails($order_number, $item_id) {
+    $this->db->where('order_number_fk', $order_number);
+    $this->db->where('item_fk', $item_id);
+    $this->db->delete('order_detail');
+}
+
+public function updateOrderQuantity($order_number, $item_id, $quantity) {
+    $this->db->where('order_number', $order_number);
+    $this->db->where('item_fk', $item_id);
+    $this->db->update('orders', array('order_quantity' => $quantity));
+}
+
+public function updateOrderDetail($order_number, $attribute_fk, $quantity, $item_id, $type) {
+    $this->db->where('order_number_fk', $order_number);
+    $this->db->where('attribute_fk', $attribute_fk);
+    $this->db->where('item_fk', $item_id);
+    $this->db->where('attribute_type', $type);
+    $this->db->update('order_detail', array('attribute_quantity' => $quantity));
+}
+
 }
   
   

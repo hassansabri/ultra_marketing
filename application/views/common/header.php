@@ -183,10 +183,21 @@
                                     <a href="<?php echo site_url(); ?>/users" title="All Users"><span class="menu-item-parent"> <?php echo $this->lang->line("all_users"); ?></span></a>
                                 </li>
                                 <li class="">
-                                    <a href="<?php echo site_url(); ?>/users/adduser" title="New User"><span class="menu-item-parent"><?php echo $this->lang->line("add_new_user"); ?></span></a>
+                                    <a href="<?php echo site_url(); ?>/users/adduser" title="Add User"><span class="menu-item-parent"> <?php echo $this->lang->line("add_user"); ?></span></a>
                                 </li>
-                            </ul>	
-                        </li> 
+                            </ul>
+                        </li>
+                        <li class="">      
+                            <a href="#" title="Units"><i class="fa fa-lg fa-fw fa-cubes"></i> <span class="menu-item-parent">manage units</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/units" title="All Units"><span class="menu-item-parent">All Units</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/units/addunit" title="Add Unit"><span class="menu-item-parent">Add Unit</span></a>
+                                </li>
+                            </ul>
+                        </li>
                     <?php } ?> 
 
                        <?php  if ($this->session->userdata('logged_in')){ ?>
