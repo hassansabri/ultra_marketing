@@ -48,34 +48,34 @@
                       }
           }
 // print_r($attribute_fk[1]);
-if($attribute_fk[1]){
-  foreach($attribute_fk[1] as $value){
+if($attribute_fk[0]){
+  foreach($attribute_fk[0] as $value){
                         $this->data['grades'][]=$this->model_order->getgradedetail($value,'1');
              }
           }
           
-          if($attribute_fk[2]){
-              foreach($attribute_fk[2] as $value){
+          if($attribute_fk[1]){
+              foreach($attribute_fk[1] as $value){
                 $this->data['models'][]=$this->model_order->getmodeldetail($value,'1');
+                }
+              }
+              if($attribute_fk[2]){
+                foreach($attribute_fk[2] as $value){
+                  $this->data['sizes'][]=$this->model_order->getsizedetail($value,'1');
                 }
               }
               if($attribute_fk[3]){
                 foreach($attribute_fk[3] as $value){
-                  $this->data['sizes'][]=$this->model_order->getsizedetail($value,'1');
+                  $this->data['types'][]=$this->model_order->gettypedetail($value,'1');
                 }
               }
               if($attribute_fk[4]){
                 foreach($attribute_fk[4] as $value){
-                  $this->data['types'][]=$this->model_order->gettypedetail($value,'1');
+                  $this->data['colours'][]=$this->model_order->getcolourdetail($value,'1');
                 }
               }
               if($attribute_fk[5]){
                 foreach($attribute_fk[5] as $value){
-                  $this->data['colours'][]=$this->model_order->getcolourdetail($value,'1');
-                }
-              }
-              if($attribute_fk[6]){
-                foreach($attribute_fk[6] as $value){
                   $this->data['units'][]=$this->model_order->getunitdetail($value,'1');
                 }
               }

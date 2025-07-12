@@ -30,8 +30,6 @@
      foreach($order_info as $oi){ ?>
 
          <div id="abcdiv" class="m<?php echo $oi['item_id']?>">
-             
-             </div>
              <div class="main-div" style="">
                  <div class="sub-div"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?><input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/><input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
                  </div>
@@ -123,6 +121,7 @@
         <?php }
          ?>                               
                             
+                    </div>
                     </div>
                     <div class="form-group">
 				<div class="form-actions">
