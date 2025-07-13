@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2025 at 07:34 PM
+-- Generation Time: Jul 13, 2025 at 11:32 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -40,8 +40,9 @@ CREATE TABLE `brands` (
 --
 
 INSERT INTO `brands` (`brand_id`, `brand_title`, `status`, `created_date`, `modified_date`) VALUES
-(1, 'Apple', 1, '2025-06-08 23:38:17', '2025-06-08 23:38:17'),
-(2, 'Samsung', 1, '2025-06-08 23:38:17', '2025-06-08 23:38:17');
+(1, 'Apple', 1, '2025-06-08 23:38:17', '2025-07-04 01:06:25'),
+(2, 'Samsung', 1, '2025-06-08 23:38:17', '2025-06-08 23:38:17'),
+(3, 'abcd', 1, '2025-06-20 06:32:44', '2025-07-04 02:33:35');
 
 -- --------------------------------------------------------
 
@@ -111,8 +112,9 @@ CREATE TABLE `colours` (
 --
 
 INSERT INTO `colours` (`colour_id`, `colour_title`, `status`, `created_date`, `modified_date`) VALUES
-(1, 'Blue', 1, '2025-06-08 23:13:21', '2025-06-08 23:13:21'),
-(2, 'Red', 1, '2025-06-08 23:13:21', '2025-06-08 23:13:21');
+(1, 'Blue', 1, '2025-06-08 23:13:21', '2025-06-21 04:02:58'),
+(2, 'Red', 1, '2025-06-08 23:13:21', '2025-06-08 23:13:21'),
+(3, 'Black', 1, '2025-06-21 07:03:40', '2025-06-21 04:04:30');
 
 -- --------------------------------------------------------
 
@@ -133,6 +135,27 @@ CREATE TABLE `countries` (
 
 INSERT INTO `countries` (`country_id`, `country_name`, `country_code`, `country_status`) VALUES
 (1, 'Pakistan', '+92', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `faqs`
+--
+
+CREATE TABLE `faqs` (
+  `id` int(11) NOT NULL,
+  `question` varchar(500) NOT NULL,
+  `answer` text NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `faqs`
+--
+
+INSERT INTO `faqs` (`id`, `question`, `answer`, `created_at`, `updated_at`) VALUES
+(1, 'aijjijj', 'fvfv', '2025-07-11 20:36:05', '2025-07-11 20:36:05');
 
 -- --------------------------------------------------------
 
@@ -175,7 +198,7 @@ CREATE TABLE `grades` (
 --
 
 INSERT INTO `grades` (`grade_id`, `grade_title`, `status`, `created_date`, `modified_date`) VALUES
-(1, 'A', 1, '2025-06-08 23:34:50', '2025-06-08 23:34:50'),
+(1, 'A', 1, '2025-06-08 23:34:50', '2025-06-20 19:08:05'),
 (2, 'B', 1, '2025-06-08 23:34:50', '2025-06-08 23:34:50'),
 (3, 'C', 1, '2025-06-08 23:35:05', '2025-06-08 23:35:05');
 
@@ -211,7 +234,8 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`item_id`, `item_name`, `item_price`, `item_cat_fk`, `item_code`, `item_description`, `item_unit`, `item_colour_fk`, `item_weight`, `item_grade`, `item_size`, `item_type`, `item_brand_fk`, `item_images_fk`, `item_expire_date`, `item_status`, `created_date`, `modified_date`) VALUES
-(10, 'twsts', NULL, 2, '02', 'as', NULL, 0, '10 grams', NULL, NULL, NULL, NULL, 0, '2025-06-13', 1, '2025-06-09 00:23:21', '2025-06-08 23:15:14');
+(10, 'Test', NULL, 2, '02', 'as', NULL, 0, '10 grams', NULL, NULL, NULL, 1, 0, '2025-06-13', 1, '2025-06-09 00:23:21', '2025-06-08 23:15:14'),
+(11, 'test1', NULL, 1, '02', 'test1', NULL, 0, '10 gram', NULL, NULL, NULL, 2, 0, '2025-07-02', 1, '2025-07-02 19:31:08', '2025-07-02 16:31:14');
 
 -- --------------------------------------------------------
 
@@ -234,20 +258,31 @@ CREATE TABLE `items_attributes` (
 --
 
 INSERT INTO `items_attributes` (`item_attribute_id`, `attribute_fk`, `item_fk`, `status`, `item_type`, `created_date`, `modified_date`) VALUES
-(21, 1, 10, 2, 'brand', '2025-06-17 22:25:50', '2025-06-17 22:25:50'),
-(22, 1, 10, 2, 'model', '2025-06-17 22:25:50', '2025-06-17 22:25:50'),
-(23, 2, 10, 2, 'type', '2025-06-17 22:25:50', '2025-06-17 22:25:50'),
-(24, 1, 10, 2, 'brand', '2025-06-17 22:33:28', '2025-06-17 22:33:28'),
-(25, 1, 10, 2, 'model', '2025-06-17 22:33:28', '2025-06-17 22:33:28'),
-(26, 1, 10, 2, 'grade', '2025-06-17 22:33:28', '2025-06-17 22:33:28'),
-(27, 1, 10, 2, 'size', '2025-06-17 22:33:28', '2025-06-17 22:33:28'),
-(28, 2, 10, 2, 'type', '2025-06-17 22:33:28', '2025-06-17 22:33:28'),
-(29, 1, 10, 1, 'brand', '2025-06-18 20:58:13', '2025-06-18 20:58:13'),
-(30, 1, 10, 1, 'model', '2025-06-18 20:58:13', '2025-06-18 20:58:13'),
-(31, 1, 10, 1, 'grade', '2025-06-18 20:58:13', '2025-06-18 20:58:13'),
-(32, 1, 10, 1, 'size', '2025-06-18 20:58:13', '2025-06-18 20:58:13'),
-(33, 1, 10, 1, 'type', '2025-06-18 20:58:13', '2025-06-18 20:58:13'),
-(34, 2, 10, 1, 'type', '2025-06-18 20:58:13', '2025-06-18 20:58:13');
+(152, 1, 10, 1, 'brand', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(153, 2, 10, 1, 'brand', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(154, 1, 10, 1, 'model', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(155, 2, 10, 1, 'model', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(156, 1, 10, 1, 'grade', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(157, 2, 10, 1, 'grade', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(158, 3, 10, 1, 'grade', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(159, 5, 10, 1, 'size', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(160, 1, 10, 1, 'type', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(161, 2, 10, 1, 'type', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(162, 1, 10, 1, 'colour', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(163, 2, 10, 1, 'colour', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(164, 3, 10, 1, 'colour', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(165, 1, 10, 1, 'unit', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(166, 3, 10, 1, 'unit', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(167, 5, 10, 1, 'unit', '2025-07-01 23:11:27', '2025-07-01 23:11:27'),
+(175, 1, 11, 1, 'brand', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(176, 1, 11, 1, 'model', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(177, 1, 11, 1, 'grade', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(178, 2, 11, 1, 'grade', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(179, 3, 11, 1, 'grade', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(180, 1, 11, 1, 'size', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(181, 1, 11, 1, 'type', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(182, 1, 11, 1, 'colour', '2025-07-11 19:39:03', '2025-07-11 19:39:03'),
+(183, 1, 11, 1, 'unit', '2025-07-11 19:39:03', '2025-07-11 19:39:03');
 
 -- --------------------------------------------------------
 
@@ -272,7 +307,106 @@ INSERT INTO `models` (`model_id`, `model_title`, `status`, `created_date`, `modi
 (2, '2022', 1, '2025-06-09 22:43:28', '2025-06-09 22:43:28'),
 (3, '2023', 1, '2025-06-09 22:45:10', '2025-06-09 22:45:10'),
 (4, '2024', 1, '2025-06-09 22:45:10', '2025-06-09 22:45:10'),
-(5, '2025', 1, '2025-06-09 22:46:01', '2025-06-09 22:46:01');
+(5, '2025', 1, '2025-06-09 22:46:01', '2025-06-20 18:24:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` bigint(20) NOT NULL,
+  `order_number` bigint(20) NOT NULL,
+  `item_fk` bigint(20) NOT NULL,
+  `order_quantity` int(11) DEFAULT NULL,
+  `order_price` int(11) DEFAULT NULL,
+  `order_status` enum('draft','confirm') NOT NULL DEFAULT 'draft',
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `order_quantity`, `order_price`, `order_status`, `created_date`, `modified_date`) VALUES
+(52, 8341, 10, 1, NULL, 'draft', '2025-07-10 02:30:28', '2025-07-10 02:30:28'),
+(53, 8341, 11, 1, NULL, 'draft', '2025-07-10 02:30:28', '2025-07-10 02:30:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_detail`
+--
+
+CREATE TABLE `order_detail` (
+  `order_detail_id` bigint(20) NOT NULL,
+  `order_number_fk` bigint(20) NOT NULL,
+  `attribute_fk` bigint(20) NOT NULL,
+  `attribute_quantity` int(11) NOT NULL,
+  `item_fk` bigint(20) NOT NULL,
+  `attribute_type` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `order_detail`
+--
+
+INSERT INTO `order_detail` (`order_detail_id`, `order_number_fk`, `attribute_fk`, `attribute_quantity`, `item_fk`, `attribute_type`) VALUES
+(143, 8341, 1, 10, 10, 'grade'),
+(144, 8341, 2, 20, 10, 'grade'),
+(145, 8341, 3, 30, 10, 'grade'),
+(146, 8341, 1, 10, 10, 'model'),
+(147, 8341, 2, 20, 10, 'model'),
+(148, 8341, 1, 80, 11, 'grade'),
+(149, 8341, 1, 90, 11, 'model');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_options`
+--
+
+CREATE TABLE `payment_options` (
+  `payment_option_id` bigint(20) NOT NULL,
+  `payment_options_title` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `payment_options`
+--
+
+INSERT INTO `payment_options` (`payment_option_id`, `payment_options_title`, `status`, `created_date`, `modified_date`) VALUES
+(1, 'Check', 1, '2025-06-27 23:17:38', '2025-06-27 23:17:38'),
+(2, 'Cash', 1, '2025-06-27 23:17:38', '2025-06-27 23:17:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profile`
+--
+
+CREATE TABLE `profile` (
+  `profile_id` bigint(20) NOT NULL,
+  `shop_name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `adress` varchar(255) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `profile`
+--
+
+INSERT INTO `profile` (`profile_id`, `shop_name`, `name`, `email`, `phone`, `adress`, `created_date`, `modified_date`) VALUES
+(1, 'asdfghjkl', 'Nadeem', 'nadeem.sabri.life@gmail.com', '021-3333333', 'abc xyz', '2025-06-27 23:32:13', '2025-06-27 23:32:13');
 
 -- --------------------------------------------------------
 
@@ -323,10 +457,11 @@ CREATE TABLE `sizes` (
 --
 
 INSERT INTO `sizes` (`size_id`, `size_title`, `status`, `created_date`, `modified_date`) VALUES
-(1, 'S', 1, '2025-06-08 23:15:47', '2025-06-08 23:15:47'),
+(1, 'S', 1, '2025-06-08 23:15:47', '2025-06-20 20:40:47'),
 (2, 'M', 1, '2025-06-08 23:15:47', '2025-06-08 23:15:47'),
 (3, 'L', 1, '2025-06-08 23:17:34', '2025-06-08 23:17:34'),
-(4, 'XL', 1, '2025-06-08 23:17:34', '2025-06-08 23:17:34');
+(4, 'XL', 1, '2025-06-08 23:17:34', '2025-06-20 22:04:17'),
+(5, 'Standard', 1, '2025-06-23 16:48:15', '2025-06-23 16:48:15');
 
 -- --------------------------------------------------------
 
@@ -352,6 +487,70 @@ INSERT INTO `state` (`state_id`, `state_name`, `state_status`, `created_date`, `
 (2, 'Punjab', 1, '2025-05-14 15:53:23', '2025-05-14 15:53:23', 1),
 (3, 'Kpk', 1, '2025-05-14 15:53:23', '2025-05-14 15:53:23', 1),
 (4, 'Sindh', 1, '2025-05-14 15:54:14', '2025-05-14 15:54:14', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stocks`
+--
+
+CREATE TABLE `stocks` (
+  `stocks_id` bigint(20) NOT NULL,
+  `brand_fk` bigint(20) DEFAULT NULL,
+  `grade_fk` bigint(20) DEFAULT NULL,
+  `model_fk` bigint(20) DEFAULT NULL,
+  `size_fk` bigint(20) DEFAULT NULL,
+  `type_fk` bigint(20) DEFAULT NULL,
+  `colour_fk` bigint(20) DEFAULT NULL,
+  `unit_fk` bigint(20) DEFAULT NULL,
+  `item_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition') NOT NULL,
+  `entry_date` date NOT NULL,
+  `balance` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `stocks`
+--
+
+INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(26, 0, 0, 0, 0, 0, 0, 0, 10, 'opening_balance', '2025-06-30', 100, '2025-06-30 05:30:00', '2025-06-30 05:30:00'),
+(27, 0, 0, 0, 0, 0, 1, 0, 10, 'opening_balance', '2025-07-07', 100, '2025-07-07 20:23:33', '2025-07-07 20:23:33'),
+(28, 1, 0, 0, 0, 0, 1, 0, 11, '', '2025-07-08', 100, '2025-07-07 20:27:09', '2025-07-07 20:27:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stocks_logs`
+--
+
+CREATE TABLE `stocks_logs` (
+  `stocks_logs_id` bigint(20) NOT NULL,
+  `brand_fk` bigint(20) DEFAULT NULL,
+  `grade_fk` bigint(20) DEFAULT NULL,
+  `model_fk` bigint(20) DEFAULT NULL,
+  `size_fk` bigint(20) DEFAULT NULL,
+  `type_fk` bigint(20) DEFAULT NULL,
+  `colour_fk` bigint(20) DEFAULT NULL,
+  `unit_fk` bigint(20) DEFAULT NULL,
+  `item_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition') DEFAULT NULL,
+  `entry_date` date NOT NULL,
+  `balance` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `stocks_logs`
+--
+
+INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(25, 0, 0, 0, 0, 0, 0, 0, 10, 'opening_balance', '2025-06-30', 100, '2025-06-30 05:30:00', '2025-06-30 05:30:00'),
+(26, 0, 0, 0, 0, 0, 1, 0, 10, 'opening_balance', '2025-07-07', 100, '2025-07-07 20:23:33', '2025-07-07 20:23:33'),
+(27, 1, 0, 0, 0, 0, 1, 0, 11, '', '2025-07-08', 100, '2025-07-07 20:27:09', '2025-07-07 20:27:09');
 
 -- --------------------------------------------------------
 
@@ -384,6 +583,7 @@ INSERT INTO `types` (`type_id`, `type_title`, `status`, `created_date`, `modifie
 CREATE TABLE `units` (
   `unit_id` bigint(20) NOT NULL,
   `unit_title` varchar(255) NOT NULL,
+  `unit_value` enum('1','2','12','*') NOT NULL,
   `status` int(11) NOT NULL DEFAULT 0,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
@@ -393,12 +593,12 @@ CREATE TABLE `units` (
 -- Dumping data for table `units`
 --
 
-INSERT INTO `units` (`unit_id`, `unit_title`, `status`, `created_date`, `modified_date`) VALUES
-(1, 'PCS', 1, '2025-06-08 23:10:06', '2025-06-08 23:10:06'),
-(2, 'BOX', 1, '2025-06-08 23:10:06', '2025-06-08 23:10:06'),
-(3, 'DOZEN', 1, '2025-06-08 23:11:12', '2025-06-08 23:11:12'),
-(4, 'METER', 1, '2025-06-08 23:11:12', '2025-06-08 23:11:12'),
-(5, 'PAIR', 1, '2025-06-08 23:11:41', '2025-06-08 23:11:41');
+INSERT INTO `units` (`unit_id`, `unit_title`, `unit_value`, `status`, `created_date`, `modified_date`) VALUES
+(1, 'PCS', '1', 1, '2025-06-08 23:10:06', '2025-06-08 23:10:06'),
+(2, 'BOX', '*', 1, '2025-06-08 23:10:06', '2025-06-08 23:10:06'),
+(3, 'DOZEN', '12', 1, '2025-06-08 23:11:12', '2025-06-08 23:11:12'),
+(4, 'METER', '*', 1, '2025-06-08 23:11:12', '2025-06-08 23:11:12'),
+(5, 'PAIR', '2', 1, '2025-06-08 23:11:41', '2025-06-08 23:11:41');
 
 -- --------------------------------------------------------
 
@@ -562,6 +762,12 @@ ALTER TABLE `countries`
   ADD PRIMARY KEY (`country_id`);
 
 --
+-- Indexes for table `faqs`
+--
+ALTER TABLE `faqs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `genders`
 --
 ALTER TABLE `genders`
@@ -592,6 +798,30 @@ ALTER TABLE `models`
   ADD PRIMARY KEY (`model_id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Indexes for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD PRIMARY KEY (`order_detail_id`);
+
+--
+-- Indexes for table `payment_options`
+--
+ALTER TABLE `payment_options`
+  ADD PRIMARY KEY (`payment_option_id`);
+
+--
+-- Indexes for table `profile`
+--
+ALTER TABLE `profile`
+  ADD PRIMARY KEY (`profile_id`);
+
+--
 -- Indexes for table `shops`
 --
 ALTER TABLE `shops`
@@ -608,6 +838,18 @@ ALTER TABLE `sizes`
 --
 ALTER TABLE `state`
   ADD PRIMARY KEY (`state_id`);
+
+--
+-- Indexes for table `stocks`
+--
+ALTER TABLE `stocks`
+  ADD PRIMARY KEY (`stocks_id`);
+
+--
+-- Indexes for table `stocks_logs`
+--
+ALTER TABLE `stocks_logs`
+  ADD PRIMARY KEY (`stocks_logs_id`);
 
 --
 -- Indexes for table `types`
@@ -647,7 +889,7 @@ ALTER TABLE `users_types`
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `brand_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `brand_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -659,13 +901,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `colour_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `colour_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
   MODIFY `country_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `faqs`
+--
+ALTER TABLE `faqs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `genders`
@@ -683,19 +931,43 @@ ALTER TABLE `grades`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `item_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `items_attributes`
 --
 ALTER TABLE `items_attributes`
-  MODIFY `item_attribute_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `item_attribute_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT for table `models`
 --
 ALTER TABLE `models`
   MODIFY `model_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  MODIFY `order_detail_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+
+--
+-- AUTO_INCREMENT for table `payment_options`
+--
+ALTER TABLE `payment_options`
+  MODIFY `payment_option_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `profile`
+--
+ALTER TABLE `profile`
+  MODIFY `profile_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `shops`
@@ -707,7 +979,7 @@ ALTER TABLE `shops`
 -- AUTO_INCREMENT for table `sizes`
 --
 ALTER TABLE `sizes`
-  MODIFY `size_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `size_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `state`
@@ -716,10 +988,22 @@ ALTER TABLE `state`
   MODIFY `state_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `stocks`
+--
+ALTER TABLE `stocks`
+  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `stocks_logs`
+--
+ALTER TABLE `stocks_logs`
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
 -- AUTO_INCREMENT for table `types`
 --
 ALTER TABLE `types`
-  MODIFY `type_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `type_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -749,16 +1033,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
---
--- Table structure for table `faqs`
---
-
-CREATE TABLE `faqs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `question` varchar(500) NOT NULL,
-  `answer` text NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

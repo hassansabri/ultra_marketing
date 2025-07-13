@@ -29,10 +29,13 @@
      <?php 
      foreach($order_info as $oi){ ?>
 
-         <div id="abcdiv" class="m<?php echo $oi['item_id']?>">
-             <div class="main-div" style="">
-                 <div class="sub-div"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?><input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/><input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
-                 </div>
+<div id="abcdiv" class="m<?php echo $oi['item_id']?>">
+    <div class="main-div" >
+        <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>
+        <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
+        <span class="cross-span" onclick="orders.remove_order('<?php echo $oi['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
+                 <input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
+                </div>
              <div class="col-md-2 hidee" id="grade-div">
                  <lable>Grade</lable>
                  <div>

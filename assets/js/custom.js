@@ -208,6 +208,11 @@ var orders={
         
     });
 },
+remove_order:function(item_id,order_number){
+console.log(item_id);
+console.log(order_number);
+$('.m'+item_id).remove();
+},
     applyautocomoplete: function (services) {
       services.forEach((services) => {
      
@@ -237,13 +242,8 @@ let myVariable = 4;
                 return false;
             },
             select: function (event, ui) {
-                 event.preventDefault(); 
-                // Set the input field's value to the label
+                 event.preventDefault();
                 $(this).val(ui.item.label);
-              // When an item is selected, you can access both label and value
-    //           console.log(ui);
-    // console.log("Selected label:", ui.item.label);
-    // console.log("Selected value:", ui.item.value);
     orders.initorder(ui.item.value);
             }
         });
@@ -254,8 +254,6 @@ let myVariable = 4;
             type: 'post',
             data:'item_id=' + value
         }).done(function (msg) {
-            // console.log(ui.item.value);
-         //   $.LoadingOverlay("hide");
             var obj = JSON.parse(msg);
             if($("#abcdiv").hasClass('m'+value)){
                 return false;
