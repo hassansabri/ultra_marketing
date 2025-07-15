@@ -29,22 +29,101 @@
     public function index(){
         $this->data['all_items']=$this->model_order->getAllItems();
         $this->data["all_brands"] = $this->model_order->getallbrands();
+        $this->data["all_shops"] = $this->model_order->getallshops();
         $this->load->view('orders/new_order',$this->data);
     }
-    public function show_invoice() {
-        $this->data['profile']=$this->model_order->getprofiledetail();
-                $this->load->view("orders/invoice",$this->data);
-        
+    public function show_invoice($order_number = null) {
+        // If no order number provided, redirect to draft orders
+        if (!$order_number) {
+            redirect(site_url() . 'orders/draftorders');
         }
+        
+        // Get order information
+        $this->data['order_info'] = $this->model_order->getOrder($order_number);
+        $this->data['order_number'] = $order_number;
+        
+        // Get profile details for company information
+        $this->data['profile'] = $this->model_order->getprofiledetail();
+        
+        // Fetch shop info for the order (get shop_id from first order_info row)
+        $shop_info = null;
+        if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
+            $this->load->model('shops/m_shop', 'model_shop');
+            $shop = $this->model_shop->getshopdetail($this->data['order_info'][0]['shop_id']);
+            if ($shop && isset($shop[0])) {
+                $shop_info = $shop[0];
+            }
+        }
+        $this->data['shop_info'] = $shop_info;
+        
+        // Get order details for each item
+        $this->data['order_details'] = array();
+        foreach($this->data['order_info'] as $oi){
+            $item_id = $oi['item_id'];
+            $order_details = $this->model_order->getorderdetail($order_number, $item_id);
+            
+            // Get item details
+            $item_detail = $this->model_order->getitemdetail($item_id);
+            
+            // Organize order details by attribute type
+            $organized_details = array();
+            foreach($order_details as $detail){
+                $attribute_type = $detail['attribute_type'];
+                $attribute_fk = $detail['attribute_fk'];
+                $quantity = $detail['attribute_quantity'];
+                
+                // Get attribute details based on type
+                switch($attribute_type){
+                    case 'grade':
+                        $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
+                        break;
+                    case 'model':
+                        $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
+                        break;
+                    case 'size':
+                        $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
+                        break;
+                    case 'type':
+                        $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
+                        break;
+                    case 'colour':
+                        $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
+                        break;
+                    case 'unit':
+                        $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                        break;
+                    default:
+                        $attribute_detail = array();
+                }
+                
+                if(!isset($organized_details[$attribute_type])){
+                    $organized_details[$attribute_type] = array();
+                }
+                $organized_details[$attribute_type][] = array(
+                    'detail' => $attribute_detail,
+                    'quantity' => $quantity
+                );
+            }
+            
+            $this->data['order_details'][$item_id] = array(
+                'item_detail' => $item_detail[0],
+                'attributes' => $organized_details
+            );
+        }
+        
+        $this->load->view("orders/invoice", $this->data);
+    }
         public function initorder(){
-           $item_id= $this->input->post('item_id');
-           $attribute_fk=$this->model_order->getitemattributes($item_id);
-           $this->data = array();
+          $item_id= $this->input->post('item_id');
+          $this->data['flag']= $this->input->post('flag');
+          $this->data['order_number']= $this->input->post('order_number');
+          $attribute_fk=$this->model_order->getitemattributes($item_id);
+          
+          
            // print_r($attribute_fk);
            if($attribute_fk){
                       foreach($attribute_fk[0] as $value2){
                           $this->data['brands'][]=$this->model_order->getbranddetail($value2,'1');
-          
                       }
           }
 // print_r($attribute_fk[1]);
@@ -121,11 +200,14 @@ if($attribute_fk[0]){
         public function draft_order(){
          $order_number =  $this->input->post('order_number');
          $item_ids =  $this->input->post('item_ids');
-         foreach($item_ids as $value){
-           $item_id=$value;
+         $qty =  $this->input->post('item_qty');
+         $item_price =  $this->input->post('item_price');
+         $shop_id = $this->input->post('shopid'); // get selected shop
+         for($i=0;$i<sizeof($item_ids);$i++){
+           $item_id=$item_ids[$i];
            $data=$this->allattributes($item_id);
+           $this->model_order->insertdraftorder($order_number,$item_id,$qty[$i],$item_price[$i], $shop_id); // pass shop_id
            if($data['grades']){
-             $this->model_order->insertdraftorder($order_number,$item_id);
             $grade_quantity=0;
              foreach($data['grades'] as $value){
            $value['grade_id'];
@@ -177,6 +259,10 @@ if($attribute_fk[0]){
           $this->data['all_draft_orders']=$this->model_order->getAllDraftOrders();
           //  $this->data['products'] = $this->model_order->getdraftproducts();
            $this->load->view('orders/all_draft_orders',$this->data);
+        }
+        public function completeorders(){
+          $this->data['all_complete_orders']=$this->model_order->getAllCompleteOrders();
+           $this->load->view('orders/all_complete_orders',$this->data);
         }
         public function editorder($order_number){
           $this->data['order_info'] = $this->model_order->getOrder($order_number);
@@ -245,16 +331,25 @@ $this->data['all_items']=$this->model_order->getAllItems();
           $this->load->view('orders/editorder',$this->data);
 
         }
+        public function deleteorderdetail(){
+          $item_id = $this->input->post('item_id');
+            $order_number = $this->input->post('order_number');
+          $this->model_order->deleteorder2($order_number, $item_id);
+          $this->model_order->deleteOrderDetails($order_number, $item_id);
+        }
         public function draft_order_updater($order_number){
+          $item_ids = array();
             $item_ids = $this->input->post('item_ids');
             $item_qty = $this->input->post('item_qty');
-            
-            foreach($item_ids as $key => $value){
+            $item_price = $this->input->post('item_price');
+            if(isset($item_ids)&&sizeof($item_ids)>0){
+              foreach($item_ids as $key => $value){
                 $item_id = $value;
                 $quantity = isset($item_qty[$key]) ? $item_qty[$key] : 1;
+                $price = isset($item_price[$key]) ? $item_price[$key] : 0;
                 
                 // Update order quantity
-                $this->model_order->updateOrderQuantity($order_number, $item_id, $quantity);
+                $this->model_order->updateOrderQuantityAndPrice($order_number, $item_id, $quantity,$price);
                 
                 // Delete existing order details for this item
                 $this->model_order->deleteOrderDetails($order_number, $item_id);
@@ -313,8 +408,81 @@ $this->data['all_items']=$this->model_order->getAllItems();
                     }
                 }
             }
+            }else{
+              $this->model_order->deleteorder($order_number);
+            }
+            
             
             redirect(site_url() . 'orders/draftorders');
+        }
+        public function review($order_number){
+            // Get order information
+            $this->data['order_info'] = $this->model_order->getOrder($order_number);
+            $this->data['order_number'] = $order_number;
+            
+            // Get profile details for company information
+            $this->data['profile'] = $this->model_order->getprofiledetail();
+            
+            // Get order details for each item
+            $this->data['order_details'] = array();
+            foreach($this->data['order_info'] as $oi){
+                $item_id = $oi['item_id'];
+                $order_details = $this->model_order->getorderdetail($order_number, $item_id);
+                
+                // Get item details
+                $item_detail = $this->model_order->getitemdetail($item_id);
+                
+                // Organize order details by attribute type
+                $organized_details = array();
+                foreach($order_details as $detail){
+                    $attribute_type = $detail['attribute_type'];
+                    $attribute_fk = $detail['attribute_fk'];
+                    $quantity = $detail['attribute_quantity'];
+                    
+                    // Get attribute details based on type
+                    switch($attribute_type){
+                        case 'grade':
+                            $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
+                            break;
+                        case 'model':
+                            $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
+                            break;
+                        case 'size':
+                            $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
+                            break;
+                        case 'type':
+                            $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
+                            break;
+                        case 'colour':
+                            $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
+                            break;
+                        case 'unit':
+                            $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                            break;
+                        default:
+                            $attribute_detail = array();
+                    }
+                    
+                    if(!isset($organized_details[$attribute_type])){
+                        $organized_details[$attribute_type] = array();
+                    }
+                    $organized_details[$attribute_type][] = array(
+                        'detail' => $attribute_detail,
+                        'quantity' => $quantity
+                    );
+                }
+                
+                $this->data['order_details'][$item_id] = array(
+                    'item_detail' => $item_detail[0],
+                    'attributes' => $organized_details
+                );
+            }
+            
+            $this->load->view('orders/review_order', $this->data);
+        }
+        public function save($order_number){
+           $this->model_order->updateorder($order_number);
+           redirect(site_url() . 'orders/review/'.$order_number);
         }
 }
     

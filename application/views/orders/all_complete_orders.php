@@ -38,7 +38,7 @@
                                     -->
                                     <header>
                                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                        <h2>All Draft Orders</h2>
+                                        <h2>All Complete Orders</h2>
 
                                     </header>
 
@@ -63,11 +63,11 @@
                                                 <tbody>
                                                     <?php 
                                                 
-                                                    if (sizeof($all_draft_orders) > 0) { 
+                                                    if (sizeof($all_complete_orders) > 0) { 
                                                       //  print_r($all_draft_orders);
                                                         ?>
                                                         
-                                                        <?php foreach($all_draft_orders as $value) {  
+                                                        <?php foreach($all_complete_orders as $value) {  
                                                     ?>
                                                             <tr>
                                                                 <td><?php echo $value['order_number'] ?></td>
@@ -80,10 +80,6 @@
                                                                             <span class="caret"></span>
                                                                         </button>
                                                                         <ul class="dropdown-menu">
-                                                                            <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $value['order_number']; ?>">Edit Order</a>
-                                                                            </li>
-                                                                            <li class="divider"></li>
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Order</a>
                                                                             </li>

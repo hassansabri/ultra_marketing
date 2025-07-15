@@ -1,9 +1,14 @@
 <div>
     <div id="abcdiv" class="m<?php echo $item_detail[0]['item_id']?>">
         
-        </div>
-        <div class="main-div" style="">
-            <div class="sub-div"><?php echo $item_detail[0]['item_name']?><input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="1"/><input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/></div>
+		
+		<div class="main-div" style="">
+            <div class="sub-div"><?php echo $item_detail[0]['item_name']?>
+			<input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/>
+			<input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="1"/>
+			<input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value=""/>
+		<span class="cross-span" onclick="orders.remove_order('<?php echo $item_detail[0]['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
+		</div>
             </div>
         <div class="col-md-2 hidee" id="grade-div">
             <lable>Grade</lable>
@@ -85,7 +90,7 @@
 					<div style="clear:both"></div>
 				</div>
 			</div>
-			
+			</div>
 	</div>
 
 </div>

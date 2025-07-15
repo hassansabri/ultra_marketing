@@ -17,6 +17,11 @@ class m_orders extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+ public function getallshops(){
+     $this->db->where('shop_status',1);
+        $query = $this->db->get("shops");
+        return $query->result_array();
+    }
     public function getallbrands(){
         $this->db->where('status',1);
         $query = $this->db->get("brands");
@@ -247,6 +252,28 @@ $this->db->where("item_id", $items_id);
             return array();
         }
     }
+    public function getAllCompleteOrders(){
+        $this->db->where('order_status','confirm');
+         $this->db->group_by('order_number');
+        $query = $this->db->get("orders");
+      if (sizeof($query->result_array()) > 0) {
+            foreach ($query->result_array() as $value) {
+                $data = array(
+                    "order_id" => $value["order_id"],
+                    "order_number" => $value["order_number"],
+                    "item_fk" => $value["item_fk"],
+                    "order_quantity" => $value["order_quantity"],
+                    "order_price" => $value["order_price"],
+                    "created_date" => $value["created_date"],
+                    "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"])
+                );
+                $dat[]=$data;
+            }
+            return $dat;
+        } else {
+            return array();
+        }
+    }
     public function getOrder($order_number){
         $this->db->where('order_number',$order_number);
         $query = $this->db->get("orders");
@@ -258,8 +285,10 @@ $this->db->where("item_id", $items_id);
                     "order_number" => $value["order_number"],
                     "item_id" => $value["item_fk"],
                     "order_quantity" => $value["order_quantity"],
+                    "order_status" => $value["order_status"],
                     "order_price" => $value["order_price"],
                     "created_date" => $value["created_date"],
+                    "shop_id" => isset($value["shop_id"]) ? $value["shop_id"] : null,
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
                     "item_detail" => $this->getitemdetail($value["item_fk"])
                 );
@@ -276,8 +305,10 @@ $this->db->where("item_id", $items_id);
                     "order_number" => '',
                     "item_id" =>'',
                     "order_quantity" => '',
+                    "order_statue" => '',
                     "order_price" => '',
                     "created_date" => '',
+                    "shop_id" => '',
                     "order_detail" => '',
                     "item_detail" => ''
                 );;
@@ -290,23 +321,29 @@ $this->db->where("item_id", $items_id);
        //  echo $this->db->last_query();
             return $query->result_array();
     }
-    public function insertdraftorder($order_number,$item_id){
+    public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id = null){
         $data=array(
             'order_number'=>$order_number,
             'item_fk'=>$item_id,
+            'order_quantity'=>$order_quantity,
+            'order_price'=>$order_price,
+            'shop_id'=>$shop_id
         );
          $this->db->insert('orders',$data);
         
     }
 public function insertdraftorderdetail($order_number,$attribute_fk,$quantity,$item_id,$type){
-$data=array(
-            'order_number_fk'=>$order_number,
-            'attribute_fk'=>$attribute_fk,
-            'attribute_quantity'=>$quantity,
-            'item_fk'=>$item_id,
-            'attribute_type'=>$type,
-        );
-         $this->db->insert('order_detail',$data);
+    if($quantity > 0){
+
+        $data=array(
+                    'order_number_fk'=>$order_number,
+                    'attribute_fk'=>$attribute_fk,
+                    'attribute_quantity'=>$quantity,
+                    'item_fk'=>$item_id,
+                    'attribute_type'=>$type,
+                );
+                 $this->db->insert('order_detail',$data);
+    }
 }
 
 public function deleteOrderDetails($order_number, $item_id) {
@@ -314,11 +351,55 @@ public function deleteOrderDetails($order_number, $item_id) {
     $this->db->where('item_fk', $item_id);
     $this->db->delete('order_detail');
 }
-
-public function updateOrderQuantity($order_number, $item_id, $quantity) {
+public function deleteorder2($order_number,$item_id){
+      $this->db->where('order_number', $order_number);
+      $this->db->where('item_fk',$item_id);
+         $this->db->delete('orders');
+}
+public function deleteorder($order_number){
+      $this->db->where('order_number', $order_number);
+         $this->db->delete('orders');
+}
+public function get_itemids_from_ordernumber($order_number){
+$this->db->select('item_fk');
+    $this->db->where('order_number', $order_number);
+    $query = $this->db->get("orders");
+        $dat=array();
+      if (sizeof($query->result_array()) > 0) {
+        return true;
+      }else{
+        return false;
+      }
+}
+public function ifitemalredyexist($order_number, $item_id){
+    $this->db->select('order_id');
     $this->db->where('order_number', $order_number);
     $this->db->where('item_fk', $item_id);
-    $this->db->update('orders', array('order_quantity' => $quantity));
+        $query = $this->db->get("orders");
+        $dat=array();
+      if (sizeof($query->result_array()) > 0) {
+        return true;
+      }else{
+        return false;
+      }
+}
+public function updateOrderQuantityAndPrice($order_number, $item_id, $quantity,$price) {
+    $exist = $this->ifitemalredyexist($order_number, $item_id);
+    if(!$exist){
+        // insrt order
+        $this->insertdraftorder($order_number,$item_id);
+    }
+    $item_ids = array();
+    // $this->insertdraftorder($order_number,$item_id);
+    $now = date('Y-m-d H:i:s');
+    $this->db->where('order_number', $order_number);
+    $this->db->where('item_fk', $item_id);
+    $this->db->update('orders', array('order_quantity' => $quantity,'order_price' => $price,'modified_date'=>$now));
+    $afftectedRows = $this->db->affected_rows();
+    if ($afftectedRows) {   
+            $item_ids[]=$item_id;
+         }
+         
 }
 
 public function updateOrderDetail($order_number, $attribute_fk, $quantity, $item_id, $type) {
@@ -327,6 +408,11 @@ public function updateOrderDetail($order_number, $attribute_fk, $quantity, $item
     $this->db->where('item_fk', $item_id);
     $this->db->where('attribute_type', $type);
     $this->db->update('order_detail', array('attribute_quantity' => $quantity));
+}
+public function updateorder($order_number){
+    $this->db->where('order_number', $order_number);
+    $this->db->where('order_status', 'draft');
+    $this->db->update('orders', array('order_status' => 'confirm'));
 }
 
 }

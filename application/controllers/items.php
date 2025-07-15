@@ -37,6 +37,7 @@
 public function additem(){
     $this->data["update"] = "no";   
          $this->data["all_categories"] = $this->model_category->getallcategories();    
+         $this->data["all_brands"] = $this->model_item->getallbrands();
     $this->load->view('items/add_new_item', $this->data);
 }
 public function addnewitem(){

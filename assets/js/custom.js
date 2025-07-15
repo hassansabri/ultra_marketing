@@ -186,19 +186,18 @@ $(document).ready(function () {
 });
 var orders={
     init:function(){
-        $(".number").keypress(function (e) {
-        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $(document).on('keypress', '.number', function (e) {
+         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
         //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
         return false;
         }
-        });
+        
+    });
         $(document).on('change', '.show', function (ele) {
         var id = $(this).val();
-        console.log(id);
             var html = $.trim($(this).find('option:selected').text());
             console.log(html);
            var attrid = $('option:selected', this).attr('atttype');
-           console.log('#'+attrid+'-div');
            $('#'+attrid+'-div').show();
         if ($(this).is(':checked')) {
             val = "yes";
@@ -209,11 +208,17 @@ var orders={
     });
 },
 remove_order:function(item_id,order_number){
-console.log(item_id);
-console.log(order_number);
+$.LoadingOverlay("show");
+        $.ajax({
+            url: baseurl + '/orders/deleteorderdetail',
+            type: 'post',
+            data: 'item_id=' + item_id + '&order_number=' + order_number
+        }).done(function (msg) {
+            $.LoadingOverlay("hide");
+        });
 $('.m'+item_id).remove();
 },
-    applyautocomoplete: function (services) {
+    applyautocomoplete: function (services,flag=false,order_number=false) {
       services.forEach((services) => {
      
 let myVariable = 4;
@@ -244,15 +249,15 @@ let myVariable = 4;
             select: function (event, ui) {
                  event.preventDefault();
                 $(this).val(ui.item.label);
-    orders.initorder(ui.item.value);
+    orders.initorder(ui.item.value,flag,order_number);
             }
         });
     },
-   initorder:function(value,item_id){
+   initorder:function(value,flag,order_number){
     $.ajax({
             url: baseurl + '/orders/initorder',
             type: 'post',
-            data:'item_id=' + value
+            data:'item_id=' + value + '&flag=' + flag + '&order_number=' + order_number,
         }).done(function (msg) {
             var obj = JSON.parse(msg);
             if($("#abcdiv").hasClass('m'+value)){

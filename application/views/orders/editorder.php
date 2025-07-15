@@ -33,6 +33,7 @@
     <div class="main-div" >
         <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>
         <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
+      <input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>"/>
         <span class="cross-span" onclick="orders.remove_order('<?php echo $oi['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
                  <input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
                 </div>
@@ -164,7 +165,7 @@
         }
         ?>
    ];
-    orders.applyautocomoplete(availableTags);
+    orders.applyautocomoplete(availableTags,'1',<?php echo $order_number; ?>);
     orders.init();
 </script>
 <?php $this->load->view("common/footer"); ?>

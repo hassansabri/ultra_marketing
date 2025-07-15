@@ -26,7 +26,27 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
-                                Type Item Name : <input class="tags"/><span> Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo rand(0000,9999) ?>"/></span>
+                                <?php $order_number = rand(0000,9999); ?>
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
+                                     Type Item Name : <input class="tags"/><span> 
+                                
+                                </div>
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
+                                
+                                     Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number ?>"/></span>
+                                </div>
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
+                                
+                                     Shop : <select id="" name="shopid" class="form-control">
+                                         <option vlue="0">Please select</option>
+                                          <?php if ($all_shops) { ?>
+                                                         <?php foreach ($all_shops as $value) { ?>
+                                                             <option  value="<?php echo $value["shop_id"]; ?>" ><?php echo $value["shop_name"]; ?></option>
+                                                         <?php } ?>
+                                                     <?php } ?>
+                                     </select>
+                                </div>
+                                <div style="clear:both"></div>
                             </div>
                         </div>
                     </div>
@@ -69,7 +89,7 @@
         }
         ?>
    ];
-    orders.applyautocomoplete(availableTags);
+    orders.applyautocomoplete(availableTags,false,<?php echo $order_number ?>);
     orders.init();
 </script>
 <?php $this->load->view("common/footer"); ?>
