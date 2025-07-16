@@ -183,7 +183,7 @@
                                     <a href="<?php echo site_url(); ?>/users" title="All Users"><span class="menu-item-parent"> <?php echo $this->lang->line("all_users"); ?></span></a>
                                 </li>
                                 <li class="">
-                                    <a href="<?php echo site_url(); ?>/users/adduser" title="Add User"><span class="menu-item-parent"> <?php echo $this->lang->line("add_user"); ?></span></a>
+                                    <a href="<?php echo site_url(); ?>/users/adduser" title="Add User"><span class="menu-item-parent">Add User</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -356,14 +356,7 @@
                             </ul>
                         </li>
                     <?php } ?>
-                    <!-- FAQ Management -->
-                    <?php if ($this->session->userdata('logged_in')) { ?>
-                        <li class="">
-                            <a href="<?php echo site_url('faq/index'); ?>" title="FAQ Management">
-                                <i class="fa fa-lg fa-fw fa-question-circle"></i> <span class="menu-item-parent">FAQ Management</span>
-                            </a>
-                        </li>
-                    <?php } ?>
+                    
                 </ul>
             </nav>
             <span class="minifyme" data-action="minifyMenu"> 

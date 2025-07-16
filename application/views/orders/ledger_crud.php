@@ -55,6 +55,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Order Number</th>
+                                    <th>Shop</th>
                                     <th>Date</th>
                                     <th>Amount</th>
                                     <th>Payment Method</th>
@@ -69,6 +70,23 @@
                                         <tr>
                                             <td><?php echo $row['ledger_id']; ?></td>
                                             <td><?php echo htmlspecialchars($row['order_number']); ?></td>
+                                            <?php 
+                                            // Fetch shop name for this order
+                                            $shop_name = '';
+                                            if (isset($row['order_number'])) {
+                                                $CI =& get_instance();
+                                                $CI->load->model('orders/m_orders', 'model_order');
+                                                $order_info = $CI->model_order->getOrder($row['order_number']);
+                                                if (isset($order_info[0]['shop_id']) && $order_info[0]['shop_id']) {
+                                                    $CI->load->model('shops/m_shop', 'model_shop');
+                                                    $shop = $CI->model_shop->getshopdetail($order_info[0]['shop_id']);
+                                                    if ($shop && isset($shop[0]['shop_name'])) {
+                                                        $shop_name = $shop[0]['shop_name'];
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <td><?php echo htmlspecialchars($shop_name); ?></td>
                                             <td><?php echo htmlspecialchars($row['date']); ?></td>
                                             <td><?php echo htmlspecialchars($row['amount']); ?></td>
                                             <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
