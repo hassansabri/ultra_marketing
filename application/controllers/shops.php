@@ -119,6 +119,12 @@ public function getstates(){
             echo "0";
         }
     }
+    public function ledger($shop_id) {
+        $this->load->model('orders/m_orders', 'model_orders');
+        $this->data['shop_ledger'] = $this->model_orders->getShopLedger($shop_id);
+        $this->data['shop_detail'] = $this->model_shops->getshopdetail($shop_id);
+        $this->load->view('shops/shop_ledger', $this->data);
+    }
         }
     
 ?>

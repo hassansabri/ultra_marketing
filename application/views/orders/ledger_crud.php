@@ -13,6 +13,35 @@
                     <div class="panel-body">
                         <form method="post" action="<?php echo isset($entry) ? site_url('orders/edit_ledger_entry/'.$entry['ledger_id']) : site_url('orders/add_ledger_entry'); ?>">
                             <div class="form-group">
+                                <label for="shop_id">Shop</label>
+                                <select class="form-control" name="shop_id" id="shop_id">
+                                    <option value="">Select Shop</option>
+                                    <?php if(isset($all_shops) && is_array($all_shops)) { ?>
+                                        <?php foreach($all_shops as $shop) { ?>
+                                            <option value="<?php echo $shop['shop_id']; ?>"
+                                                <?php 
+                                                // Try to pre-select shop if editing
+                                                $selected = '';
+                                                if(isset($entry)) {
+                                                    // Try to get shop_id from order_number
+                                                    if(isset($entry['order_number'])) {
+                                                        $CI =& get_instance();
+                                                        $CI->load->model('orders/m_orders');
+                                                        $order_info = $CI->m_orders->getOrder($entry['order_number']);
+                                                        if(isset($order_info[0]['shop_id']) && $order_info[0]['shop_id'] == $shop['shop_id']) {
+                                                            $selected = 'selected';
+                                                        }
+                                                    }
+                                                }
+                                                echo $selected;
+                                                ?>>
+                                                <?php echo htmlspecialchars($shop['shop_name']); ?>
+                                            </option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="order_number">Order Number</label>
                                 <input type="text" class="form-control" name="order_number" id="order_number" value="<?php echo isset($entry) ? htmlspecialchars($entry['order_number']) : ''; ?>" required>
                             </div>
@@ -26,7 +55,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="payment_method">Payment Method</label>
-                                <input type="text" class="form-control" name="payment_method" id="payment_method" value="<?php echo isset($entry) ? htmlspecialchars($entry['payment_method']) : ''; ?>">
+                                <select class="form-control" name="payment_method" id="payment_method" required>
+                                    <option value="">Select Payment Method</option>
+                                    <?php
+                                    $payment_options = array('Cash', 'Bank Transfer', 'Credit Card', 'Cheque', 'Other');
+                                    $selected_method = isset($entry) ? $entry['payment_method'] : '';
+                                    foreach($payment_options as $option) {
+                                        $selected = ($selected_method == $option) ? 'selected' : '';
+                                        echo "<option value=\"$option\" $selected>$option</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="type">Type</label>

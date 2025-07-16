@@ -462,6 +462,17 @@ public function updateorder($order_number){
         return $query->row_array();
     }
 
+    // Get all ledger entries for a shop
+    public function getShopLedger($shop_id) {
+        $this->db->select('order_ledger.*, orders.shop_id');
+        $this->db->from('order_ledger');
+        $this->db->join('orders', 'orders.order_number = order_ledger.order_number');
+        $this->db->where('orders.shop_id', $shop_id);
+        $this->db->order_by('order_ledger.date', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     // Check stock availability for an item with attributes
     public function checkStockAvailability($item_id, $order_quantity, $attributes = array()) {
         $this->load->model('stocks/m_stocks', 'model_stock');

@@ -533,6 +533,7 @@ $this->data['all_items']=$this->model_order->getAllItems();
     // List all ledger entries for all orders
     public function ledger() {
         $this->data['ledger_entries'] = $this->model_order->getAllOrderLedger();
+        $this->data['all_shops'] = $this->model_order->getallshops();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 
@@ -548,6 +549,7 @@ $this->data['all_items']=$this->model_order->getAllItems();
             $this->model_order->insertOrderLedger($order_number, $date, $amount, $payment_method, $remarks, $type);
             redirect(site_url('orders/ledger'));
         }
+        $this->data['all_shops'] = $this->model_order->getallshops();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 
@@ -566,6 +568,7 @@ $this->data['all_items']=$this->model_order->getAllItems();
             redirect(site_url('orders/ledger'));
         }
         $this->data['entry'] = $this->model_order->getOrderLedgerById($ledger_id);
+        $this->data['all_shops'] = $this->model_order->getallshops();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 

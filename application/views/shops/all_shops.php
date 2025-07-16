@@ -96,6 +96,9 @@
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/shops/editshop/<?php echo $value['shop_id']; ?>">Edit Shop</a>
                                                                             </li>
+                                                                            <li>
+                                                                                <a href="<?php echo site_url(); ?>/shops/ledger/<?php echo $value['shop_id']; ?>">Ledger</a>
+                                                                            </li>
                                                                             <li class="divider"></li>
                                                                             <!-- <li>
                                                                                 <a href="<?php echo site_url(); ?>/users/changepermissions/<?php echo $value['shop_id']; ?>"><?php echo $this->lang->line("AccessRights"); ?></a>
