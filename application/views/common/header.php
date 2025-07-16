@@ -339,6 +339,11 @@
                             </ul>	
                         </li> 
                     <?php } ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
+                        <li class="">      
+                            <a href="<?php echo site_url(); ?>/orders/ledger" title="Order Ledger"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Order Ledger</span></a>
+                        </li>
+                    <?php } ?>
                     <!-- Profile Management -->
                     <?php if ($this->session->userdata('logged_in')) { ?>
                         <li class="">

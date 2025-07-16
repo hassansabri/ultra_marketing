@@ -12,6 +12,18 @@
     <!-- END RIBBON -->
     <!-- MAIN CONTENT -->
     <div id="content">
+        <!-- Stock Error Messages -->
+        <?php if($this->session->flashdata('stock_errors')): ?>
+            <div class="alert alert-danger">
+                <h4><i class="fa fa-exclamation-triangle"></i> Stock Availability Issues</h4>
+                <ul>
+                    <?php foreach($this->session->flashdata('stock_errors') as $error): ?>
+                        <li><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        
         <!-- widget grid -->
         <section id="widget-grid" class="">
             <!-- row -->

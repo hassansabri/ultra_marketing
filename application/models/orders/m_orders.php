@@ -415,6 +415,90 @@ public function updateorder($order_number){
     $this->db->update('orders', array('order_status' => 'confirm'));
 }
 
+    // Insert a ledger entry for an order (now with type)
+    public function insertOrderLedger($order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
+        $data = array(
+            'order_number' => $order_number,
+            'date' => $date,
+            'amount' => $amount,
+            'payment_method' => $payment_method,
+            'remarks' => $remarks,
+            'type' => $type
+        );
+        $this->db->insert('order_ledger', $data);
+        return $this->db->insert_id();
+    }
+
+    // Fetch all ledger entries for an order
+    public function getOrderLedger($order_number) {
+        $this->db->where('order_number', $order_number);
+        $this->db->order_by('date', 'ASC');
+        $query = $this->db->get('order_ledger');
+        return $query->result_array();
+    }
+
+    // Update a ledger entry (now with type)
+    public function updateOrderLedger($ledger_id, $data) {
+        $this->db->where('ledger_id', $ledger_id);
+        return $this->db->update('order_ledger', $data);
+    }
+
+    // Delete a ledger entry
+    public function deleteOrderLedger($ledger_id) {
+        $this->db->where('ledger_id', $ledger_id);
+        return $this->db->delete('order_ledger');
+    }
+
+    // Get all ledger entries (include type)
+    public function getAllOrderLedger() {
+        $query = $this->db->order_by('date', 'DESC')->get('order_ledger');
+        return $query->result_array();
+    }
+
+    // Get a single ledger entry by ID
+    public function getOrderLedgerById($ledger_id) {
+        $this->db->where('ledger_id', $ledger_id);
+        $query = $this->db->get('order_ledger');
+        return $query->row_array();
+    }
+
+    // Check stock availability for an item with attributes
+    public function checkStockAvailability($item_id, $order_quantity, $attributes = array()) {
+        $this->load->model('stocks/m_stocks', 'model_stock');
+        
+        // Prepare stock check data
+        $stock_data = array(
+            'item_fk' => $item_id,
+            'brand_fk' => isset($attributes['brand_fk']) ? $attributes['brand_fk'] : 0,
+            'grade_fk' => isset($attributes['grade_fk']) ? $attributes['grade_fk'] : 0,
+            'model_fk' => isset($attributes['model_fk']) ? $attributes['model_fk'] : 0,
+            'size_fk' => isset($attributes['size_fk']) ? $attributes['size_fk'] : 0,
+            'type_fk' => isset($attributes['type_fk']) ? $attributes['type_fk'] : 0,
+            'colour_fk' => isset($attributes['colour_fk']) ? $attributes['colour_fk'] : 0,
+            'unit_fk' => isset($attributes['unit_fk']) ? $attributes['unit_fk'] : 0
+        );
+        
+        $stock_result = $this->model_stock->checkstock($stock_data);
+        
+        if (!empty($stock_result) && isset($stock_result[0]['balance'])) {
+            $available_stock = $stock_result[0]['balance'];
+            return array(
+                'available' => $available_stock,
+                'requested' => $order_quantity,
+                'sufficient' => ($available_stock >= $order_quantity),
+                'shortage' => max(0, $order_quantity - $available_stock)
+            );
+        }
+        
+        // If no stock record found, return 0 available
+        return array(
+            'available' => 0,
+            'requested' => $order_quantity,
+            'sufficient' => false,
+            'shortage' => $order_quantity
+        );
+    }
+
 }
   
   

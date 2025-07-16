@@ -14,7 +14,7 @@
             <lable>Grade</lable>
             <div>
 
-                <?php if($grades){?>
+                <?php if(isset($grades)){?>
                 <?php foreach($grades as $value){?>
                 <span><?php echo $value['grade_title'];?></span>
                 <input class="number gengrade" type="text" placeholder="grade" name="grade-<?php echo $value['grade_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;"
@@ -33,7 +33,7 @@
 				<div>
 
 		
-					<?php if($models){?>
+					<?php if(isset($models)){?>
 					<?php foreach($models as $value){?>
 					<span><?php echo $value['model_title'];?></span>
 					<input class="number" type="text" name="model-<?php echo $value['model_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;" value="0" />
@@ -49,7 +49,7 @@
 				<lable>Sizes</lable>
 				<div>
 
-					<?php if($sizes){?>
+					<?php if(isset($sizes)){?>
 					<?php foreach($sizes as $value){?>
 					<span><?php echo $value['size_title'];?></span>
 					<input class="number" type="text" name="size-<?php echo $value['size_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;" value="0" />
@@ -63,7 +63,7 @@
 			<div class="col-md-2 hidee" id="type-div">
 				<lable>Types</lable>
 				<div>
-					<?php if($types){?>
+					<?php if(isset($types)){?>
 					<?php foreach($types as $value){?>
 					<span><?php echo $value['type_title'];?></span>
 					<input class="number" type="text" name="type-<?php echo $value['type_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;" value="0" />
@@ -79,7 +79,7 @@
 				<lable>colours</lable>
 				<div>
 					
-					<?php if($colours){?>
+					<?php if(isset($colours)){?>
 					<?php foreach($colours as $value){?>
 					<span><?php echo $value['colour_title'];?></span>
 					<input class="number" type="text" name="colour-<?php echo $value['colour_id'] ?>-<?php echo $item_detail[0]["item_id"]; ?>" style="width:100%;" value="0" />

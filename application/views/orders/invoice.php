@@ -1,17 +1,5 @@
-<?php $this->load->view("common/header"); ?>
-
 <div id="main" role="main">
-    <!-- RIBBON -->
-    <div id="ribbon">
-        <!-- breadcrumb -->
-        <ol class="breadcrumb">
-            <li><?php echo $this->lang->line("home"); ?></li>
-            <li>Orders</li>
-            <li>Invoice</li>
-        </ol>
-        <!-- end breadcrumb -->
-    </div>
-    <!-- END RIBBON -->
+
     
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -202,9 +190,7 @@
                                                                 </div>
                                                             </div>
                                                         <?php else: ?>
-                                                            <div class="alert alert-info" style="margin-top: 15px;">
-                                                                <i class="fa fa-info-circle"></i> No attributes found for this item.
-                                                            </div>
+                                                    
                                                         <?php endif; ?>
                                                     </td>
                                                 </tr>
@@ -227,6 +213,62 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <?php if(isset($order_ledger) && count($order_ledger) > 0): ?>
+                                <!-- Order Ledger Section -->
+                                <div class="invoice-ledger" style="margin-top: 30px;">
+                                    <h4><i class="fa fa-book"></i> Order Ledger</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th class="text-right">Debit (<?php echo $currency; ?>)</th>
+                                                        <th class="text-right">Credit (<?php echo $currency; ?>)</th>
+                                                        <th class="text-right">Balance (<?php echo $currency; ?>)</th>
+                                                        <th>Type</th>
+                                                        <th>Payment Method</th>
+                                                        <th>Remarks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php 
+                                                    $total_debit = 0; 
+                                                    $total_credit = 0; 
+                                                    $balance = 0;
+                                                    foreach($order_ledger as $entry): 
+                                                        $debit = $entry['type'] == 'debit' ? $entry['amount'] : 0;
+                                                        $credit = $entry['type'] == 'credit' ? $entry['amount'] : 0;
+                                                        $total_debit += $debit;
+                                                        $total_credit += $credit;
+                                                        $balance += ($credit - $debit);
+                                                    ?>
+                                                        <tr>
+                                                            <td><?php echo date('Y-m-d H:i', strtotime($entry['date'])); ?></td>
+                                                            <td class="text-right"><?php echo $debit ? $currency . number_format($debit, 2) : '-'; ?></td>
+                                                            <td class="text-right"><?php echo $credit ? $currency . number_format($credit, 2) : '-'; ?></td>
+                                                            <td class="text-right"><?php echo $currency . number_format($balance, 2); ?></td>
+                                                            <td><?php echo ucfirst($entry['type']); ?></td>
+                                                            <td><?php echo htmlspecialchars($entry['payment_method']); ?></td>
+                                                            <td><?php echo htmlspecialchars($entry['remarks']); ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr style="background: #f6f8fa; font-weight: bold;">
+                                                        <td class="text-right">Totals:</td>
+                                                        <td class="text-right"><?php echo $currency . number_format($total_debit, 2); ?></td>
+                                                        <td class="text-right"><?php echo $currency . number_format($total_credit, 2); ?></td>
+                                                        <td class="text-right"><?php echo $currency . number_format($balance, 2); ?></td>
+                                                        <td colspan="3"></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                      
+                                    <?php endif; ?>
+                                </div>
+                                <!-- End Order Ledger Section -->
                                 
                                 <!-- Action Buttons -->
                                 <div class="row" style="margin-top: 30px;">
@@ -376,11 +418,3 @@
     }
 }
 </style>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    console.log('Invoice page loaded for order: <?php echo $order_number; ?>');
-});
-</script>
-
-<?php $this->load->view("common/footer"); ?>

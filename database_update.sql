@@ -14,3 +14,17 @@ UPDATE `profile` SET `status` = 1 WHERE `status` IS NULL;
 
 -- Add shop_id to orders table
 ALTER TABLE `orders` ADD COLUMN `shop_id` BIGINT(20) DEFAULT NULL; 
+
+-- Create order_ledger table for order payments/transactions
+CREATE TABLE `order_ledger` (
+  `ledger_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `order_number` BIGINT(20) NOT NULL,
+  `date` DATETIME NOT NULL,
+  `amount` DECIMAL(12,2) NOT NULL,
+  `payment_method` VARCHAR(100) DEFAULT NULL,
+  `remarks` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`ledger_id`)
+); 
+
+-- Add type (debit/credit) to order_ledger
+ALTER TABLE `order_ledger` ADD COLUMN `type` ENUM('debit','credit') DEFAULT 'credit' AFTER `ledger_id`; 
