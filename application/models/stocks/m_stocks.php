@@ -37,6 +37,106 @@ class m_stocks extends CI_Model {
         $this->db->insert('stocks',$data);
         $this->db->insert('stocks_logs',$data);
     }
+    
+    /**
+     * Deduct stock for an order
+     * @param array $data Stock data with quantities to deduct
+     * @param int $quantity Quantity to deduct
+     * @return bool Success status
+     */
+    public function deductStock($data, $quantity) {
+        // First check if we have enough stock
+        
+        $current_stock = $this->checkstock($data);
+        if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+            return false; // No stock record found
+        }
+        
+        $available_stock = $current_stock[0]['balance'];
+        if ($available_stock < $quantity) {
+            return false; // Insufficient stock
+        }
+        
+        // Calculate new balance
+        $new_balance = $available_stock - $quantity;
+        
+        // Update stock
+        if($data['grade_fk']){
+            $this->db->where('grade_fk', $data['grade_fk']);
+            $update=true;
+        }
+        if($data['model_fk']){
+            $this->db->where('model_fk', $data['model_fk']);
+            $update=true;
+        }
+        if($data['size_fk']){
+            $this->db->where('size_fk', $data['size_fk']);
+            $update=true;
+        }
+        if($data['type_fk']){
+            $this->db->where('type_fk', $data['type_fk']);
+            $update=true;
+        }
+        if($data['colour_fk']){
+            $this->db->where('colour_fk', $data['colour_fk']);
+            $update=true;
+        }
+        if($data['item_fk']){
+            $this->db->where('item_fk', $data['item_fk']);
+            $update=true;
+        }
+        if($update){
+            $this->db->update('stocks', array('balance' => $new_balance));
+        
+        }
+        // Log the deduction
+        $log_data = $data;
+        $log_data['balance'] = -$quantity; // Negative for deduction
+        $log_data['stock_type'] = 'deduction';
+        $log_data['entry_date'] = date('Y-m-d');
+        $this->db->insert('stocks_logs', $log_data);
+        
+        return true;
+    }
+    
+    /**
+     * Restore stock (for order cancellation or modification)
+     * @param array $data Stock data
+     * @param int $quantity Quantity to restore
+     * @return bool Success status
+     */
+    public function restoreStock($data, $quantity) {
+        // Get current stock
+        $current_stock = $this->checkstock($data);
+        if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+            // If no stock record exists, create one
+            $data['balance'] = $quantity;
+            $this->db->insert('stocks', $data);
+        } else {
+            // Update existing stock
+            $available_stock = $current_stock[0]['balance'];
+            $new_balance = $available_stock + $quantity;
+            
+            $this->db->where('brand_fk', $data['brand_fk']);
+            $this->db->where('grade_fk', $data['grade_fk']);
+            $this->db->where('model_fk', $data['model_fk']);
+            $this->db->where('size_fk', $data['size_fk']);
+            $this->db->where('type_fk', $data['type_fk']);
+            $this->db->where('colour_fk', $data['colour_fk']);
+            $this->db->where('item_fk', $data['item_fk']);
+            $this->db->where('unit_fk', $data['unit_fk']);
+            $this->db->update('stocks', array('balance' => $new_balance));
+        }
+        
+        // Log the restoration
+        $log_data = $data;
+        $log_data['balance'] = $quantity; // Positive for restoration
+        $log_data['stock_type'] = 'restoration';
+        $log_data['entry_date'] = date('Y-m-d');
+        $this->db->insert('stocks_logs', $log_data);
+        
+        return true;
+    }
        public function getunits($status=false){
         if($status){
             $this->db->where('status',$status);

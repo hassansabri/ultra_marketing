@@ -386,8 +386,8 @@ public function ifitemalredyexist($order_number, $item_id){
 public function updateOrderQuantityAndPrice($order_number, $item_id, $quantity,$price) {
     $exist = $this->ifitemalredyexist($order_number, $item_id);
     if(!$exist){
-        // insrt order
-        $this->insertdraftorder($order_number,$item_id);
+        // insert order with default values
+        $this->insertdraftorder($order_number, $item_id, $quantity, $price);
     }
     $item_ids = array();
     // $this->insertdraftorder($order_number,$item_id);
@@ -451,14 +451,23 @@ public function updateorder($order_number){
 
     // Get all ledger entries (include type)
     public function getAllOrderLedger() {
-        $query = $this->db->order_by('date', 'DESC')->get('order_ledger');
+        $this->db->select('order_ledger.*, orders.shop_id, shops.shop_name');
+        $this->db->from('order_ledger');
+        $this->db->join('orders', 'orders.order_number = order_ledger.order_number', 'left');
+        $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
+        $this->db->order_by('order_ledger.date', 'DESC');
+        $query = $this->db->get();
         return $query->result_array();
     }
 
     // Get a single ledger entry by ID
     public function getOrderLedgerById($ledger_id) {
-        $this->db->where('ledger_id', $ledger_id);
-        $query = $this->db->get('order_ledger');
+        $this->db->select('order_ledger.*, orders.shop_id, shops.shop_name');
+        $this->db->from('order_ledger');
+        $this->db->join('orders', 'orders.order_number = order_ledger.order_number', 'left');
+        $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
+        $this->db->where('order_ledger.ledger_id', $ledger_id);
+        $query = $this->db->get();
         return $query->row_array();
     }
 
@@ -508,6 +517,159 @@ public function updateorder($order_number){
             'sufficient' => false,
             'shortage' => $order_quantity
         );
+    }
+
+    /**
+     * Deduct stock for an order
+     * @param string $order_number Order number
+     * @return bool Success status
+     */
+    public function deductStockForOrder($order_number) {
+        $this->load->model('stocks/m_stocks', 'model_stock');
+        
+        // Get order details
+        $order_info = $this->getOrder($order_number);
+        if (empty($order_info)) {
+            return false;
+        }
+        
+        $success = true;
+        
+        foreach ($order_info as $order_item) {
+            $item_id = $order_item['item_id'];
+            $quantity = $order_item['order_quantity'];
+            
+            // Get order details for attributes
+            $order_details = $this->getorderdetail($order_number, $item_id);
+            
+            if (empty($order_details)) {
+                // No attributes, deduct from general stock
+                $stock_data = array(
+                    'item_fk' => $item_id,
+                    'brand_fk' => 0,
+                    'grade_fk' => 0,
+                    'model_fk' => 0,
+                    'size_fk' => 0,
+                    'type_fk' => 0,
+                    'colour_fk' => 0,
+                    'unit_fk' => 0
+                );
+                
+                if (!$this->model_stock->deductStock($stock_data, $quantity)) {
+                    $success = false;
+                }
+            } else {
+                // Deduct stock for each attribute combination
+                foreach ($order_details as $detail) {
+                    $attribute_quantity = $detail['attribute_quantity'];
+                    if ($attribute_quantity > 0) {
+                        $stock_data = array(
+                            'item_fk' => $item_id,
+                            'brand_fk' => 0,
+                            'grade_fk' => ($detail['attribute_type'] == 'grade') ? $detail['attribute_fk'] : 0,
+                            'model_fk' => ($detail['attribute_type'] == 'model') ? $detail['attribute_fk'] : 0,
+                            'size_fk' => ($detail['attribute_type'] == 'size') ? $detail['attribute_fk'] : 0,
+                            'type_fk' => ($detail['attribute_type'] == 'type') ? $detail['attribute_fk'] : 0,
+                            'colour_fk' => ($detail['attribute_type'] == 'colour') ? $detail['attribute_fk'] : 0,
+                            'unit_fk' => ($detail['attribute_type'] == 'unit') ? $detail['attribute_fk'] : 0
+                        );
+                        
+                        if (!$this->model_stock->deductStock($stock_data, $attribute_quantity)) {
+                            $success = false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $success;
+    }
+    
+    /**
+     * Restore stock for an order (for cancellation or modification)
+     * @param string $order_number Order number
+     * @return bool Success status
+     */
+    public function restoreStockForOrder($order_number) {
+        $this->load->model('stocks/m_stocks', 'model_stock');
+        
+        // Get order details
+        $order_info = $this->getOrder($order_number);
+        if (empty($order_info)) {
+            return false;
+        }
+        
+        $success = true;
+        
+        foreach ($order_info as $order_item) {
+            $item_id = $order_item['item_fk'];
+            $quantity = $order_item['order_quantity'];
+            
+            // Get order details for attributes
+            $order_details = $this->getorderdetail($order_number, $item_id);
+            
+            if (empty($order_details)) {
+                // No attributes, restore to general stock
+                $stock_data = array(
+                    'item_fk' => $item_id,
+                    'brand_fk' => 0,
+                    'grade_fk' => 0,
+                    'model_fk' => 0,
+                    'size_fk' => 0,
+                    'type_fk' => 0,
+                    'colour_fk' => 0,
+                    'unit_fk' => 0
+                );
+                
+                if (!$this->model_stock->restoreStock($stock_data, $quantity)) {
+                    $success = false;
+                }
+            } else {
+                // Restore stock for each attribute combination
+                foreach ($order_details as $detail) {
+                    $attribute_quantity = $detail['attribute_quantity'];
+                    if ($attribute_quantity > 0) {
+                        $stock_data = array(
+                            'item_fk' => $item_id,
+                            'brand_fk' => 0,
+                            'grade_fk' => ($detail['attribute_type'] == 'grade') ? $detail['attribute_fk'] : 0,
+                            'model_fk' => ($detail['attribute_type'] == 'model') ? $detail['attribute_fk'] : 0,
+                            'size_fk' => ($detail['attribute_type'] == 'size') ? $detail['attribute_fk'] : 0,
+                            'type_fk' => ($detail['attribute_type'] == 'type') ? $detail['attribute_fk'] : 0,
+                            'colour_fk' => ($detail['attribute_type'] == 'colour') ? $detail['attribute_fk'] : 0,
+                            'unit_fk' => ($detail['attribute_type'] == 'unit') ? $detail['attribute_fk'] : 0
+                        );
+                        
+                        if (!$this->model_stock->restoreStock($stock_data, $attribute_quantity)) {
+                            $success = false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $success;
+    }
+    
+    /**
+     * Update order shop_id
+     * @param string $order_number Order number
+     * @param int $shop_id Shop ID
+     * @return bool Success status
+     */
+    public function updateOrderShop($order_number, $shop_id) {
+        $this->db->where('order_number', $order_number);
+        return $this->db->update('orders', array('shop_id' => $shop_id));
+    }
+    
+    /**
+     * Get all active payment options from the payment_options table
+     * @return array
+     */
+    public function getAllPaymentOptions() {
+        $this->db->where('status', 1);
+        $query = $this->db->get('payment_options');
+        return $query->result_array();
     }
 
 }

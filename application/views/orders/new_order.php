@@ -12,16 +12,32 @@
     <!-- END RIBBON -->
     <!-- MAIN CONTENT -->
     <div id="content">
-        <!-- Stock Error Messages -->
-        <?php if($this->session->flashdata('stock_errors')): ?>
+        <!-- Error Messages -->
+        <?php if ($this->session->flashdata('validation_errors')): ?>
             <div class="alert alert-danger">
-                <h4><i class="fa fa-exclamation-triangle"></i> Stock Availability Issues</h4>
-                <p><strong>Order creation was cancelled due to insufficient stock:</strong></p>
+                <h4>Please fix the following errors:</h4>
                 <ul>
-                    <?php foreach($this->session->flashdata('stock_errors') as $error): ?>
+                    <?php foreach ($this->session->flashdata('validation_errors') as $error): ?>
                         <li><?php echo $error; ?></li>
                     <?php endforeach; ?>
                 </ul>
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($this->session->flashdata('stock_errors')): ?>
+            <div class="alert alert-warning">
+                <h4>Stock Issues:</h4>
+                <ul>
+                    <?php foreach ($this->session->flashdata('stock_errors') as $error): ?>
+                        <li><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success">
+                <?php echo $this->session->flashdata('success'); ?>
             </div>
         <?php endif; ?>
         
@@ -35,7 +51,7 @@
    ];
    console.log(availableTags1);
 </script>
-                    <form method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data" onsubmit="orders.checkquantity()">
+                    <form method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data" id="orderForm" novalidate>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
@@ -50,14 +66,15 @@
                                 </div>
                                  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
                                 
-                                     Shop : <select id="" name="shopid" class="form-control">
-                                         <option vlue="0">Please select</option>
+                                     Shop : <select id="shopid" name="shopid" class="form-control" required>
+                                         <option value="">Please select a shop</option>
                                           <?php if ($all_shops) { ?>
                                                          <?php foreach ($all_shops as $value) { ?>
                                                              <option  value="<?php echo $value["shop_id"]; ?>" ><?php echo $value["shop_name"]; ?></option>
                                                          <?php } ?>
                                                      <?php } ?>
                                      </select>
+                                     <span class="error-message" id="shop-error" style="color: red; display: none;">Please select a shop</span>
                                 </div>
                                 <div style="clear:both"></div>
                             </div>

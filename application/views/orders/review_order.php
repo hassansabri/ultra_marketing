@@ -15,6 +15,30 @@
     
     <!-- MAIN CONTENT -->
     <div id="content">
+        <!-- Flash Messages -->
+        <?php if($this->session->flashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <i class="fa fa-check-circle"></i> <?php echo $this->session->flashdata('success'); ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if($this->session->flashdata('stock_errors')): ?>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <i class="fa fa-exclamation-triangle"></i> <strong>Stock Validation Failed:</strong>
+                <ul style="margin-top: 10px; margin-bottom: 0;">
+                    <?php foreach($this->session->flashdata('stock_errors') as $error): ?>
+                        <li><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        
         <!-- widget grid -->
         <section id="widget-grid" class="">
             <!-- row -->
@@ -197,10 +221,9 @@
                                                         <i class="fa fa-edit"></i> Edit Order
                                                     </a>
                                                     <?php if($order_info[0]['order_status'] == 'draft') {?> 
-                                                        <a href="<?php echo site_url(); ?>/orders/save/<?php echo $order_number; ?>" class="btn btn-primary">
-                                                            <i class="fa fa-save"></i> Save Price and Complete Order
-                                                        </a>
-                                                    
+                                                        <button type="button" class="btn btn-success" onclick="completeOrder('<?php echo $order_number; ?>')">
+                                                            <i class="fa fa-check"></i> Complete Order & Deduct Stock
+                                                        </button>
                                                      <?php } ?>
                                                <?php if($order_info[0]['order_status'] != 'draft') {?> 
                                                 <a href="<?php echo site_url(); ?>/orders/show_invoice/<?php echo $order_number; ?>" class="btn btn-success">
@@ -282,6 +305,26 @@ $(document).ready(function() {
     // Initialize any necessary JavaScript functionality
     orders.init();
 });
+
+// Function to complete order with stock validation
+function completeOrder(orderNumber) {
+    if (confirm('Are you sure you want to complete this order? This will:\n\n1. Change order status to confirmed\n2. Deduct stock from inventory\n3. This action cannot be undone\n\nDo you want to proceed?')) {
+        // Show loading indicator
+        var button = event.target;
+        var originalText = button.innerHTML;
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
+        button.disabled = true;
+        
+        // Redirect to save method which will handle stock validation and deduction
+        window.location.href = '<?php echo site_url(); ?>/orders/save/' + orderNumber;
+    }
+}
+
+// Function to check stock availability before completing order
+function checkStockBeforeCompletion(orderNumber) {
+    // This function can be used for additional client-side stock checking if needed
+    console.log('Checking stock availability for order: ' + orderNumber);
+}
 </script>
 
 <?php $this->load->view("common/footer"); ?> 

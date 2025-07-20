@@ -114,6 +114,12 @@
         // Fetch ledger entries for the order
         $this->data['order_ledger'] = $this->model_order->getOrderLedger($order_number);
         
+        // Fetch shop ledger entries if shop info is available
+        $this->data['shop_ledger'] = array();
+        if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
+            $this->data['shop_ledger'] = $this->model_order->getShopLedger($this->data['order_info'][0]['shop_id']);
+        }
+        
         $this->load->view("orders/invoice", $this->data);
     }
         public function initorder(){
@@ -170,6 +176,13 @@ if($attribute_fk[0]){
            $attribute_fk=$this->model_order->getitemattributes($item_id);
            print_r($attribute_fk);
            $this->data = array();
+           $this->data = array(
+            'grades' => array(),
+            'models' => '',
+            'sizes' => '',
+            'types' => '',
+            'colours' => '',
+        );
 if($attribute_fk[0]){
   foreach($attribute_fk[0] as $value){
                         $this->data['grades'][]=$this->model_order->getgradedetail($value,'1');
@@ -206,6 +219,38 @@ if($attribute_fk[0]){
          $qty =  $this->input->post('item_qty');
          $item_price =  $this->input->post('item_price');
          $shop_id = $this->input->post('shopid'); // get selected shop
+         
+         // Server-side validation for required fields
+         $validation_errors = array();
+         
+         // Validate shop selection
+         if (empty($shop_id) || $shop_id === '') {
+             $validation_errors[] = 'Please select a shop';
+         }
+         
+         // Validate that items are added
+         if (empty($item_ids) || !is_array($item_ids) || count($item_ids) === 0) {
+             $validation_errors[] = 'Please add at least one item to the order';
+         }
+         
+         // Validate quantities
+         if (!empty($qty) && is_array($qty)) {
+             foreach ($qty as $index => $quantity) {
+                 if (empty($quantity) || $quantity <= 0) {
+                     $validation_errors[] = 'Please enter valid quantities for all items';
+                     break;
+                 }
+             }
+         } else {
+             $validation_errors[] = 'Please enter valid quantities for all items';
+         }
+         
+         // If validation fails, redirect back with errors
+         if (!empty($validation_errors)) {
+             $this->session->set_flashdata('validation_errors', $validation_errors);
+             redirect(site_url() . 'orders');
+             return;
+         }
          
          $stock_errors = array();
          $has_stock_issues = false;
@@ -284,6 +329,9 @@ if($attribute_fk[0]){
            
          }
          
+         // Order created successfully (stock will be deducted when order is completed)
+         $this->session->set_flashdata('success', 'Draft order created successfully. Stock will be deducted when order is completed.');
+         
          if (!empty($stock_errors)) {
              $this->session->set_flashdata('stock_errors', $stock_errors);
          }
@@ -361,14 +409,33 @@ if($attribute_fk[0]){
             }
           }
           $this->data['order_number'] = $order_number;
-$this->data['all_items']=$this->model_order->getAllItems();
-        $this->data["all_brands"] = $this->model_order->getallbrands();
+          $this->data['all_items'] = $this->model_order->getAllItems();
+          $this->data["all_brands"] = $this->model_order->getallbrands();
+          $this->data['all_shops'] = $this->model_order->getallshops();
+          
+          // Get current shop ID for the order
+          $current_order = $this->model_order->getOrder($order_number);
+          if (!empty($current_order)) {
+              $this->data['current_shop_id'] = $current_order[0]['shop_id'];
+          }
+          
           $this->load->view('orders/editorder',$this->data);
 
         }
         public function deleteorderdetail(){
           $item_id = $this->input->post('item_id');
             $order_number = $this->input->post('order_number');
+            
+            // Check if order is completed (not draft) before restoring stock
+            $order_info = $this->model_order->getOrder($order_number);
+            if (!empty($order_info) && $order_info[0]['order_status'] === 'confirm') {
+                // Restore stock only for completed orders
+                $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
+                if (!$stock_restoration_success) {
+                    $this->session->set_flashdata('stock_errors', ['Failed to restore stock for cancelled order. Please contact administrator.']);
+                }
+            }
+            
           $this->model_order->deleteorder2($order_number, $item_id);
           $this->model_order->deleteOrderDetails($order_number, $item_id);
         }
@@ -377,6 +444,39 @@ $this->data['all_items']=$this->model_order->getAllItems();
             $item_ids = $this->input->post('item_ids');
             $item_qty = $this->input->post('item_qty');
             $item_price = $this->input->post('item_price');
+            
+            // Server-side validation for required fields
+            $validation_errors = array();
+            
+            // Validate shop selection
+            $shop_id = $this->input->post('shopid');
+            if (empty($shop_id) || $shop_id === '') {
+                $validation_errors[] = 'Please select a shop';
+            }
+            
+            // Validate that items are added
+            if (empty($item_ids) || !is_array($item_ids) || count($item_ids) === 0) {
+                $validation_errors[] = 'Please add at least one item to the order';
+            }
+            
+            // Validate quantities
+            if (!empty($item_qty) && is_array($item_qty)) {
+                foreach ($item_qty as $index => $quantity) {
+                    if (empty($quantity) || $quantity <= 0) {
+                        $validation_errors[] = 'Please enter valid quantities for all items';
+                        break;
+                    }
+                }
+            } else {
+                $validation_errors[] = 'Please enter valid quantities for all items';
+            }
+            
+            // If validation fails, redirect back with errors
+            if (!empty($validation_errors)) {
+                $this->session->set_flashdata('validation_errors', $validation_errors);
+                redirect(site_url() . 'orders/editorder/' . $order_number);
+                return;
+            }
             if(isset($item_ids)&&sizeof($item_ids)>0){
               foreach($item_ids as $key => $value){
                 $item_id = $value;
@@ -457,6 +557,8 @@ $this->data['all_items']=$this->model_order->getAllItems();
               $this->model_order->deleteorder($order_number);
             }
             
+            // Order updated successfully (stock will be deducted when order is completed)
+            $this->session->set_flashdata('success', 'Draft order updated successfully. Stock will be deducted when order is completed.');
             
             redirect(site_url() . 'orders/draftorders');
         }
@@ -526,38 +628,88 @@ $this->data['all_items']=$this->model_order->getAllItems();
             $this->load->view('orders/review_order', $this->data);
         }
         public function save($order_number){
-           $this->model_order->updateorder($order_number);
-           redirect(site_url() . 'orders/review/'.$order_number);
+            // Check stock availability before completing the order
+            $order_info = $this->model_order->getOrder($order_number);
+            $stock_errors = array();
+            $has_stock_issues = false;
+            
+            foreach($order_info as $oi){
+                $item_id = $oi['item_id'];
+                $quantity = $oi['order_quantity'];
+                
+                // Check stock availability
+                $stock_check = $this->model_order->checkStockAvailability($item_id, $quantity);
+                if (!$stock_check['sufficient']) {
+                    $item_detail = $this->model_order->getitemdetail($item_id);
+                    $item_name = isset($item_detail[0]['item_name']) ? $item_detail[0]['item_name'] : 'Item';
+                    $stock_errors[] = "Insufficient stock for {$item_name}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
+                    $has_stock_issues = true;
+                }
+            }
+            
+            // If there are stock issues, don't complete the order
+            if ($has_stock_issues) {
+                $this->session->set_flashdata('stock_errors', $stock_errors);
+                redirect(site_url() . 'orders/review/' . $order_number);
+                return;
+            }
+            
+            // Update order status to confirmed
+            $this->model_order->updateorder($order_number);
+            
+            // Deduct stock after successful order completion
+            $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
+            if (!$stock_deduction_success) {
+                $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
+            } else {
+                $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');
+            }
+            
+            redirect(site_url() . 'orders/review/'.$order_number);
         }
 
     // List all ledger entries for all orders
     public function ledger() {
         $this->data['ledger_entries'] = $this->model_order->getAllOrderLedger();
         $this->data['all_shops'] = $this->model_order->getallshops();
+        $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 
     // Add a ledger entry (POST)
     public function add_ledger_entry() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $shop_id = $this->input->post('shop_id');
             $order_number = $this->input->post('order_number');
             $date = $this->input->post('date');
             $amount = $this->input->post('amount');
             $payment_method = $this->input->post('payment_method');
             $remarks = $this->input->post('remarks');
             $type = $this->input->post('type');
+            
+            // Insert ledger entry
             $this->model_order->insertOrderLedger($order_number, $date, $amount, $payment_method, $remarks, $type);
+            
+            // Update order with shop_id if not already set
+            if ($shop_id) {
+                $this->model_order->updateOrderShop($order_number, $shop_id);
+            }
+            
             redirect(site_url('orders/ledger'));
         }
         $this->data['all_shops'] = $this->model_order->getallshops();
+        $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 
     // Edit a ledger entry (GET for form, POST for update)
     public function edit_ledger_entry($ledger_id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $shop_id = $this->input->post('shop_id');
+            $order_number = $this->input->post('order_number');
+            
             $data = array(
-                'order_number' => $this->input->post('order_number'),
+                'order_number' => $order_number,
                 'date' => $this->input->post('date'),
                 'amount' => $this->input->post('amount'),
                 'payment_method' => $this->input->post('payment_method'),
@@ -565,10 +717,17 @@ $this->data['all_items']=$this->model_order->getAllItems();
                 'type' => $this->input->post('type'),
             );
             $this->model_order->updateOrderLedger($ledger_id, $data);
+            
+            // Update order with shop_id if provided
+            if ($shop_id) {
+                $this->model_order->updateOrderShop($order_number, $shop_id);
+            }
+            
             redirect(site_url('orders/ledger'));
         }
         $this->data['entry'] = $this->model_order->getOrderLedgerById($ledger_id);
         $this->data['all_shops'] = $this->model_order->getallshops();
+        $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
         $this->load->view('orders/ledger_crud', $this->data);
     }
 
@@ -576,6 +735,28 @@ $this->data['all_items']=$this->model_order->getAllItems();
     public function delete_ledger_entry($ledger_id) {
         $this->model_order->deleteOrderLedger($ledger_id);
         redirect(site_url('orders/ledger'));
+    }
+    
+    // AJAX method to update shop for an order
+    public function update_shop_ajax() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $order_number = $this->input->post('order_number');
+            $shop_id = $this->input->post('shop_id');
+            
+            if ($order_number && $shop_id) {
+                $success = $this->model_order->updateOrderShop($order_number, $shop_id);
+                
+                if ($success) {
+                    echo json_encode(array('success' => true, 'message' => 'Shop updated successfully'));
+                } else {
+                    echo json_encode(array('success' => false, 'message' => 'Failed to update shop'));
+                }
+            } else {
+                echo json_encode(array('success' => false, 'message' => 'Invalid order number or shop ID'));
+            }
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Invalid request method'));
+        }
     }
 }
     
