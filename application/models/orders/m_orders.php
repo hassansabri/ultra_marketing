@@ -327,7 +327,8 @@ $this->db->where("item_id", $items_id);
             'item_fk'=>$item_id,
             'order_quantity'=>$order_quantity,
             'order_price'=>$order_price,
-            'shop_id'=>$shop_id
+            'shop_id'=>$shop_id,
+            'created_by'=>$this->session->userdata('uid')
         );
          $this->db->insert('orders',$data);
         
@@ -383,11 +384,12 @@ public function ifitemalredyexist($order_number, $item_id){
         return false;
       }
 }
-public function updateOrderQuantityAndPrice($order_number, $item_id, $quantity,$price) {
+public function updateOrderQuantityAndPrice($shopid,$order_number, $item_id, $quantity,$price) {
+    echo $item_id;
     $exist = $this->ifitemalredyexist($order_number, $item_id);
     if(!$exist){
         // insert order with default values
-        $this->insertdraftorder($order_number, $item_id, $quantity, $price);
+        $this->insertdraftorder($order_number, $item_id, $quantity, $price,$shopid);
     }
     $item_ids = array();
     // $this->insertdraftorder($order_number,$item_id);
@@ -412,18 +414,19 @@ public function updateOrderDetail($order_number, $attribute_fk, $quantity, $item
 public function updateorder($order_number){
     $this->db->where('order_number', $order_number);
     $this->db->where('order_status', 'draft');
-    $this->db->update('orders', array('order_status' => 'confirm'));
+    $this->db->update('orders', array('order_status' => 'confirm','confirm_by'=>$this->session->userdata('uid')));
 }
 
     // Insert a ledger entry for an order (now with type)
-    public function insertOrderLedger($order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
+    public function insertOrderLedger($shop_id,$order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
         $data = array(
             'order_number' => $order_number,
             'date' => $date,
             'amount' => $amount,
             'payment_method' => $payment_method,
             'remarks' => $remarks,
-            'type' => $type
+            'type' => $type,
+            'shop_id' => $shop_id
         );
         $this->db->insert('order_ledger', $data);
         return $this->db->insert_id();

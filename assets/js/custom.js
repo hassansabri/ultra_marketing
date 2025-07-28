@@ -220,38 +220,6 @@ var orders={
     });
     
     // Add stock validation for dynamically loaded quantity inputs
-    $(document).on('change', 'input[name="item_qty[]"]', function() {
-        var item_id = $(this).closest('.main-div').find('input[name="item_ids[]"]').val();
-        var qty = $(this).val();
-        var input = $(this);
-        
-        if (qty && qty > 0) {
-            $.ajax({
-                url: baseurl + '/stocks/checkstock',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    item_id: item_id,
-                    brand: 0,
-                    grade: 0,
-                    model: 0,
-                    size: 0,
-                    type: 0,
-                    colour: 0,
-                    unit: 0
-                }
-            }).done(function(response) {
-                var available = parseInt(response.balance) || 0;
-                if (parseInt(qty) > available) {
-                    alert('Low stock alert! Item ID ' + item_id + ': Available stock is ' + available + ', but you requested ' + qty + '.');
-                    input.val(available); // Set to available quantity
-                    input.css('background-color', '#ffebee'); // Highlight in red
-                } else {
-                    input.css('background-color', ''); // Remove highlighting
-                }
-            });
-        }
-    });
     
     // Add stock validation for AJAX loaded content without form submission
     $(document).on('change', 'input[name="item_qty[]"]', function(e) {
@@ -293,54 +261,6 @@ var orders={
     });
     
     // Add stock validation for attribute quantity inputs
-    $(document).on('change', 'input[name*="-"]', function(e) {
-        // Prevent this from triggering form submission
-        e.stopPropagation();
-        
-        var name = $(this).attr('name');
-        if (name && name.includes('-') && !name.includes('item_')) {
-            var parts = name.split('-');
-            if (parts.length >= 3) {
-                var attribute_type = parts[0]; // grade, model, size, etc.
-                var attribute_id = parts[1];
-                var item_id = parts[2];
-                var qty = $(this).val();
-                var input = $(this);
-                
-                if (qty && qty > 0) {
-                    // Check stock for specific attribute combination
-                    var stock_data = {
-                        item_id: item_id,
-                        brand: 0,
-                        grade: attribute_type === 'grade' ? attribute_id : 0,
-                        model: attribute_type === 'model' ? attribute_id : 0,
-                        size: attribute_type === 'size' ? attribute_id : 0,
-                        type: attribute_type === 'type' ? attribute_id : 0,
-                        colour: attribute_type === 'colour' ? attribute_id : 0,
-                        unit: attribute_type === 'unit' ? attribute_id : 0
-                    };
-                    
-                    $.ajax({
-                        url: baseurl + '/stocks/checkstock',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: stock_data
-                    }).done(function(response) {
-                        var available = parseInt(response.balance) || 0;
-                        if (parseInt(qty) > available) {
-                            // Show warning but don't auto-submit form
-                            console.log('Stock warning: ' + attribute_type.charAt(0).toUpperCase() + attribute_type.slice(1) + ' ID ' + attribute_id + ' for Item ID ' + item_id + ' - Available: ' + available + ', Requested: ' + qty);
-                            input.css('background-color', '#ffebee'); // Highlight in red
-                            input.attr('title', 'Available stock: ' + available); // Add tooltip
-                        } else {
-                            input.css('background-color', ''); // Remove highlighting
-                            input.removeAttr('title'); // Remove tooltip
-                        }
-                    });
-                }
-            }
-        }
-    });
     
     // Legacy form submission handler (for backward compatibility)
     $(document).on('submit', 'form[onsubmit*="orders.checkquantity"]', function(e) {
@@ -370,31 +290,18 @@ var orders={
             qtyInput.css('border-color', '');
         }
     });
-    
-    // Handle form submission properly
-    $(document).on('submit', '#orderForm', function(e) {
-        e.preventDefault(); // Always prevent default submission
-        
-        var form = $(this);
-        
-        // Check if already processing
-        if (form.data('processing')) {
-            return false;
-        }
-        
-        // Set processing flag
-        form.data('processing', true);
-        
-        // Validate required fields first
-        if (!orders.validateRequiredFields()) {
-            form.removeData('processing');
-            return false;
-        }
-        
-        // Submit the form (stock validation will be done when order is completed)
-        form[0].submit();
-        
-        return false;
+    $(document).on('click','#of',function(){
+        // });
+        // // Handle form submission properly
+        // $(document).on('submit', '#orderForm', function(e) {
+            //  e.preventDefault(); // Always prevent default submission
+            
+            
+            // Submit the form (stock validation will be done when order is completed)
+            // $('#orderForm').trigger('submit');
+            // alert('ok');
+        orders.validateStockAndSubmit(true);
+        // return false;
     });
 },
 remove_order:function(item_id,order_number){
@@ -572,7 +479,7 @@ validateStockAndSubmit:function(shouldSubmit){
             if (shouldSubmit) {
                 // Submit the form programmatically
                 setTimeout(function() {
-                    $("form[onsubmit*='orders.checkquantity']")[0].submit();
+                    $("#orderForm").trigger('submit');
                 }, 100);
             }
         }

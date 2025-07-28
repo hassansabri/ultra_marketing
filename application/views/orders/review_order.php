@@ -50,11 +50,13 @@
                                 <header>
                                     <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
                                     <h2>Order Review - #<?php echo $order_number; ?></h2>
+                                   <?php if($order_info[0]['order_status'] == 'draft') {?> 
                                     <div class="widget-toolbar">
                                         <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $order_number; ?>" class="btn btn-primary btn-sm">
                                             <i class="fa fa-edit"></i> Edit Order
                                         </a>
-                                        <a href="<?php echo site_url(); ?>/orders/draftorders" class="btn btn-default btn-sm">
+                                   <?php }?>
+                                        <a href="<?php echo site_url(); ?>/orders/draftorders" class="btn btn-default btn-sm" style="float:right">
                                             <i class="fa fa-arrow-left"></i> Back to Orders
                                         </a>
                                     </div>
@@ -217,10 +219,10 @@
                                         <div class="row">
                                             <div class="col-md-12 text-center">
                                                 <div class="btn-group" style="margin-top: 20px;">
-                                                    <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $order_number; ?>" class="btn btn-primary">
-                                                        <i class="fa fa-edit"></i> Edit Order
-                                                    </a>
                                                     <?php if($order_info[0]['order_status'] == 'draft') {?> 
+                                                        <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $order_number; ?>" class="btn btn-primary">
+                                                            <i class="fa fa-edit"></i> Edit Order
+                                                        </a>
                                                         <button type="button" class="btn btn-success" onclick="completeOrder('<?php echo $order_number; ?>')">
                                                             <i class="fa fa-check"></i> Complete Order & Deduct Stock
                                                         </button>

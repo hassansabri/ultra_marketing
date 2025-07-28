@@ -68,9 +68,6 @@
                                 <input type="text" class="form-control" name="remarks" id="remarks" value="<?php echo isset($entry) ? htmlspecialchars($entry['remarks']) : ''; ?>">
                             </div>
                             <button type="submit" class="btn btn-success"><?php echo isset($entry) ? 'Update' : 'Add'; ?> Entry</button>
-                            <?php if(isset($entry)): ?>
-                                <a href="<?php echo site_url('orders/ledger'); ?>" class="btn btn-default">Cancel</a>
-                            <?php endif; ?>
                         </form>
                     </div>
                 </div>

@@ -50,10 +50,16 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
-                                Type Item Name : <input class="tags"/><span> 
-                                Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number; ?>"/></span>
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                     Type Item Name : <input class="tags"/><span> 
+
+                                 </div>
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                     Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number; ?>"/></span>
+
+                                 </div>
                                 
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 10px;">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     Shop : <select id="shopid" name="shopid" class="form-control" required>
                                         <option value="">Please select a shop</option>
                                         <?php if (isset($all_shops) && $all_shops) { ?>
@@ -172,7 +178,7 @@
 				<div class="form-actions">
 					<div class="row">
 						<div class="col-md-12">
-							<button class="btn btn-default" type="submit">
+							<button class="btn btn-default" type="button" id="of">
 								<i class="fa fa-eye"></i>
 								<?php echo $this->lang->line("Submit"); ?>
 							</button>

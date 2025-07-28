@@ -17,7 +17,15 @@ class m_users extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
+public function getUsersWithRoleCount() {
+        $this->db->select('u.users_id, u.user_name, u.email, COUNT(ur.role_id) as role_count');
+        $this->db->from('users u');
+        $this->db->join('user_roles ur', 'ur.users_id != u.users_id', 'left');
+        $this->db->where('ur.is_active', 1);
+        $this->db->group_by('u.users_id');
+        $this->db->order_by('u.user_name', 'ASC');
+        return $this->db->get()->result_array();
+    }
     public function getUserDetail($user_id = false) {
 //        $this->db->where("is_active", "1");
         $this->db->where("is_delete", "0");

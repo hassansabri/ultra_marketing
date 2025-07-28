@@ -28,7 +28,7 @@ class users extends CI_Controller {
 
     public function index() {
       
-        $users_id = $this->session->userdata('uid');
+        $users_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
         $this->data["all_users"] = $this->model_users->getAllUsers($users_id, $user_type);
         $this->load->view("users/allusers", $this->data);
@@ -171,6 +171,7 @@ class users extends CI_Controller {
                 $this->data["update"] = "no";
             }
             $this->data["users_id"] = $user_id;
+             $data['users'] = $this->m_permissions->getUsersWithRoleCount();
             $this->data["user_detail"] = $this->model_users->getUserDetail($user_id);
             $this->load->view("users/editprofileuser", $this->data);
         } else {
@@ -180,9 +181,27 @@ class users extends CI_Controller {
 
     public function allusers() {
     
-        $users_id = $this->session->userdata('uid');
+        $users_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
         $this->data["all_users"] = $this->model_users->getAllUsers($users_id, $user_type);
+        
+        // Load permission model to get user roles
+        $this->load->model('m_permissions');
+        
+            // Get roles for each user
+    foreach ($this->data["all_users"] as &$user) {
+        $user['roles'] = $this->m_permissions->getUserRoles($user['users_id']);
+        
+        // Calculate total permissions for this user
+        $user['permission_count'] = 0;
+        if (!empty($user['roles'])) {
+            foreach ($user['roles'] as $role) {
+                $permissions = $this->m_permissions->getRolePermissions($role['role_id']);
+                $user['permission_count'] += count($permissions);
+            }
+        }
+    }
+        
         $this->load->view("users/allusers", $this->data);
     }
 

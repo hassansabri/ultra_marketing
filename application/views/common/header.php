@@ -58,7 +58,7 @@
         <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery-ui-1.9.2.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.steps.js"></script>
-        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDOdbqj_VlYUEcSaYc-hoasCL6bG29rvsU&sensor=false&libraries=places"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDOdbqj_VlYUEcSaYc-hoasCL6bG29rvsU&sensor=false&libraries=places"></script>
          <script type="text/javascript">
             var baseurl = '<?php echo site_url(); ?>';
             var global_url = '<?php echo base_url(); ?>';
@@ -175,7 +175,9 @@
                
                 <ul>                     
                     <!-- 2 is for users management-->
-                    <?php  if ($this->session->userdata('logged_in')){ ?>
+                    <?php  if (has_module_permission('users')&&$this->session->userdata('uid')&&$this->session->userdata('logged_in')){ ?>
+                    <?php  { ?>
+                        <?php } ?> 
                         <li class="">      
                             <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">manage all users</span></a>
                             <ul>
@@ -344,6 +346,34 @@
                             <a href="<?php echo site_url(); ?>/orders/ledger" title="Order Ledger"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Order Ledger</span></a>
                         </li>
                     <?php } ?>
+                    <?php  if ($this->session->userdata('logged_in')){ ?>
+                        <li class="">      
+                            <a href="#" title="Reports"><i class="fa fa-lg fa-fw fa-chart-bar"></i> <span class="menu-item-parent">Reports & Analytics</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports" title="Dashboard"><span class="menu-item-parent">Dashboard</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/sales_report" title="Sales Report"><span class="menu-item-parent">Sales Report</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/shop_report" title="Shop Report"><span class="menu-item-parent">Shop Report</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/item_report" title="Item Report"><span class="menu-item-parent">Item Report</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/payment_report" title="Payment Report"><span class="menu-item-parent">Payment Report</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/date_range_report" title="Date Range Report"><span class="menu-item-parent">Date Range Report</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/orders_reports/analytics" title="Analytics"><span class="menu-item-parent">Analytics</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php } ?>
                     <!-- Profile Management -->
                     <?php if ($this->session->userdata('logged_in')) { ?>
                         <li class="">
@@ -353,6 +383,25 @@
                                     <a href="<?php echo site_url(); ?>/profile" title="All Profiles"><span class="menu-item-parent">All Profiles</span></a>
                                 </li>
                              
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->session->userdata('logged_in')) { ?>
+                        <li class="">
+                            <a href="#" title="Permissions"><i class="fa fa-lg fa-fw fa-lock"></i> <span class="menu-item-parent">Roles & Permissions</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/permissions/assign_user_roles" title="Assign User Roles"><span class="menu-item-parent">Assign User Roles</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/permissions/dashboard" title="Permissions Dashboard"><span class="menu-item-parent">Permissions Dashboard</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/permissions/add_role" title="Add Role"><span class="menu-item-parent">Add Role</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/permissions/roles" title="All Roles"><span class="menu-item-parent">All Roles</span></a>
+                                </li>
                             </ul>
                         </li>
                     <?php } ?>

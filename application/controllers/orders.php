@@ -440,6 +440,7 @@ if($attribute_fk[0]){
           $this->model_order->deleteOrderDetails($order_number, $item_id);
         }
         public function draft_order_updater($order_number){
+      
           $item_ids = array();
             $item_ids = $this->input->post('item_ids');
             $item_qty = $this->input->post('item_qty');
@@ -489,12 +490,13 @@ if($attribute_fk[0]){
                     $item_detail = $this->model_order->getitemdetail($item_id);
                     $item_name = isset($item_detail[0]['item_name']) ? $item_detail[0]['item_name'] : 'Item';
                     $this->session->set_flashdata('stock_errors', ["Insufficient stock for {$item_name}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}"]);
+                   
                     redirect(site_url() . 'orders/draftorders');
                     return;
                 }
 
                 // Update order quantity
-                $this->model_order->updateOrderQuantityAndPrice($order_number, $item_id, $quantity,$price);
+                $this->model_order->updateOrderQuantityAndPrice($shop_id,$order_number, $item_id, $quantity,$price);
                 
                 // Delete existing order details for this item
                 $this->model_order->deleteOrderDetails($order_number, $item_id);
@@ -688,7 +690,7 @@ if($attribute_fk[0]){
             $type = $this->input->post('type');
             
             // Insert ledger entry
-            $this->model_order->insertOrderLedger($order_number, $date, $amount, $payment_method, $remarks, $type);
+            $this->model_order->insertOrderLedger($shop_id,$order_number, $date, $amount, $payment_method, $remarks, $type);
             
             // Update order with shop_id if not already set
             if ($shop_id) {

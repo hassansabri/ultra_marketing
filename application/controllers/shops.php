@@ -2,6 +2,7 @@
 /**
  *  @property m_login $model_login
  *  @property m_users $model_shops
+ *  @property m_users $model_orders
 * @property CI_Session $session
  * @property CI_Input $input
  */
@@ -24,6 +25,7 @@
             parent::__construct();
             if (!$this->session->userdata('logged_in'))redirect('login');
             $this->load->model("shops/m_shop", "model_shops");
+            $this->load->model("orders/m_orders", "model_orders");
 
     }    
     public function index() {
@@ -120,7 +122,7 @@ public function getstates(){
         }
     }
     public function ledger($shop_id) {
-        $this->load->model('orders/m_orders', 'model_orders');
+        
         $this->data['shop_ledger'] = $this->model_orders->getShopLedger($shop_id);
         $this->data['shop_detail'] = $this->model_shops->getshopdetail($shop_id);
         $this->load->view('shops/shop_ledger', $this->data);

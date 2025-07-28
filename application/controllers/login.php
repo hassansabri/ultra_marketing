@@ -54,13 +54,15 @@ class login extends CI_Controller{
                         'name' => $reutn["name"],
                         'email' => $reutn["email"],
                         'uid' => $reutn["users_id"],
+                        'user_id' => $reutn["users_id"],
+                        'users_id' => $reutn["users_id"],
                         'user_type' => $reutn["user_type"],
                         'logged_in' => TRUE,
                         'website' => 'ultra_marketing'
                     );
             
                     $this->session->set_userdata($newdata);
-                    // print_r($this->session->userdata('access'));
+                    // print_r($this->session->userdata());
                     // if ($this->session->userdata('access') != '') {
                     //     echo 'h';
                     // }

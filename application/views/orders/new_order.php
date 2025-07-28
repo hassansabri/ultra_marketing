@@ -51,16 +51,16 @@
    ];
    console.log(availableTags1);
 </script>
-                    <form method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data" id="orderForm" novalidate>
+                    <form method="post" action="<?php echo site_url(); ?>/orders/draft_order" class="" enctype="multipart/form-data" id="orderForm">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
                                 <?php $order_number = rand(0000,9999); ?>
-                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                      Type Item Name : <input class="tags"/><span> 
                                 
                                 </div>
-                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
+                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 
                                      Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number ?>"/></span>
                                 </div>
@@ -84,8 +84,8 @@
 				<div class="form-actions">
 					<div class="row">
 						<div class="col-md-12">
-							<input type="hidden" value="sbmt" name="sbmt" />
-							<button class="btn btn-default" type="submit">
+							<input type="hidden" value="sbmt" name="button" />
+							<button class="btn btn-default" type="button" id="of">
 								<i class="fa fa-eye"></i>
 								<?php echo $this->lang->line("Submit"); ?>
 							</button>

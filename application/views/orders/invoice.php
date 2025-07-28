@@ -15,11 +15,11 @@
                                 <div class="invoice-box">
                                     <table cellpadding="0" cellspacing="0" class="table table-bordered">
                                         <tr class="top">
-                                            <td colspan="2">
+                                            <td colspan="4">
                                                 <table class="table table-borderless">
                                                     <tr>
                                                         <td class="title">
-                                                            <img src="<?php echo base_url(); ?>images/<?php echo $profile[0]['logo']; ?>" style="width: 100%; max-width: 300px" />
+                                                            <img src="<?php echo base_url(); ?>images/<?php echo $profile[0]['logo']; ?>" style="width: 100%; max-width: 180px" />
                                                         </td>
                                                         <td class="text-right">
                                                             <h3>INVOICE</h3>
@@ -32,25 +32,25 @@
                                         </tr>
 
                                         <tr class="information">
-                                            <td colspan="2">
+                                            <td colspan="4">
                                                 <table class="table table-borderless">
                                                     <tr>
                                                         <td>
                                                             <h5><strong>From:</strong></h5>
                                                             <?php if(isset($profile[0])): ?>
                                                                 <p><strong><?php echo $profile[0]['shop_name']; ?></strong></p>
-                                                                <p><?php echo $profile[0]['adress']; ?></p>
+                                                                <!-- <p><?php echo $profile[0]['adress']; ?></p>
                                                                 <p>Phone: <?php echo $profile[0]['phone']; ?></p>
-                                                                <p>Email: <?php echo $profile[0]['email']; ?></p>
+                                                                <p>Email: <?php echo $profile[0]['email']; ?></p> -->
                                                             <?php endif; ?>
                                                         </td>
                                                         <td class="text-right">
                                                             <h5><strong>To:</strong></h5>
                                                             <?php if(isset($shop_info) && $shop_info): ?>
                                                                 <p><strong><?php echo $shop_info['shop_name']; ?></strong></p>
-                                                                <p><?php echo $shop_info['shop_address']; ?></p>
+                                                                <!-- <p><?php echo $shop_info['shop_address']; ?></p>
                                                                 <p>Phone: <?php echo $shop_info['shop_number']; ?></p>
-                                                                <p>Email: <?php echo $shop_info['shop_email']; ?></p>
+                                                                <p>Email: <?php echo $shop_info['shop_email']; ?></p> -->
                                                             <?php else: ?>
                                                                 <p><strong>Customer</strong></p>
                                                                 <p>Customer Address</p>
@@ -99,11 +99,11 @@
                                                             <strong><?php echo $item_data['item_detail']['item_name']; ?></strong><br>
                                                             <!-- <small><strong>Code:</strong> <?php echo $item_data['item_detail']['item_code']; ?></small><br>
                                                             <small><strong>Description:</strong> <?php echo $item_data['item_detail']['item_description']; ?></small> -->
-                                                            <div style="margin-top: 8px;">
-                                                                <!-- <span style="display:inline-block; margin-right:12px;"><strong>Price:</strong> <?php echo $currency . number_format($item_price, 2); ?></span>
+                                                            <!-- <div style="margin-top: 8px;">
+                                                                <span style="display:inline-block; margin-right:12px;"><strong>Price:</strong> <?php echo $currency . number_format($item_price, 2); ?></span>
                                                                 <span style="display:inline-block; margin-right:12px;"><strong>Quantity:</strong> <?php echo $item_qty; ?></span>
-                                                                <span style="display:inline-block;"><strong>Subtotal:</strong> <?php echo $currency . number_format($item_subtotal, 2); ?></span> -->
-                                                            </div>
+                                                                <span style="display:inline-block;"><strong>Subtotal:</strong> <?php echo $currency . number_format($item_subtotal, 2); ?></span>
+                                                            </div> -->
                                                         </div>
                                                     </td>
                                                     <td class="text-right">
@@ -213,24 +213,20 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </div>
-                                
-                                <?php if(isset($shop_ledger) && count($shop_ledger) > 0): ?>
+                                    <?php if(isset($shop_ledger) && count($shop_ledger) > 0): ?>
                                 <!-- Shop Ledger Section - After Total Price -->
-                                <div class="invoice-ledger" style="margin-top: 30px;">
-                                    <h4><i class="fa fa-store"></i> Shop Ledger - <?php echo isset($shop_info['shop_name']) ? $shop_info['shop_name'] : 'Shop'; ?></h4>
+                                <div class="invoice-ledger" style="margin-top: 0px;">
+                                    <!-- <h4><i class="fa fa-store"></i> Shop Ledger - <?php echo isset($shop_info['shop_name']) ? $shop_info['shop_name'] : 'Shop'; ?></h4> -->
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Date</th>
-                                                    <th>Order #</th>
                                                     <th class="text-right">Debit (<?php echo $currency; ?>)</th>
                                                     <th class="text-right">Credit (<?php echo $currency; ?>)</th>
                                                     <th class="text-right">Balance (<?php echo $currency; ?>)</th>
                                                     <th>Type</th>
                                                     <th>Payment Method</th>
-                                                    <th>Remarks</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -247,19 +243,11 @@
                                                 ?>
                                                     <tr <?php echo ($entry['order_number'] == $order_number) ? 'class="current-order"' : ''; ?>>
                                                         <td><?php echo date('Y-m-d H:i', strtotime($entry['date'])); ?></td>
-                                                        <td>
-                                                            <a href="<?php echo site_url(); ?>/orders/show_invoice/<?php echo $entry['order_number']; ?>" 
-                                                               class="btn btn-xs <?php echo ($entry['order_number'] == $order_number) ? 'btn-success' : 'btn-info'; ?>" 
-                                                               title="View Order Invoice">
-                                                                <?php echo $entry['order_number']; ?>
-                                                            </a>
-                                                        </td>
                                                         <td class="text-right"><?php echo $debit ? $currency . number_format($debit, 2) : '-'; ?></td>
                                                         <td class="text-right"><?php echo $credit ? $currency . number_format($credit, 2) : '-'; ?></td>
                                                         <td class="text-right"><?php echo $currency . number_format($shop_balance, 2); ?></td>
                                                         <td><?php echo ucfirst($entry['type']); ?></td>
                                                         <td><?php echo htmlspecialchars($entry['payment_method']); ?></td>
-                                                        <td><?php echo htmlspecialchars($entry['remarks']); ?></td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -277,103 +265,8 @@
                                 </div>
                                 <!-- End Shop Ledger Section -->
                                 
-                                <!-- Shop Financial Summary -->
-                                <div class="invoice-summary" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
-                                    <h4><i class="fa fa-chart-line"></i> Shop Financial Summary</h4>
-                                    <div class="row">
-                                        <div class="col-md-3 col-sm-6">
-                                            <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 15px;">
-                                                <h5 style="color: #e74c3c; margin: 0;">Total Debits</h5>
-                                                <h3 style="color: #e74c3c; margin: 10px 0;"><?php echo $currency . number_format($shop_total_debit, 2); ?></h3>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-sm-6">
-                                            <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 15px;">
-                                                <h5 style="color: #27ae60; margin: 0;">Total Credits</h5>
-                                                <h3 style="color: #27ae60; margin: 10px 0;"><?php echo $currency . number_format($shop_total_credit, 2); ?></h3>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-sm-6">
-                                            <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 15px;">
-                                                <h5 style="color: #3498db; margin: 0;">Current Balance</h5>
-                                                <h3 style="color: #3498db; margin: 10px 0;"><?php echo $currency . number_format($shop_balance, 2); ?></h3>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-sm-6">
-                                            <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 15px;">
-                                                <h5 style="color: #f39c12; margin: 0;">This Order</h5>
-                                                <h3 style="color: #f39c12; margin: 10px 0;"><?php echo $currency . number_format($total_price, 2); ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="alert alert-info" style="margin-top: 15px;">
-                                                <i class="fa fa-info-circle"></i> 
-                                                <strong>Note:</strong> This invoice shows the complete financial history for <?php echo isset($shop_info['shop_name']) ? $shop_info['shop_name'] : 'this shop'; ?>. 
-                                                The current order amount is <?php echo $currency . number_format($total_price, 2); ?> and will be reflected in the shop's ledger once payment is processed.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Shop Financial Summary -->
                                 <?php endif; ?>
-                                <!-- <?php if(isset($order_ledger) && count($order_ledger) > 0): ?>
-                                
-                                <div class="invoice-ledger">
-                                    <h4><i class="fa fa-book"></i> Order Ledger</h4>
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th class="text-right">Debit (<?php echo $currency; ?>)</th>
-                                                        <th class="text-right">Credit (<?php echo $currency; ?>)</th>
-                                                        <th class="text-right">Balance (<?php echo $currency; ?>)</th>
-                                                        <th>Type</th>
-                                                        <th>Payment Method</th>
-                                                        <th>Remarks</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php 
-                                                    $total_debit = 0; 
-                                                    $total_credit = 0; 
-                                                    $balance = 0;
-                                                    foreach($order_ledger as $entry): 
-                                                        $debit = $entry['type'] == 'debit' ? $entry['amount'] : 0;
-                                                        $credit = $entry['type'] == 'credit' ? $entry['amount'] : 0;
-                                                        $total_debit += $debit;
-                                                        $total_credit += $credit;
-                                                        $balance += ($credit - $debit);
-                                                    ?>
-                                                        <tr>
-                                                            <td><?php echo date('Y-m-d H:i', strtotime($entry['date'])); ?></td>
-                                                            <td class="text-right"><?php echo $debit ? $currency . number_format($debit, 2) : '-'; ?></td>
-                                                            <td class="text-right"><?php echo $credit ? $currency . number_format($credit, 2) : '-'; ?></td>
-                                                            <td class="text-right"><?php echo $currency . number_format($balance, 2); ?></td>
-                                                            <td><?php echo ucfirst($entry['type']); ?></td>
-                                                            <td><?php echo htmlspecialchars($entry['payment_method']); ?></td>
-                                                            <td><?php echo htmlspecialchars($entry['remarks']); ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr style="background: #f6f8fa; font-weight: bold;">
-                                                        <td class="text-right">Totals:</td>
-                                                        <td class="text-right"><?php echo $currency . number_format($total_debit, 2); ?></td>
-                                                        <td class="text-right"><?php echo $currency . number_format($total_credit, 2); ?></td>
-                                                        <td class="text-right"><?php echo $currency . number_format($balance, 2); ?></td>
-                                                        <td colspan="3"></td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    <?php else: ?>
-                                      
-                                    <?php endif; ?>
-                                </div> -->
-                                <!-- End Order Ledger Section -->
+                                </div>
                                 
                                 <!-- Action Buttons -->
                                 <div class="row" style="margin-top: 30px;">
@@ -406,6 +299,12 @@
 </div>
 
 <style>
+    .invoice-box table tr.information table td{
+        padding-bottom:0px;
+    }
+    .table{
+        margin-bottom:0px;
+    }
 .invoice-box {
     max-width: 800px;
     margin: auto;
@@ -440,7 +339,7 @@
 }
 
 .invoice-box table tr.information table td {
-    padding-bottom: 40px;
+    /* padding-bottom: 40px; */
 }
 
 .invoice-box table tr.heading td {
@@ -507,7 +406,7 @@
     }
     
     .invoice-box {
-        padding: 15px;
+        padding: 5px;
     }
 }
 .invoice-box table th, .invoice-box table td {
@@ -518,7 +417,7 @@
 }
 @media (max-width: 768px) {
     .invoice-box table th, .invoice-box table td {
-        font-size: 13px;
+        font-size: 25px;
         padding: 4px;
     }
 }
@@ -562,20 +461,20 @@
 /* Enhanced styling for shop ledger after total price */
 .invoice-ledger {
     margin-top: 30px;
-    border-top: 2px solid #e74c3c;
+    /* border-top: 2px solid #e74c3c; */
     padding-top: 20px;
 }
 
 .invoice-ledger h4 {
     color: #2c3e50;
-    border-bottom: 2px solid #e74c3c;
+    /* border-bottom: 2px solid #e74c3c; */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
 .invoice-ledger .btn-xs {
     padding: 2px 6px;
-    font-size: 11px;
+    font-size: 25px;
 }
 
 /* Highlight current order in shop ledger */
