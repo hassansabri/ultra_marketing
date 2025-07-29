@@ -19,6 +19,20 @@ class m_stocks extends CI_Model {
         return $query->result_array();
         
     }
+    public function getcurrentballance($data){
+        $this->db->select_sum('balance');
+        $this->db->where('brand_fk',$data['brand_fk']);
+        $this->db->where('grade_fk',$data['grade_fk']);
+        $this->db->where('model_fk',$data['model_fk']);
+        $this->db->where('size_fk',$data['size_fk']);
+        $this->db->where('type_fk',$data['type_fk']);
+        $this->db->where('colour_fk',$data['colour_fk']);
+        $this->db->where('item_fk',$data['item_fk']);
+        $this->db->where('unit_fk',$data['unit_fk']);
+        $query = $this->db->get("stocks");
+        return $query->result_array();
+        
+    }
     public function checkstock($data ){
         $this->db->select_sum('balance');
         $this->db->where('brand_fk',$data['brand_fk']);
@@ -34,7 +48,7 @@ class m_stocks extends CI_Model {
     }
 
     public function addstock($data){
-        $this->db->insert('stocks',$data);
+        $this->restoreStock($data,$data['balance']);
         $this->db->insert('stocks_logs',$data);
     }
     
@@ -116,8 +130,6 @@ class m_stocks extends CI_Model {
             // Update existing stock
             $available_stock = $current_stock[0]['balance'];
             $new_balance = $available_stock + $quantity;
-            
-            $this->db->where('brand_fk', $data['brand_fk']);
             $this->db->where('grade_fk', $data['grade_fk']);
             $this->db->where('model_fk', $data['model_fk']);
             $this->db->where('size_fk', $data['size_fk']);

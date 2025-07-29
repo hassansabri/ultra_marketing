@@ -155,7 +155,7 @@
                                             </div>
                                             
                                             <!-- Bulk Role Assignment -->
-                                            <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                            <?php if ('1'=='1'): ?>
                                             <div class="row" style="margin: 15px;">
                                                 <div class="col-md-12">
                                                     <div class="panel panel-primary">
@@ -304,7 +304,7 @@
                                                 <th data-hide="phone,tablet"><?php echo $this->lang->line("status"); ?></th>
                                                 <th data-hide="phone,tablet">
                                                     Roles
-                                                    <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                    <?php if (has_module_permission('users') || is_admin()): ?>
                                                     <br>
                                                     <small>
                                                         <a href="#bulkRoleForm" class="text-primary" style="text-decoration: none;">
@@ -364,12 +364,19 @@
                                                                         <?php endif; ?>
                                                                         
                                                                         <!-- Assign Role Link -->
-                                                                        <?php if (has_module_permission('permissions') || is_admin()): ?>
-                                                                        <div class="assign-role-link">
+                                                                        <?php if (has_module_permission('users') || is_admin()): ?>
+                                                                        <div class="assign-role-link" style="margin-bottom: 5px;">
                                                                             <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>" 
                                                                                class="btn btn-primary btn-xs assign-role-btn" 
                                                                                title="Assign Roles to <?php echo $value['name']; ?>">
                                                                                 <i class="fa fa-plus-circle"></i> Assign Role
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="edit-role-link">
+                                                                            <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>" 
+                                                                               class="btn btn-warning btn-xs edit-role-btn" 
+                                                                               title="Edit Roles for <?php echo $value['name']; ?>">
+                                                                                <i class="fa fa-edit"></i> Edit Role
                                                                             </a>
                                                                         </div>
                                                                         <?php endif; ?>
@@ -377,7 +384,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="user-permissions-container">
-                                                                        <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                                        <?php if (has_module_permission('users') || is_admin()): ?>
                                                                             <?php 
                                                                             $permission_count = isset($value['permission_count']) ? $value['permission_count'] : 0;
                                                                             $btn_class = $permission_count > 0 ? 'btn-success' : 'btn-warning';
@@ -443,7 +450,7 @@
                                                                             <span class="caret"></span>
                                                                         </button>
                                                                         <ul class="dropdown-menu">
-                                                                            <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                                            <?php if (has_module_permission('users') || is_admin()): ?>
                                                                             <li class="dropdown-header">
                                                                                 <i class="fa fa-shield"></i> Permission Status
                                                                                 <?php 
@@ -460,7 +467,7 @@
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/users/editprofileuser/<?php echo $value['users_id']; ?>"> <?php echo $this->lang->line("edit_profile"); ?></a>
                                                                             </li>
-                                                                            <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                                            <?php if (has_module_permission('users') || is_admin()): ?>
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>">
                                                                                     <i class="fa fa-plus-circle text-primary"></i> 
@@ -470,13 +477,20 @@
                                                                                     <?php endif; ?>
                                                                                 </a>
                                                                             </li>
+                                                                            <li>
+                                                                                <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>" class="text-center">
+                                                                                    <strong>
+                                                                                        <i class="fa fa-edit text-warning"></i> Edit Role
+                                                                                    </strong>
+                                                                                </a>
+                                                                            </li>
                                                                             <?php endif; ?>
                                                                             <li class="divider"></li>
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/users/changepermissions/<?php echo $value['users_id']; ?>"><?php echo $this->lang->line("AccessRights"); ?></a>
                                                                             </li>
                                                                             <li class="divider"></li>
-                                                                            <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                                            <?php if (has_module_permission('users') || is_admin()): ?>
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>">
                                                                                     <?php 
@@ -497,7 +511,7 @@
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <?php endif; ?>
-                                                                            <?php if (has_module_permission('permissions') || is_admin()): ?>
+                                                                            <?php if (has_module_permission('users') || is_admin()): ?>
                                                                             <li class="divider"></li>
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/permissions/assign_user_roles/<?php echo $value['users_id']; ?>" class="text-center">

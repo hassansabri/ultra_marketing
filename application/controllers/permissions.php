@@ -479,7 +479,7 @@ class Permissions extends CI_Controller {
             redirect('login');
         }
         
-        if (!has_module_permission('permissions') && !is_admin()) {
+        if (!has_module_permission('users') && !is_admin()) {
             show_error('Access Denied', 403);
         }
         

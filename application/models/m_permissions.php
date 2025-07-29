@@ -289,7 +289,7 @@ class M_permissions extends CI_Model {
         $this->db->select('r.*');
         $this->db->from('user_roles ur');
         $this->db->join('roles r', 'r.role_id = ur.role_id');
-        $this->db->where('ur.user_role_id', $users_id);
+        $this->db->where('ur.users_id', $users_id);
         $this->db->where('ur.is_active', 1);
         $this->db->where('r.is_active', 1);
         $this->db->order_by('r.role_name', 'ASC');
@@ -359,7 +359,7 @@ class M_permissions extends CI_Model {
     /**
      * Bulk assign roles to multiple users
      */
-    public function bulkAssignRoles($users_ids, $role_ids, $action = 'add', $assigned_by = null) {
+    public function bulk_assign_roles($users_ids, $role_ids, $action = 'add', $assigned_by = null) {
         $results = [
             'success_count' => 0,
             'error_count' => 0,

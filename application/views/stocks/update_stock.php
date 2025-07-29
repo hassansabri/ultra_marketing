@@ -31,7 +31,7 @@
                                     }
                                  //    print_r($brands_attribute_fk);
                                      ?>
- <div class="main-div">
+ <!-- <div class="main-div">
  	<div class="sub-div">Brand</div>
  	<?php  if ($all_brands) { ?>
  	<select id="brand" name="brand" class="form-control show" atttype="brand">
@@ -146,7 +146,7 @@
  	</select>
  	<?php } ?>
  </div>
- </div>
+ </div> -->
  <div class="main-div">
 	<div class="sub-div">
 			Logs

@@ -75,6 +75,7 @@
         $this->data['unit_fk']=$this->input->post('unit');
      $stock_arr = $this->model_stock->checkstock($this->data);
      $this->ldata['all_logs']=$this->model_stock->getlogs($this->data);
+     $this->ldata['current_ballance']=$this->model_stock->getcurrentballance($this->data);
      $log_view = $this->load->view('stocks/logs_values',$this->ldata,true);
      if(!isset($stock_arr[0]['balance'])){
 $stock=0;

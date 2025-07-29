@@ -6,7 +6,8 @@
                                                             <tr>
                                                                 <td><?php 
                                                                 echo $val = get_item_name($value["item_fk"]); ?></td>
-                                                                <td><?php
+                                                                 <!-- <td>
+                                                                  <?php
                                                                 $val = get_att_name($value["brand_fk"],'brands','brand_title','brand');
                                                                 echo $val; ?></td>
                                                                 <td><?php
@@ -26,9 +27,10 @@
                                                                 echo $val; ?></td>
                                                                 <td><?php
                                                                 $val = get_att_name($value["unit_fk"],'units','unit_title','unit');
-                                                                echo $val; ?></td>
+                                                                echo $val; ?></td> -->
                                                                 <td><?php echo $value["entry_date"]; ?></td>
                                                                 <td><?php echo $value["stock_type"]; ?></td>
+                                                                <td><?php echo $current_ballance[0]["balance"]; ?></td>
                                                                 <td><?php echo $value["balance"]; ?></td>
                                                                 
                                                             </tr>
