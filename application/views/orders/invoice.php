@@ -278,9 +278,7 @@
                                             <a href="<?php echo site_url(); ?>/orders/review/<?php echo $order_number; ?>" class="btn btn-info">
                                                 <i class="fa fa-eye"></i> Review Order
                                             </a>
-                                            <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $order_number; ?>" class="btn btn-warning">
-                                                <i class="fa fa-edit"></i> Edit Order
-                                            </a>
+                                            
                                             <a href="<?php echo site_url(); ?>/orders/draftorders" class="btn btn-default">
                                                 <i class="fa fa-arrow-left"></i> Back to Orders
                                             </a>

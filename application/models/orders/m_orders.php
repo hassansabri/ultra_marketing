@@ -276,6 +276,7 @@ $this->db->where("item_id", $items_id);
     }
     public function getOrder($order_number){
         $this->db->where('order_number',$order_number);
+        $this->db->where('order_status','draft');
         $query = $this->db->get("orders");
         $dat=array();
       if (sizeof($query->result_array()) > 0) {

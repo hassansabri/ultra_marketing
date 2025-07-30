@@ -56,8 +56,9 @@
            $this->data['entry_date'] =  date('Y-m-d',strtotime($this->input->post('entry_date')));
         $this->model_stock->addstock($this->data);
         $this->ldata['all_logs']=$this->model_stock->getlogs($this->data);
+        
         // update logs
-      
+       $this->ldata['current_ballance']=$this->model_stock->getcurrentballance($this->data);
      $log_view = $this->load->view('stocks/logs_values',$this->ldata,true);
      $rdata=array(
         'logs'=>$log_view

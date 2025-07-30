@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2025 at 08:11 PM
+-- Generation Time: Jul 30, 2025 at 11:12 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -847,8 +847,7 @@ CREATE TABLE `stocks` (
 --
 
 INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(31, 0, 0, 0, 0, 0, 0, 0, 10, 'opening_balance', '2025-07-16', 97, '2025-07-16 07:02:21', '2025-07-16 07:02:21'),
-(32, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-24', 99, '2025-07-24 05:24:17', '2025-07-24 05:24:17');
+(35, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 200, '2025-07-30 00:05:51', '2025-07-30 00:05:51');
 
 -- --------------------------------------------------------
 
@@ -878,23 +877,8 @@ CREATE TABLE `stocks_logs` (
 --
 
 INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(30, 0, 0, 0, 0, 0, 0, 0, 10, 'opening_balance', '2025-07-16', 100, '2025-07-16 07:02:21', '2025-07-16 07:02:21'),
-(31, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 04:34:32', '2025-07-20 04:34:32'),
-(32, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 04:34:32', '2025-07-20 04:34:32'),
-(33, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 04:34:32', '2025-07-20 04:34:32'),
-(34, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 04:37:07', '2025-07-20 04:37:07'),
-(35, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -99, '2025-07-20 04:43:33', '2025-07-20 04:43:33'),
-(36, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 05:00:45', '2025-07-20 05:00:45'),
-(37, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 05:01:14', '2025-07-20 05:01:14'),
-(38, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 05:01:41', '2025-07-20 05:01:41'),
-(39, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-20', -1, '2025-07-20 05:10:09', '2025-07-20 05:10:09'),
-(40, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-23', -1, '2025-07-23 18:16:57', '2025-07-23 18:16:57'),
-(41, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-23', -1, '2025-07-23 18:29:38', '2025-07-23 18:29:38'),
-(42, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-23', -1, '2025-07-23 18:36:22', '2025-07-23 18:36:22'),
-(43, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-24', 100, '2025-07-24 05:24:17', '2025-07-24 05:24:17'),
-(44, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-28', -1, '2025-07-28 17:30:24', '2025-07-28 17:30:24'),
-(45, 0, 0, 0, 0, 0, 0, 0, 10, '', '2025-07-28', -2, '2025-07-28 17:30:48', '2025-07-28 17:30:48'),
-(46, 0, 0, 0, 0, 0, 0, 0, 11, '', '2025-07-28', -1, '2025-07-28 17:30:48', '2025-07-28 17:30:48');
+(57, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 100, '2025-07-30 00:05:51', '2025-07-30 00:05:51'),
+(58, 0, 0, 0, 0, 0, 0, 0, 11, 'stock_addition', '2025-07-30', 100, '2025-07-30 00:06:39', '2025-07-30 00:06:39');
 
 -- --------------------------------------------------------
 
@@ -976,8 +960,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`users_id`, `user_name`, `name`, `user_type`, `email`, `password`, `gender`, `phone`, `user_image`, `passport_no`, `blood_group`, `emergency_number`, `designation`, `is_active`, `is_delete`, `created_date`, `modified_date`, `random_id`) VALUES
-(5, 'Hassan', 'Ultra Marketing', 'admin', 'hassan.life@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '0323 4391439', '62452867.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1746458903, ''),
-(7, 'Asad Azeem', 'Ultra Marketing', 'admin', 'asadansari.300@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03244236066', '62452867.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1746458903, '');
+(5, 'Hassan', 'Ultra Marketing', 'admin', 'hassan.life@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03234391439', '65882836.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1753788188, ''),
+(7, 'Muhammad Nadeem', 'Ultra Marketing', 'admin', 'tipulahore@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03114774666', '62452867.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1746458903, '');
 
 -- --------------------------------------------------------
 
@@ -1108,7 +1092,7 @@ CREATE TABLE `user_roles` (
 
 INSERT INTO `user_roles` (`user_role_id`, `users_id`, `role_id`, `assigned_at`, `assigned_by`, `is_active`) VALUES
 (1, 5, 1, '2025-07-22 14:52:11', 5, 1),
-(3, 7, 5, '2025-07-22 17:52:27', 5, 1);
+(6, 7, 1, '2025-07-29 12:37:34', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1460,13 +1444,13 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `stocks`
 --
 ALTER TABLE `stocks`
-  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `stocks_logs`
 --
 ALTER TABLE `stocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `types`
@@ -1502,7 +1486,7 @@ ALTER TABLE `users_types`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

@@ -29,6 +29,7 @@ class m_stocks extends CI_Model {
         $this->db->where('colour_fk',$data['colour_fk']);
         $this->db->where('item_fk',$data['item_fk']);
         $this->db->where('unit_fk',$data['unit_fk']);
+        // $this->db->where('entry_date',$data['entry_date']);
         $query = $this->db->get("stocks");
         return $query->result_array();
         
@@ -49,7 +50,7 @@ class m_stocks extends CI_Model {
 
     public function addstock($data){
         $this->restoreStock($data,$data['balance']);
-        $this->db->insert('stocks_logs',$data);
+    //    $this->db->insert('stocks_logs',$data);
     }
     
     /**
@@ -126,6 +127,7 @@ class m_stocks extends CI_Model {
             // If no stock record exists, create one
             $data['balance'] = $quantity;
             $this->db->insert('stocks', $data);
+            $this->db->insert('stocks_logs',$data);
         } else {
             // Update existing stock
             $available_stock = $current_stock[0]['balance'];
@@ -138,14 +140,15 @@ class m_stocks extends CI_Model {
             $this->db->where('item_fk', $data['item_fk']);
             $this->db->where('unit_fk', $data['unit_fk']);
             $this->db->update('stocks', array('balance' => $new_balance));
+            $this->db->insert('stocks_logs',$data);
         }
         
         // Log the restoration
-        $log_data = $data;
-        $log_data['balance'] = $quantity; // Positive for restoration
-        $log_data['stock_type'] = 'restoration';
-        $log_data['entry_date'] = date('Y-m-d');
-        $this->db->insert('stocks_logs', $log_data);
+        // $log_data = $data;
+        // $log_data['balance'] = $quantity; // Positive for restoration
+        // $log_data['stock_type'] = 'restoration';
+        // $log_data['entry_date'] = date('Y-m-d');
+        // $this->db->insert('stocks_logs', $log_data);
         
         return true;
     }
