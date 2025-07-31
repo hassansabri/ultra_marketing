@@ -92,6 +92,12 @@
                                                         <p><strong>Order Number:</strong> <?php echo $order_number; ?></p>
                                                         <p><strong>Review Date:</strong> <?php echo date('l, F j, Y'); ?></p>
                                                         <p><strong>Total Items:</strong> <?php echo count($order_info); ?></p>
+                                                        <?php if(isset($packing_info[0]) && $packing_info[0]['packing_title']): ?>
+                                                            <p><strong>Packing Option:</strong> <?php echo $packing_info[0]['packing_title']; ?></p>
+                                                            <!-- <?php if($packing_info[0]['packing_cost'] > 0): ?>
+                                                                <p><strong>Packing Cost:</strong> $<?php echo number_format($packing_info[0]['packing_cost'], 2); ?></p>
+                                                            <?php endif; ?> -->
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -117,25 +123,25 @@
                                                                         </div>
                                                                     </div>
                                                                     
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <p><strong>Item Code:</strong> <?php echo $item_data['item_detail']['item_code']; ?></p>
-                                                                            <p><strong>Description:</strong> <?php echo $item_data['item_detail']['item_description']; ?></p>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <p><strong>Status:</strong> 
-                                                                                <span">
-                                                                                    <?php 
-                                                                                     if(isset($order_info[$index]['order_status'])) echo $order_info[0]['order_status'];?>
-                                                                                </span>
-                                                                            </p>
-                                                                            <label for="price"><strong>price:</strong> 
-                                                                                <span" id="price">
-                                                                                <?php echo $order_info[$index]['order_price']; $index++;?>
-                                                                                </span>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
+                                                                                                                                         <div class="row">
+                                                                         <div class="col-md-6">
+                                                                             <p><strong>Item Code:</strong> <?php echo $item_data['item_detail']['item_code']; ?></p>
+                                                                             <p><strong>Description:</strong> <?php echo $item_data['item_detail']['item_description']; ?></p>
+                                                                         </div>
+                                                                         <div class="col-md-6">
+                                                                             <p><strong>Status:</strong> 
+                                                                                 <span">
+                                                                                     <?php 
+                                                                                      if(isset($order_info[$index]['order_status'])) echo $order_info[0]['order_status'];?>
+                                                                                 </span>
+                                                                             </p>
+                                                                             <label for="price"><strong>price:</strong> 
+                                                                                 <span" id="price">
+                                                                                 <?php echo $order_info[$index]['order_price']; $index++;?>
+                                                                                 </span>
+                                                                             </label>
+                                                                         </div>
+                                                                     </div>
 
                                                                     <!-- Attributes Section -->
                                                                     <?php if(isset($item_data['attributes']) && count($item_data['attributes']) > 0): ?>
@@ -152,7 +158,8 @@
                                                                                     'size' => array('icon' => 'fa-expand', 'title' => 'Sizes'),
                                                                                     'type' => array('icon' => 'fa-tag', 'title' => 'Types'),
                                                                                     'colour' => array('icon' => 'fa-palette', 'title' => 'Colours'),
-                                                                                    'unit' => array('icon' => 'fa-cubes', 'title' => 'Units')
+                                                                                    'unit' => array('icon' => 'fa-cubes', 'title' => 'Units'),
+                                                                                    'packing' => array('icon' => 'fa-box', 'title' => 'Packing')
                                                                                 );
                                                                                 
                                                                                 foreach($attribute_types as $type => $type_info):
@@ -215,9 +222,71 @@
                                             </div>
                                         </div>
 
-                                        <!-- Action Buttons -->
-                                        <div class="row">
-                                            <div class="col-md-12 text-center">
+                                                                                 <!-- Packing Summary -->
+                                         <!-- <div class="row">
+                                             <div class="col-md-12">
+                                                 <div class="panel panel-info">
+                                                     <div class="panel-heading">
+                                                         <h4><i class="fa fa-box"></i> Packing Summary</h4>
+                                                     </div>
+                                                     <div class="panel-body">
+                                                         <?php 
+                                                         $total_packing_cost = 0;
+                                                         $packing_items = array();
+                                                         
+                                                         if(isset($item_packing_info) && count($item_packing_info) > 0) {
+                                                             foreach($item_packing_info as $packing) {
+                                                                 if($packing['packing_cost'] > 0) {
+                                                                     $total_packing_cost += $packing['packing_cost'];
+                                                                     $packing_items[] = $packing;
+                                                                 }
+                                                             }
+                                                         }
+                                                         ?>
+                                                         
+                                                         <?php if(count($packing_items) > 0): ?>
+                                                             <div class="table-responsive">
+                                                                 <table class="table table-striped">
+                                                                     <thead>
+                                                                         <tr>
+                                                                             <th>Item</th>
+                                                                             <th>Packing Option</th>
+                                                                             <th>Cost</th>
+                                                                         </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                         <?php foreach($packing_items as $packing): ?>
+                                                                             <tr>
+                                                                                 <td>
+                                                                                     <?php 
+                                                                                     $item_detail = $this->model_order->getitemdetail($packing['item_fk']);
+                                                                                     echo isset($item_detail[0]['item_name']) ? $item_detail[0]['item_name'] : 'Item #' . $packing['item_fk'];
+                                                                                     ?>
+                                                                                 </td>
+                                                                                 <td><?php echo $packing['packing_title']; ?></td>
+                                                                                 <td>$<?php echo number_format($packing['packing_cost'], 2); ?></td>
+                                                                             </tr>
+                                                                         <?php endforeach; ?>
+                                                                     </tbody>
+                                                                     <tfoot>
+                                                                         <tr class="info">
+                                                                             <td colspan="2"><strong>Total Packing Cost:</strong></td>
+                                                                             <td><strong>$<?php echo number_format($total_packing_cost, 2); ?></strong></td>
+                                                                         </tr>
+                                                                     </tfoot>
+                                                                 </table>
+                                                             </div>
+                                                         <?php else: ?>
+                                                             <p class="text-muted">No packing costs for this order.</p>
+                                                         <?php endif; ?>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div> -->
+
+                                         <!-- Action Buttons -->
+                                         <div class="row">
+                                             <div class="col-md-12 text-center">
                                                 <div class="btn-group" style="margin-top: 20px;">
                                                     <?php if($order_info[0]['order_status'] == 'draft') {?> 
                                                         <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $order_number; ?>" class="btn btn-primary">

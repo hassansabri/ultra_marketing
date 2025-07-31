@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2025 at 11:12 AM
+-- Generation Time: Jul 31, 2025 at 10:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -336,6 +336,8 @@ CREATE TABLE `orders` (
   `order_status` enum('draft','confirm') NOT NULL DEFAULT 'draft',
   `created_by` bigint(20) NOT NULL,
   `confirm_by` bigint(20) DEFAULT NULL,
+  `packing_type` bigint(20) NOT NULL DEFAULT 1,
+  `packing_id` bigint(20) NOT NULL DEFAULT 1,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -344,11 +346,12 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `created_date`, `modified_date`) VALUES
-(108, 4157, 10, 1, 1, 1, 'confirm', 5, 5, '2025-07-23 18:28:03', '2025-07-23 18:28:03'),
-(109, 2644, 10, 1, 2, 0, 'confirm', 5, 5, '2025-07-24 04:10:22', '2025-07-24 03:42:43'),
-(110, 227, 10, 1, 1, 0, 'confirm', 5, 5, '2025-07-24 04:43:09', '2025-07-24 02:07:06'),
-(111, 2644, 11, 1, 1, 0, 'confirm', 5, 5, '2025-07-24 06:42:43', '2025-07-24 03:42:43');
+INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `packing_type`, `packing_id`, `created_date`, `modified_date`) VALUES
+(108, 4157, 10, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-07-23 18:28:03', '2025-07-23 18:28:03'),
+(109, 2644, 10, 1, 2, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-07-24 03:42:43'),
+(110, 227, 10, 1, 1, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:43:09', '2025-07-24 02:07:06'),
+(111, 2644, 11, 1, 1, 1, 'draft', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-07-30 22:43:51'),
+(119, 7932, 11, 1, 1, 1, 'confirm', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-07-30 22:52:42');
 
 -- --------------------------------------------------------
 
@@ -362,6 +365,7 @@ CREATE TABLE `order_detail` (
   `attribute_fk` bigint(20) NOT NULL,
   `attribute_quantity` int(11) NOT NULL,
   `item_fk` bigint(20) NOT NULL,
+  `packing_id` bigint(20) DEFAULT NULL,
   `attribute_type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -389,6 +393,29 @@ CREATE TABLE `order_ledger` (
 INSERT INTO `order_ledger` (`ledger_id`, `order_number`, `date`, `amount`, `payment_method`, `type`, `shop_id`, `remarks`) VALUES
 (5, 4157, '2025-07-20 11:11:00', 1.00, 'Cash', 'debit', 1, 'aaaaaaaaaa'),
 (6, 4157, '2025-07-23 00:00:00', 1.00, 'Cash', 'credit', 1, 'aaaa');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packing_options`
+--
+
+CREATE TABLE `packing_options` (
+  `packing_id` bigint(20) NOT NULL,
+  `packing_title` varchar(255) NOT NULL,
+  `packing_description` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `packing_options`
+--
+
+INSERT INTO `packing_options` (`packing_id`, `packing_title`, `packing_description`, `status`, `created_date`, `modified_date`) VALUES
+(1, 'Box', 'box', 1, '2025-07-30 18:12:48', '2025-07-30 18:12:48'),
+(2, 'Polythene', 'polythene', 1, '2025-07-30 18:12:48', '2025-07-30 18:12:48');
 
 -- --------------------------------------------------------
 
@@ -847,7 +874,7 @@ CREATE TABLE `stocks` (
 --
 
 INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(35, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 200, '2025-07-30 00:05:51', '2025-07-30 00:05:51');
+(35, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 199, '2025-07-30 00:05:51', '2025-07-30 00:05:51');
 
 -- --------------------------------------------------------
 
@@ -878,7 +905,8 @@ CREATE TABLE `stocks_logs` (
 
 INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
 (57, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 100, '2025-07-30 00:05:51', '2025-07-30 00:05:51'),
-(58, 0, 0, 0, 0, 0, 0, 0, 11, 'stock_addition', '2025-07-30', 100, '2025-07-30 00:06:39', '2025-07-30 00:06:39');
+(58, 0, 0, 0, 0, 0, 0, 0, 11, 'stock_addition', '2025-07-30', 100, '2025-07-30 00:06:39', '2025-07-30 00:06:39'),
+(59, 0, 0, 0, 0, 0, 0, 0, 11, '', '2025-07-30', -1, '2025-07-31 01:55:08', '2025-07-31 01:55:08');
 
 -- --------------------------------------------------------
 
@@ -1203,6 +1231,12 @@ ALTER TABLE `order_ledger`
   ADD PRIMARY KEY (`ledger_id`);
 
 --
+-- Indexes for table `packing_options`
+--
+ALTER TABLE `packing_options`
+  ADD PRIMARY KEY (`packing_id`);
+
+--
 -- Indexes for table `payment_options`
 --
 ALTER TABLE `payment_options`
@@ -1378,7 +1412,7 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
@@ -1391,6 +1425,12 @@ ALTER TABLE `order_detail`
 --
 ALTER TABLE `order_ledger`
   MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `packing_options`
+--
+ALTER TABLE `packing_options`
+  MODIFY `packing_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `payment_options`
@@ -1450,7 +1490,7 @@ ALTER TABLE `stocks`
 -- AUTO_INCREMENT for table `stocks_logs`
 --
 ALTER TABLE `stocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `types`

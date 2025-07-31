@@ -276,7 +276,7 @@ $this->db->where("item_id", $items_id);
     }
     public function getOrder($order_number){
         $this->db->where('order_number',$order_number);
-        $this->db->where('order_status','draft');
+        
         $query = $this->db->get("orders");
         $dat=array();
       if (sizeof($query->result_array()) > 0) {
@@ -289,6 +289,7 @@ $this->db->where("item_id", $items_id);
                     "order_status" => $value["order_status"],
                     "order_price" => $value["order_price"],
                     "created_date" => $value["created_date"],
+                    "packing_id" => $value["packing_id"],
                     "shop_id" => isset($value["shop_id"]) ? $value["shop_id"] : null,
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
                     "item_detail" => $this->getitemdetail($value["item_fk"])
@@ -311,8 +312,9 @@ $this->db->where("item_id", $items_id);
                     "created_date" => '',
                     "shop_id" => '',
                     "order_detail" => '',
-                    "item_detail" => ''
-                );;
+                    "item_detail" => '',
+                    "packing_id" => ''
+                );
         }
     }
     public function getorderdetail($order_number,$item_fk){
@@ -322,13 +324,14 @@ $this->db->where("item_id", $items_id);
        //  echo $this->db->last_query();
             return $query->result_array();
     }
-    public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id = null){
+    public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id,$packing_id){
         $data=array(
             'order_number'=>$order_number,
             'item_fk'=>$item_id,
             'order_quantity'=>$order_quantity,
             'order_price'=>$order_price,
             'shop_id'=>$shop_id,
+            'packing_id'=>$packing_id,
             'created_by'=>$this->session->userdata('uid')
         );
          $this->db->insert('orders',$data);
@@ -385,19 +388,19 @@ public function ifitemalredyexist($order_number, $item_id){
         return false;
       }
 }
-public function updateOrderQuantityAndPrice($shopid,$order_number, $item_id, $quantity,$price) {
+public function updateOrderQuantityAndPrice($shopid,$order_number, $item_id, $quantity,$price,$packing_id) {
     echo $item_id;
     $exist = $this->ifitemalredyexist($order_number, $item_id);
     if(!$exist){
         // insert order with default values
-        $this->insertdraftorder($order_number, $item_id, $quantity, $price,$shopid);
+        $this->insertdraftorder($order_number, $item_id, $quantity, $price,$shopid,$packing_id);
     }
     $item_ids = array();
     // $this->insertdraftorder($order_number,$item_id);
     $now = date('Y-m-d H:i:s');
     $this->db->where('order_number', $order_number);
     $this->db->where('item_fk', $item_id);
-    $this->db->update('orders', array('order_quantity' => $quantity,'order_price' => $price,'modified_date'=>$now));
+    $this->db->update('orders', array('order_quantity' => $quantity,'order_price' => $price,'modified_date'=>$now,'packing_id' => $packing_id));
     $afftectedRows = $this->db->affected_rows();
     if ($afftectedRows) {   
             $item_ids[]=$item_id;
@@ -675,7 +678,32 @@ public function updateorder($order_number){
         $query = $this->db->get('payment_options');
         return $query->result_array();
     }
-
+    public function getallpackingoptions(){
+        $this->db->where('status', 1);
+        $query = $this->db->get('packing_options');
+        return $query->result_array();
+    }
+    public function getItemPackingInfo($order_number){
+        $this->db->select('packing_id');
+       $query = $this->db->get("orders");
+        $dat=array();
+      if (sizeof($query->result_array()) > 0) {
+            foreach ($query->result_array() as $value) {
+                $data = array(
+                     "title" => $this->getpackingtitle($value["packing_id"])
+                );
+             $dat[]=$data;
+            }
+//              echo '<pre>';
+//             print_r($dat);
+//           echo '</pre>';
+// exit;
+            return $dat;
+        } else {
+            return  '';
+                    
+        }
+    }
 }
   
   

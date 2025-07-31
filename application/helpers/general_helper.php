@@ -159,5 +159,23 @@ if($result[0]['category_name']){
              return 'none';
         }
     }
+    function getpackingtitle($package_id){
+         $CI = & get_instance();
+        $CI->db->select('packing_title')->from('packing_options');
+        $CI->db->where('packing_id', $package_id);
+        $query = $CI->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            
+if($result[0]['packing_title']){
+    return $result[0]['packing_title'];
+}else{
+    return 'none';
+}
+        } else {
+             return 'none';
+        }
+    }
 }
 ?>

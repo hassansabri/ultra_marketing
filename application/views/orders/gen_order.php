@@ -7,7 +7,21 @@
 			<input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/>
 			<input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="1"/>
 			<input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value=""/>
-		<span class="cross-span" onclick="orders.remove_order('<?php echo $item_detail[0]['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
+			<select name="packing_option_<?php echo $item_detail[0]['item_id']; ?>" class=" packing-select" data-item-id="<?php echo $item_detail[0]['item_id']; ?>" style="color: #000;">
+				<option value="">Select packing option</option>
+				<?php if (isset($all_packing_options) && $all_packing_options) { ?>
+					<?php foreach ($all_packing_options as $option) { ?>
+						<option value="<?php echo $option["packing_id"]; ?>">
+							<?php echo $option["packing_title"]; ?> 
+						
+						</option>
+					<?php } ?>
+				<?php } ?>
+			</select>
+			<div class="packing-description" id="packing_desc_<?php echo $item_detail[0]['item_id']; ?>" style="display: none; margin-top: 5px; font-size: 11px; color: #666;">
+				<strong>Description:</strong> <span class="desc-text"></span>
+			</div>
+			<span class="cross-span" onclick="orders.remove_order('<?php echo $item_detail[0]['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
 		</div>
             </div>
         <div class="col-md-2 hidee" id="grade-div">
@@ -94,3 +108,27 @@
 	</div>
 
 </div>
+<script>
+// Packing options data
+var packingOptions = <?php echo json_encode(isset($all_packing_options) ? $all_packing_options : array()); ?>;
+// Handle item-specific packing option selection
+$(document).on('change', '.packing-select', function() {
+    var selectedValue = $(this).val();
+    var itemId = $(this).data('item-id');
+    var descriptionDiv = $('#packing_desc_' + itemId);
+    var descText = descriptionDiv.find('.desc-text');
+    if (selectedValue) {
+        var selectedOption = packingOptions.find(function(option) {
+            return option.packing_id == selectedValue;
+        });
+        if (selectedOption && selectedOption.packing_description) {
+            descText.text(selectedOption.packing_description);
+            descriptionDiv.show();
+        } else {
+            descriptionDiv.hide();
+        }
+    } else {
+        descriptionDiv.hide();
+    }
+});
+</script>

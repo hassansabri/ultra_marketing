@@ -270,37 +270,65 @@ var orders={
     
     // Real-time validation for shop selection
     $(document).on('change', '#shopid', function() {
-        var shopSelect = $(this);
-        if (!shopSelect.val() || shopSelect.val() === '') {
-            $('#shop-error').show();
-            shopSelect.css('border-color', 'red');
-        } else {
-            $('#shop-error').hide();
-            shopSelect.css('border-color', '');
-        }
+      
     });
     
-    // Real-time validation for quantity inputs
-    $(document).on('input', 'input[name="item_qty[]"]', function() {
-        var qtyInput = $(this);
-        var qty = qtyInput.val();
-        if (!qty || qty <= 0) {
-            qtyInput.css('border-color', 'red');
+
+    $(document).on('click','#of',function(){
+        var flag=true;
+        var shopSelect = $('#shopid');
+  if (!shopSelect.val() || shopSelect.val() === '') {
+      $('#shop-error').show();
+      shopSelect.css('border-color', 'red');
+      
+  } else {
+      $('#shop-error').hide();
+      shopSelect.css('border-color', '');
+  }
+   $('input[name="item_qty[]"]').each(function() {
+
+       var qty = $(this).val();
+       
+               if (!qty || qty <= 0) {
+                   $(this).css('border-color', 'red');
+                   flag=false;
+               } else {
+                   $(this).css('border-color', '');
+               }
+   });
+   $('input[name="item_price[]"]').each(function() {
+
+       var qty = $(this).val();
+               if (!qty || qty <= 0) {
+                   $(this).css('border-color', 'red');
+                   flag=false;
+               } else {
+                   $(this).css('border-color', '');
+               }
+   });
+
+         $("select.packing-select").each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+            flag = false;
+        
         } else {
-            qtyInput.css('border-color', '');
+            $(el).css('border-color', '');
         }
     });
-    $(document).on('click','#of',function(){
         // });
         // // Handle form submission properly
         // $(document).on('submit', '#orderForm', function(e) {
             //  e.preventDefault(); // Always prevent default submission
             
-            
+            if(flag){
+                $('#orderForm').trigger('submit');
+
+            }
             // Submit the form (stock validation will be done when order is completed)
-            // $('#orderForm').trigger('submit');
             // alert('ok');
-        orders.validateStockAndSubmit(true);
+       // orders.validateStockAndSubmit(true);
         // return false;
     });
 },
@@ -412,6 +440,8 @@ validateRequiredFields:function(){
             $(el).css('border-color', '');
         }
     });
+    // Packing option required validation
+   
     
     if (!isValid) {
         alert('Please fix the following errors:\n' + errorMessages.join('\n'));
@@ -472,7 +502,7 @@ validateStockAndSubmit:function(shouldSubmit){
         if (!valid) {
             alert('Low stock for one or more items!\n' + errorMessages.join('\n'));
             // Prevent form submission
-            $("form[onsubmit*='orders.checkquantity']").data('submit-blocked', true);
+          //  $("form[onsubmit*='orders.checkquantity']").data('submit-blocked', true);
         } else {
             // Allow form submission
             $("form[onsubmit*='orders.checkquantity']").removeData('submit-blocked');

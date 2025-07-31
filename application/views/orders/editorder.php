@@ -81,6 +81,17 @@
         <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>
         <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
       <input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>"/>
+        <select name="packing_option_<?php echo $oi['item_id']; ?>" class="packing-select" data-item-id="<?php echo $oi['item_id']; ?>" style="color: #000;">
+            <option value="">Select packing option</option>
+            <?php if (isset($all_packing_options) && $all_packing_options) { ?>
+                <?php foreach ($all_packing_options as $option) { ?>
+                    <option value="<?php echo $option["packing_id"]; ?>" <?php if($oi['packing_id'] == $option['packing_id'])echo 'selected'; ?>>
+                        <?php echo $option["packing_title"]; ?> 
+                    
+                    </option>
+                <?php } ?>
+            <?php } ?>
+        </select>
         <span class="cross-span" onclick="orders.remove_order('<?php echo $oi['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
                  <input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
                 </div>

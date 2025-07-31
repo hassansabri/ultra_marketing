@@ -72,6 +72,7 @@
                                             <th>Item</th>
                                             <th class="text-right">Price</th>
                                             <th class="text-right">Quantity</th>
+                                            <th class="text-right">Packing</th>
                                             <th class="text-right">Subtotal</th>
                                         </tr>
                                         <?php 
@@ -92,6 +93,17 @@
                                                 }
                                                 $item_subtotal = $item_price * $item_qty;
                                                 $total_price += $item_subtotal;
+                                                
+                                                // Get packing information for this item
+                                                $item_packing = null;
+                                                if(isset($item_packing_info)) {
+                                                    foreach($item_packing_info as $packing) {
+                                                        if($packing['item_fk'] == $item_id) {
+                                                            $item_packing = $packing;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
                                             ?>
                                                 <tr class="item">
                                                     <td>
@@ -113,11 +125,22 @@
                                                         <?php echo $item_qty; ?>
                                                     </td>
                                                     <td class="text-right">
+                                                        <?php $title=getpackingtitle($oi['packing_id']);
+                                                         if($title): ?>
+                                                            <span class="label label-info">
+                                                                <i class="fa fa-box"></i> <?php echo $title; ?>
+                                                              
+                                                            </span>
+                                                        <?php else: ?>
+                                                            <span class="text-muted">No packing</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="text-right">
                                                         <strong><?php echo $currency . number_format($item_subtotal, 2); ?></strong>
                                                     </td>
                                                 </tr>
                                                 <tr class="item">
-                                                    <td colspan="4">
+                                                    <td colspan="5">
                                                         <?php if(isset($item_data['attributes']) && count($item_data['attributes']) > 0): ?>
                                                             <div class="attributes-section" style="margin-top: 15px;">
                                                                 <h6 style="color: #34495e; border-bottom: 1px solid #ecf0f1; padding-bottom: 5px;">
@@ -132,7 +155,8 @@
                                                                         'size' => array('icon' => 'fa-expand', 'title' => 'Sizes'),
                                                                         'type' => array('icon' => 'fa-tag', 'title' => 'Types'),
                                                                         'colour' => array('icon' => 'fa-palette', 'title' => 'Colours'),
-                                                                        'unit' => array('icon' => 'fa-cubes', 'title' => 'Units')
+                                                                        'unit' => array('icon' => 'fa-cubes', 'title' => 'Units'),
+                                                                        'packing' => array('icon' => 'fa-box', 'title' => 'Packing')
                                                                     );
                                                                     
                                                                     foreach($attribute_types as $type => $type_info):
@@ -207,7 +231,7 @@
                                         <?php endif; ?>
 
                                         <tr class="total" style="background: #f6f8fa; border-top: 3px solid #bbb;">
-                                            <td colspan="3" class="text-right" style="font-size: 1.2em; font-weight: bold;">Total Price:</td>
+                                            <td colspan="4" class="text-right" style="font-size: 1.2em; font-weight: bold;">Total Price:</td>
                                             <td class="text-right" style="font-size: 1.3em; font-weight: bold; color: #27ae60;">
                                                 <?php echo $currency . number_format($total_price, 2); ?>
                                             </td>

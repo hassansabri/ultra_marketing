@@ -30,6 +30,7 @@
         $this->data['all_items']=$this->model_order->getAllItems();
         $this->data["all_brands"] = $this->model_order->getallbrands();
         $this->data["all_shops"] = $this->model_order->getallshops();
+        $this->data['all_packing_options'] = $this->model_order->getAllPackingOptions();
         $this->load->view('orders/new_order',$this->data);
     }
     public function show_invoice($order_number = null) {
@@ -44,6 +45,9 @@
         
         // Get profile details for company information
         $this->data['profile'] = $this->model_order->getprofiledetail();
+        
+        // Get packing information for the order
+      //  $this->data['item_packing'] = $this->model_order->getItemPackingInfo($this->data['order_info'][0]['itemidS']);
         
         // Fetch shop info for the order (get shop_id from first order_info row)
         $shop_info = null;
@@ -91,6 +95,9 @@
                         break;
                     case 'unit':
                         $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                        break;
+                    case 'packing':
+                        $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
                         break;
                     default:
                         $attribute_detail = array();
@@ -169,6 +176,7 @@ if($attribute_fk[0]){
               }
               $this->data["item_id"] =  $item_id;
               $this->data["item_detail"] =  $this->model_order->getitemdetail($item_id);
+               $this->data['all_packing_options'] = $this->model_order->getallpackingoptions();
             $html=$this->load->view('orders/gen_order',$this->data,true);
            echo json_encode($html); 
         }
@@ -280,8 +288,8 @@ if($attribute_fk[0]){
          for($i=0;$i<sizeof($item_ids);$i++){
            $item_id=$item_ids[$i];
            $data=$this->allattributes($item_id);
-           
-           $this->model_order->insertdraftorder($order_number,$item_id,$qty[$i],$item_price[$i], $shop_id); // pass shop_id
+$packing_id = $this->input->post('packing_option_'.$item_id);
+           $this->model_order->insertdraftorder($order_number,$item_id,$qty[$i],$item_price[$i], $shop_id,$packing_id); // pass shop_id
            if($data['grades']){
             $grade_quantity=0;
              foreach($data['grades'] as $value){
@@ -412,7 +420,7 @@ if($attribute_fk[0]){
           $this->data['all_items'] = $this->model_order->getAllItems();
           $this->data["all_brands"] = $this->model_order->getallbrands();
           $this->data['all_shops'] = $this->model_order->getallshops();
-          
+          $this->data['all_packing_options'] = $this->model_order->getallpackingoptions();
           // Get current shop ID for the order
           $current_order = $this->model_order->getOrder($order_number);
           if (!empty($current_order)) {
@@ -445,6 +453,7 @@ if($attribute_fk[0]){
             $item_ids = $this->input->post('item_ids');
             $item_qty = $this->input->post('item_qty');
             $item_price = $this->input->post('item_price');
+            
             
             // Server-side validation for required fields
             $validation_errors = array();
@@ -496,7 +505,8 @@ if($attribute_fk[0]){
                 }
 
                 // Update order quantity
-                $this->model_order->updateOrderQuantityAndPrice($shop_id,$order_number, $item_id, $quantity,$price);
+                $packing_id = $this->input->post('packing_option_'.$item_id);
+                $this->model_order->updateOrderQuantityAndPrice($shop_id,$order_number, $item_id, $quantity,$price,$packing_id);
                 
                 // Delete existing order details for this item
                 $this->model_order->deleteOrderDetails($order_number, $item_id);
@@ -572,6 +582,9 @@ if($attribute_fk[0]){
             // Get profile details for company information
             $this->data['profile'] = $this->model_order->getprofiledetail();
             
+            // Get packing information for the order
+            $this->data['item_packing_info'] = $this->model_order->getItemPackingInfo($order_number);
+            
             // Get order details for each item
             $this->data['order_details'] = array();
             foreach($this->data['order_info'] as $oi){
@@ -607,6 +620,9 @@ if($attribute_fk[0]){
                             break;
                         case 'unit':
                             $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                            break;
+                        case 'packing':
+                            $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
                             break;
                         default:
                             $attribute_detail = array();
