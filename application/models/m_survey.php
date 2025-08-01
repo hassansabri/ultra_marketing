@@ -192,7 +192,7 @@ class m_survey extends CI_Model {
                     "form_type" => $value["form_type"],
                     "category" => $value["category"],
                     "department_id" => $value["department_id"],
-                    "created_date" => $value["created_date"],
+                    "created_date" => $value["created_date"],  
                     "is_active" => $value["is_active"]
                 );
                 return $dat;

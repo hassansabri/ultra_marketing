@@ -4,6 +4,14 @@ var form_id_global;
 var assign_gloabl_id;
 var global_map;
 var hasvalue_global = false;
+    $(document).ready(function () {
+        setTimeout(function() {
+  // Your code to be executed after 5 seconds
+  $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning").html()+'</div>');
+  $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
+  $('.myalert').show();
+}, 1000); // 5000 milliseconds = 5 seconds
+    });
 $(document).ready(function () {
     $('#demo-setting').css('display', 'none');
     $(document).on('click', '.getuser', function (ele) {

@@ -172,7 +172,7 @@
                 Please note that these links work a bit different than
                 traditional href="" links. See documentation for details.
                 -->
-               
+                
                 <ul>                     
                     <!-- 2 is for users management-->
                     <?php  if (has_module_permission('users')&&$this->session->userdata('uid')&&$this->session->userdata('logged_in')){ ?>
@@ -424,3 +424,55 @@
                 window.location.replace(res);
             }
         </script>
+        <!-- Show stock warning under main content on every page -->
+        <script>
+          // This script will move the warning below the main content if #main exists
+          document.addEventListener('DOMContentLoaded', function() {
+            var warning = document.getElementById('global-stock-warning');
+            var main = document.getElementById('main');
+            if (warning && main) {
+              main.parentNode.insertBefore(warning, main.nextSibling);
+            }
+          });
+        </script>
+
+            <div id="warnings" style="overflow: hidden;
+  word-break: break-all;display:none;">
+
+                <?php
+                $CI =& get_instance();
+                $CI->load->model('stocks/m_stocks', 'model_stock');
+                $out_of_stock_items = $CI->model_stock->get_items_with_zero_stock();
+                $not_exists_items = $CI->model_stock->get_items_not_exists_in_stock();
+            
+                if (!empty($out_of_stock_items)):
+                ?>
+                <div id="global-stock-warning" class=" mywarning  alert alert-danger" style="margin-left: 220px;
+            padding: 0;
+            padding-bottom: 0px;
+            padding-bottom: 52px;
+            position: relative;display:none;">
+                    <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following items are out of stock!</h4>
+                    <ul style="margin-bottom:0;">
+                        <?php foreach($out_of_stock_items as $item): ?>
+                            <li><?php echo $item['item_name']; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+              <?php  if (!empty($not_exists_items)):
+                ?>
+                <div id="global-stock-warning" class="alert alert-danger" style="margin-left: 220px;
+            padding: 0;
+            padding-bottom: 0px;
+            padding-bottom: 52px;
+            position: relative;display:none">
+                    <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following items are Not In stock!</h4>
+                    <ul style="margin-bottom:0;">
+                        <?php foreach($not_exists_items as $item): ?>
+                            <li><?php echo $name = get_item_name($item);  ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+            </div>

@@ -704,6 +704,9 @@ public function updateorder($order_number){
                     
         }
     }
+    public function getpackingtitle(){
+
+    }
 }
   
   

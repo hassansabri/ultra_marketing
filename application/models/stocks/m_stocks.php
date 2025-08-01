@@ -269,5 +269,35 @@ class m_stocks extends CI_Model {
         $query = $this->db->get("items_attributes");
             return $query->result_array();
     } 
+
+    /**
+     * Get all items with zero or negative stock balance
+     */
+    public function get_items_with_zero_stock() {
+        $this->db->select('stocks.item_fk, items.item_name');
+        $this->db->from('stocks');
+        $this->db->join('items', 'items.item_id = stocks.item_fk');
+        $this->db->where('stocks.balance <=', 0);
+        $this->db->group_by('stocks.item_fk');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    public function get_items_not_exists_in_stock(){
+        $notexists = array();
+       $items= $this->getallitems();
+       if(isset($items)){
+        foreach($items as $value){
+            $this->db->select('stocks.item_fk');
+        $this->db->from('stocks');
+        $this->db->where('stocks.item_fk', $value['item_id']);
+        $query = $this->db->get();
+        $data= $query->result_array();
+        if(!$data){
+            $notexists[]=$value['item_id'];
+        }
+        }
+    }
+    return $notexists;
+    }
 }
 ?>
