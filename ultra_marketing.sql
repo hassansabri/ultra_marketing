@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2025 at 10:53 AM
+-- Generation Time: Aug 01, 2025 at 04:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -789,13 +789,6 @@ CREATE TABLE `shops` (
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `shops`
---
-
-INSERT INTO `shops` (`shop_id`, `shop_name`, `shop_owner`, `shop_number`, `shop_email`, `shop_country`, `shop_state`, `shop_city`, `shop_address`, `shop_latitude`, `shop_longitude`, `shop_status`, `created_date`, `modified_date`) VALUES
-(1, 'test12', 'test12', '00000000', 'test12', 1, 2, 1, 'Plot 110, Block G Tariq Garden, Lahore, Pakistan', 31.4199, 74.2535, 1, '2025-05-18 17:46:34', '2025-06-08 23:44:10');
-
 -- --------------------------------------------------------
 
 --
@@ -869,13 +862,6 @@ CREATE TABLE `stocks` (
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `stocks`
---
-
-INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(35, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 199, '2025-07-30 00:05:51', '2025-07-30 00:05:51');
-
 -- --------------------------------------------------------
 
 --
@@ -898,15 +884,6 @@ CREATE TABLE `stocks_logs` (
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `stocks_logs`
---
-
-INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(57, 0, 0, 0, 0, 0, 0, 0, 11, 'opening_balance', '2025-07-30', 100, '2025-07-30 00:05:51', '2025-07-30 00:05:51'),
-(58, 0, 0, 0, 0, 0, 0, 0, 11, 'stock_addition', '2025-07-30', 100, '2025-07-30 00:06:39', '2025-07-30 00:06:39'),
-(59, 0, 0, 0, 0, 0, 0, 0, 11, '', '2025-07-30', -1, '2025-07-31 01:55:08', '2025-07-31 01:55:08');
 
 -- --------------------------------------------------------
 
@@ -1466,7 +1443,7 @@ ALTER TABLE `role_permissions`
 -- AUTO_INCREMENT for table `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sizes`
@@ -1484,13 +1461,13 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `stocks`
 --
 ALTER TABLE `stocks`
-  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stocks_logs`
 --
 ALTER TABLE `stocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `types`
