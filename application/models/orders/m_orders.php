@@ -19,6 +19,7 @@ class m_orders extends CI_Model {
     }
  public function getallshops(){
      $this->db->where('shop_status',1);
+     $this->db->where('shop_type','supplier');
         $query = $this->db->get("shops");
         return $query->result_array();
     }

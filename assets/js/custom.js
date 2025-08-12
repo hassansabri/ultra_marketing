@@ -788,6 +788,7 @@ var item_id = $('#items').val();
             var entry_date = $('#entry_date').val();
             var stock_type = $('#stock_type').val();
             var balance = $('#balance').val();
+            var shop_id = $('#shop_id').val();
             if ($.trim($("#entry_date").val()) == "") {
             alert('Field with sign(*) required');
             $.LoadingOverlay("hide");
@@ -796,7 +797,7 @@ var item_id = $('#items').val();
             $.ajax({
                 type: "POST",
                 url: baseurl + '/stocks/addstock',
-                data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id+'&entry_date='+ entry_date+'&stock_type='+stock_type+'&balance='+balance,
+                data: "item_id=" + item_id+'&brand='+ brand_id+'&grade='+ grade_id+'&model='+ model_id+'&size='+ size_id+'&type='+ type_id+'&colour='+ colour_id+'&unit='+ unit_id+'&entry_date='+ entry_date+'&stock_type='+stock_type+'&balance='+balance+'&shop_id='+shop_id,
                 success: function (response)
                 {
              $('#entry_date').val('');

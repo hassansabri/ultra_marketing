@@ -206,11 +206,11 @@
 		</div>
 		<div class="col-md-2">
 			<div class="form-group" id="">
-				<select name="stock_type" class="form-control select2" id="stock_type">
+				<select name="shop_id" class="form-control select2" id="shop_id">
 					<option value="0">Please Select Debiter</option>
 					<?php if($all_debiters){ ?>
 						<?php foreach($all_debiters as $value){?>
-							<option value="opening_balance"><?php echo $value['shop_name'] ?></option>
+							<option value="<?php echo $value['shop_id'] ?>"><?php echo $value['shop_name'] ?></option>
 						<?php } ?>
 					<?php } ?>
 				</select>

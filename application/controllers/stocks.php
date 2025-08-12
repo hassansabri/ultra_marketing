@@ -52,6 +52,7 @@
         $this->data['colour_fk']=$this->input->post('colour');
         $this->data['unit_fk']=$this->input->post('unit');
         $this->data['balance']=$this->input->post('balance');
+        $this->data['shop_fk']=$this->input->post('shop_id');
         $this->data['stock_type'] = $this->input->post('stock_type');
            $this->data['entry_date'] =  date('Y-m-d',strtotime($this->input->post('entry_date')));
         $this->model_stock->addstock($this->data);
