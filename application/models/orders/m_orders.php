@@ -609,7 +609,7 @@ public function updateorder($order_number){
         $success = true;
         
         foreach ($order_info as $order_item) {
-            $item_id = $order_item['item_fk'];
+            $item_id = $order_item['item_id'];
             $quantity = $order_item['order_quantity'];
             
             // Get order details for attributes

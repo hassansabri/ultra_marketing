@@ -122,6 +122,7 @@ $stock=0;
         $this->data['colour_fk']=$this->input->post('colour');
         $this->data['unit_fk']=$this->input->post('unit');
        $this->data['all_logs'] = $this->model_stock->getlogs($this->data);
+       $this->data['all_debiters'] = $this->model_stock->getDebiters($this->data);
     echo   $this->load->view('stocks/update_stock',$this->data,true);
 
     }

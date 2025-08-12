@@ -68,6 +68,17 @@
                                             ?>">
                                         </div>
                                         <div class="form-group">
+                                            <div class="col-md-12" >
+                                            <label>select shop type</label>
+                                            <select class="form-control" name="shop_type" id="shop_type">
+                                                <option value="">Select Shop Type</option>
+                                            
+                                                        <option <?php if($shop_detail[0]['shop_type'] == 'debiter')echo 'selected'; ?>  value="debiter" >Debiter</option>
+                                                        <option <?php if($shop_detail[0]['shop_type'] == 'supplier')echo 'selected'; ?>  value="suplliers" >Suplliers</option>
+                                                 
+                                            </select>
+                                            </div>
+                                        <div class="form-group">
                                             <div class="col-md-4 custompdding" >
                                                 <?php $countries =  getCountries(); ?>
                                             <label>select country</label>

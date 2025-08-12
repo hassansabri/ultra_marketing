@@ -671,7 +671,7 @@ class orders extends CI_Controller {
                 $has_stock_issues = true;
             }
         }
-
+   
         // If there are stock issues, don't complete the order
         if ($has_stock_issues) {
             $this->session->set_flashdata('stock_errors', $stock_errors);
@@ -684,7 +684,10 @@ class orders extends CI_Controller {
 
         // Deduct stock after successful order completion
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
+        // Insert ledger entry
+$this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'credit');
         if (!$stock_deduction_success) {
+
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
         } else {
             $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');

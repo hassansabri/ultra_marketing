@@ -5,6 +5,14 @@ class m_stocks extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    public function getDebiters(){
+        $this->db->select('*');
+        $this->db->where('shop_type','debiter');
+        $this->db->where('shop_status','1');
+        $query = $this->db->get("shops");
+        return $query->result_array();
+        
+    }
     public function getlogs($data){
         $this->db->select('*');
         $this->db->where('brand_fk',$data['brand_fk']);

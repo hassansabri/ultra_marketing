@@ -58,6 +58,7 @@
                                                     <th data-class="expand">Shope Name</th>
                                                     <th>Shope Owner</th>
                                                     <th>Shope Number</th>
+                                                    <th>Shope type</th>
                                                     <th data-hide="phone"><?php echo $this->lang->line("email"); ?></th>
                                                     <th data-hide="phone,tablet"><?php echo $this->lang->line("status"); ?></th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
@@ -74,6 +75,7 @@
                                                                 <td><?php echo $value["shop_name"]; ?></td>
                                                                 <td><?php echo $value["shop_owner"]; ?></td>
                                                                 <td><?php echo $value["shop_number"]; ?></td>
+                                                                <td><?php echo $value["shop_type"]; ?></td>
                                                                 <td><?php echo $value["shop_email"]; ?></td>
                                                                 <td>
                                                                     <span class="onoffswitch">

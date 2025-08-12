@@ -159,7 +159,7 @@
 			Actions
 	</div>
 	<div class="row">
-		<div class="col-md-1" >
+		<!-- <div class="col-md-1" >
 			<div class="form-group" id="brand-id">
             </div>
 		</div>
@@ -186,13 +186,13 @@
 		<div class="col-md-1">
 			<div class="form-group" id="unit-id">
             </div>
-		</div>
-		<div class="col-md-1">
+		</div> -->
+		<div class="col-md-2">
 			<div class="form-group" id="">
 				<input placeholder="Entry Date" type="text" name="entry_date" id="entry_date" style="width:100%"/>
             </div>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-2">
 			<div class="form-group" id="">
 				<select name="stock_type" class="form-control" id="stock_type">
 					<option value="0">Please Select</option>
@@ -201,8 +201,20 @@
 				</select>
             </div>
 		</div>
-		<div class="col-md-1">
-				<input placeholder="balance" type="text" name="quantity" id="balance" style="width:100%" />
+		<div class="col-md-2">
+			<input placeholder="balance" type="text" name="quantity" id="balance" style="width:100%" />
+		</div>
+		<div class="col-md-2">
+			<div class="form-group" id="">
+				<select name="stock_type" class="form-control select2" id="stock_type">
+					<option value="0">Please Select Debiter</option>
+					<?php if($all_debiters){ ?>
+						<?php foreach($all_debiters as $value){?>
+							<option value="opening_balance"><?php echo $value['shop_name'] ?></option>
+						<?php } ?>
+					<?php } ?>
+				</select>
+			</div>
 		</div>
 		<div class="col-md-2">
 			<div class="form-group" id="">
