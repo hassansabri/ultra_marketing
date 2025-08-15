@@ -360,6 +360,14 @@ class orders extends CI_Controller {
         $this->load->view('orders/all_complete_orders', $this->data);
     }
 
+    public function cancelledorders() {
+        // Get working cancellation data
+        $this->data['all_cancelled_orders'] = $this->model_order->getAllCancelledOrders();
+        $this->data['cancellation_stats'] = $this->model_order->getCancellationStats();
+        $this->data['cancellation_reasons'] = array(); // Will be implemented later
+        $this->load->view('orders/all_cancelled_orders', $this->data);
+    }
+
     public function editorder($order_number) {
         $this->data['order_info'] = $this->model_order->getOrder($order_number);
         $itemids = $this->model_order->getitemidsfromordernumber($order_number);
@@ -685,7 +693,7 @@ class orders extends CI_Controller {
         // Deduct stock after successful order completion
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
         // Insert ledger entry
-$this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'credit');
+$this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'debit');
         if (!$stock_deduction_success) {
 
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
@@ -784,6 +792,99 @@ $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['create
             }
         } else {
             echo json_encode(array('success' => false, 'message' => 'Invalid request method'));
+        }
+    }
+
+    /**
+     * Cancel an order and restore stock
+     * @param string $order_number Order number to cancel
+     */
+    public function cancel_order($order_number = null) {
+        if (!$order_number) {
+            $this->session->set_flashdata('error', 'Order number is required');
+            redirect(site_url('orders/draftorders'));
+        }
+
+        // Check if order exists
+        $order_info = $this->model_order->getOrder($order_number);
+        if (empty($order_info)) {
+            $this->session->set_flashdata('error', 'Order not found');
+            redirect(site_url('orders/draftorders'));
+        }
+
+        // Check if order is already a draft (can't cancel draft orders)
+        if ($order_info[0]['order_status'] === 'draft') {
+            $this->session->set_flashdata('error', 'Draft orders cannot be cancelled');
+            redirect(site_url('orders/draftorders'));
+        }
+
+        // Attempt to cancel the order
+        $cancellation_success = $this->model_order->cancelOrder($order_number);
+        
+        if ($cancellation_success) {
+            // Restore stock for the cancelled order
+            $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
+            
+            if ($stock_restoration_success) {
+                // Update stock restoration status
+                $this->model_order->updateStockRestorationStatus($order_number);
+                $this->session->set_flashdata('success', 'Order cancelled successfully and stock restored');
+            } else {
+                $this->session->set_flashdata('warning', 'Order cancelled but failed to restore stock. Please contact administrator.');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Failed to cancel order');
+        }
+
+        redirect(site_url('orders/draftorders'));
+    }
+
+    /**
+     * Cancel an order via AJAX with reason
+     */
+    public function cancel_order_ajax() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(array('success' => false, 'message' => 'Invalid request method'));
+            return;
+        }
+
+        $order_number = $this->input->post('order_number');
+        $cancellation_reason = $this->input->post('cancellation_reason');
+
+        if (!$order_number) {
+            echo json_encode(array('success' => false, 'message' => 'Order number is required'));
+            return;
+        }
+
+        // Check if order exists
+        $order_info = $this->model_order->getOrder($order_number);
+        if (empty($order_info)) {
+            echo json_encode(array('success' => false, 'message' => 'Order not found'));
+            return;
+        }
+
+        // Check if order is already cancelled (basic check)
+        if ($order_info[0]['order_status'] === 'draft' && $order_info[0]['modified_date'] > $order_info[0]['created_date']) {
+            echo json_encode(array('success' => false, 'message' => 'Order appears to have been cancelled already'));
+            return;
+        }
+
+        // Attempt to cancel the order
+        $cancellation_success = $this->model_order->cancelOrder($order_number, $cancellation_reason);
+        
+        if ($cancellation_success) {
+            // Restore stock for the cancelled order
+            $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
+            
+            if ($stock_restoration_success) {
+                // Update stock restoration status
+                $this->model_order->updateStockRestorationStatus($order_number);
+                echo json_encode(array('success' => true, 'message' => 'Order cancelled successfully and stock restored'));
+            } else {
+                echo json_encode(array('success' => true, 'message' => 'Order cancelled but failed to restore stock. Please contact administrator.'));
+            }
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Failed to cancel order'));
         }
     }
 

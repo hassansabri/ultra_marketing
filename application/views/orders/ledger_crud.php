@@ -11,10 +11,10 @@
                         <?php echo isset($entry) ? 'Edit Ledger Entry' : 'Add Ledger Entry'; ?>
                     </div>
                     <div class="panel-body">
-                        <form method="post" action="<?php echo isset($entry) ? site_url('orders/edit_ledger_entry/'.$entry['ledger_id']) : site_url('orders/add_ledger_entry'); ?>">
+                        <form id="lf" method="post" action="<?php echo isset($entry) ? site_url('orders/edit_ledger_entry/'.$entry['ledger_id']) : site_url('orders/add_ledger_entry'); ?>">
                             <div class="form-group">
-                                <label for="shop_id">Shop</label>
-                                <select class="form-control" name="shop_id" id="shop_id" required>
+                                <label for="shop_id">Select supplier</label>
+                                <select class="form-control shopinvoice" name="shop_id" id="shop_id" required>
                                     <option value="">Select Shop</option>
                                     <?php
                                     if (isset($all_shops) && is_array($all_shops)) {
@@ -28,18 +28,20 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="order_number">Order Number</label>
-                                <input type="text" class="form-control" name="order_number" id="order_number" value="<?php echo isset($entry) ? htmlspecialchars($entry['order_number']) : ''; ?>" required>
+                                <label for="order_number">Invoice Number</label>
+                                <select class="form-control inv" name="order_number" id="order_number" required>
+                            <option value="<?php echo isset($entry) ? htmlspecialchars($entry['order_number']) : ''; ?>"><?php echo isset($entry) ? htmlspecialchars($entry['order_number']) : ''; ?></option>  
+                            </select>
                             </div>
                             <div class="form-group">
                                 <label for="date">Date</label>
-                                <input type="datetime-local" class="form-control" name="date" id="date" value="<?php echo isset($entry) ? date('Y-m-d\TH:i', strtotime($entry['date'])) : ''; ?>" required>
+                                <input type="datetime-local" class="form-control" name="date" id="date" value="<?php echo isset($entry) ? date('Y-m-d\TH:i', strtotime($entry['date'])) : date("Y-m-d\TH:i"); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="amount">Amount</label>
                                 <input type="number" step="0.01" class="form-control" name="amount" id="amount" value="<?php echo isset($entry) ? htmlspecialchars($entry['amount']) : ''; ?>" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group col-md-3 pm">
                                 <label for="payment_method">Payment Method</label>
                                 <select class="form-control" name="payment_method" id="payment_method" required>
                                     <option value="">Select Payment Method</option>
@@ -55,12 +57,13 @@
                                     ?>
                                 </select>
                             </div>
+                            <div style="clear:both"></div>
                             <div class="form-group">
                                 <label for="type">Type</label>
                                 <select class="form-control" name="type" id="type" required>
-                                    <option value="">Select Type</option>
+                                    <!-- <option value="">Select Type</option> -->
                                     <option value="credit" <?php echo (isset($entry) && $entry['type'] == 'credit') ? 'selected' : ''; ?>>Credit</option>
-                                    <option value="debit" <?php echo (isset($entry) && $entry['type'] == 'debit') ? 'selected' : ''; ?>>Debit</option>
+                                    <!-- <option value="debit" <?php echo (isset($entry) && $entry['type'] == 'debit') ? 'selected' : ''; ?>>Debit</option> -->
                                 </select>
                             </div>
                             <div class="form-group">
@@ -90,7 +93,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Shop</th>
-                                    <th>Order Number</th>
+                                    <th>Invoice Number</th>
                                     <th>Date</th>
                                     <th>Type</th>
                                     <th>Amount</th>
@@ -252,7 +255,8 @@
 }
 </style>
 
-<script>
+<script type="text/javascript">
+    orders.init();
 $(document).ready(function() {
     // Toggle shop edit mode
     $('.toggle-shop-edit').click(function() {

@@ -12,7 +12,7 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Order #</th>
+                                    <th>Invoice #</th>
                                     <th class="text-right">Debit</th>
                                     <th class="text-right">Credit</th>
                                     <th class="text-right">Balance</th>

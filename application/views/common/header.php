@@ -336,6 +336,23 @@
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/orders/draftorders" title=""><span class="menu-item-parent">All Draft Orders</span></a>
                                     <a href="<?php echo site_url(); ?>/orders/completeorders" title=""><span class="menu-item-parent">All Complete Orders</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders/cancelledorders" title="">
+                                        <span class="menu-item-parent">Cancelled Orders</span>
+                                        <?php 
+                                        // Load the model and get count safely
+                                        try {
+                                            $this->load->model('orders/m_orders', 'model_order');
+                                            $total = $this->model_order->getCancellationStats();
+                                            print_r($total);
+                                            $total_cancelled = $total['total_cancelled'];
+                                            if ($total_cancelled > 0): ?>
+                                                <span class="badge bg-color-red pull-right"><?php echo $total_cancelled; ?></span>
+                                            <?php endif;
+                                        } catch (Exception $e) {
+                                            // If there's an error, don't show the badge
+                                        }
+                                        ?>
+                                    </a>
                                     <a href="<?php echo site_url(); ?>/orders" title=""><span class="menu-item-parent"> New Order</span></a>
                                     </li> 
                             </ul>	

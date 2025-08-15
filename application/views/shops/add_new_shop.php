@@ -80,7 +80,7 @@
                                             <select class="form-control" name="shop_type" id="shop_type">
                                                 <option value="">Select Shop Type</option>
                                             
-                                                        <option  value="debiter" >Debiter</option>
+                                                        <option  value="crediter" >Crediter</option>
                                                         <option  value="suplliers" >Suplliers</option>
                                                  
                                             </select>

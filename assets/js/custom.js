@@ -229,6 +229,24 @@ var orders={
         }
         
     });
+        $(document).on('change', '.shopinvoice', function (ele) {
+             $.LoadingOverlay("show");
+        var id = $(this).val();
+            $.ajax({
+                url: baseurl + '/shops/getinvoices',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    shop_id: id
+                }
+            }).done(function(response) {
+                $.LoadingOverlay("hide");
+             //   console.log(response);
+            // var obj = JSON.parse(response);//
+            $('.inv').html(response);
+            });
+        
+    });
     
     // Add stock validation for dynamically loaded quantity inputs
     

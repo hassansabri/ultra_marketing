@@ -43,6 +43,14 @@ $this->db->where("shop_id", $shop_id);
         return $afftectedRows;
     }
 
+    public function getinvoices($shop_id){
+        $this->db->select('order_id,order_number');
+$this->db->where("shop_id", $shop_id);
+        $query = $this->db->get("orders");
+        return $query->result_array();
+
+    }
+
 }
   
   

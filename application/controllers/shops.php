@@ -127,6 +127,17 @@ public function getstates(){
         $this->data['shop_detail'] = $this->model_shops->getshopdetail($shop_id);
         $this->load->view('shops/shop_ledger', $this->data);
     }
+    public function getinvoices(){
+    $shop_id = $this->input->post('shop_id');
+   $invoices =  $this->model_shops->getinvoices($shop_id);
+      $html='<option>Please Select</option>';
+       if($invoices){
+            foreach($invoices as $value){
+                $html .='<option value="'.$value["order_number"].'">'.$value["order_number"].'</option>';
+                                    }
+       }
+        echo json_encode($html);
+    }
         }
     
 ?>

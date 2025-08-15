@@ -5,9 +5,9 @@ class m_stocks extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-    public function getDebiters(){
+    public function getCrediters(){
         $this->db->select('*');
-        $this->db->where('shop_type','debiter');
+        $this->db->where('shop_type','crediter');
         $this->db->where('shop_status','1');
         $query = $this->db->get("shops");
         return $query->result_array();
@@ -15,43 +15,151 @@ class m_stocks extends CI_Model {
     }
     public function getlogs($data){
         $this->db->select('*');
-        $this->db->where('brand_fk',$data['brand_fk']);
-        $this->db->where('grade_fk',$data['grade_fk']);
-        $this->db->where('model_fk',$data['model_fk']);
-        $this->db->where('size_fk',$data['size_fk']);
-        $this->db->where('type_fk',$data['type_fk']);
-        $this->db->where('colour_fk',$data['colour_fk']);
-        $this->db->where('item_fk',$data['item_fk']);
-        $this->db->where('unit_fk',$data['unit_fk']);
+        $this->db->where('item_fk', $data['item_fk']);
+        
+        // Only add WHERE conditions for non-zero values to avoid issues
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
+        }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
         $query = $this->db->get("stocks_logs");
         return $query->result_array();
-        
     }
     public function getcurrentballance($data){
         $this->db->select_sum('balance');
-        $this->db->where('brand_fk',$data['brand_fk']);
-        $this->db->where('grade_fk',$data['grade_fk']);
-        $this->db->where('model_fk',$data['model_fk']);
-        $this->db->where('size_fk',$data['size_fk']);
-        $this->db->where('type_fk',$data['type_fk']);
-        $this->db->where('colour_fk',$data['colour_fk']);
-        $this->db->where('item_fk',$data['item_fk']);
-        $this->db->where('unit_fk',$data['unit_fk']);
-        // $this->db->where('entry_date',$data['entry_date']);
+        $this->db->where('item_fk', $data['item_fk']);
+        
+        // Only add WHERE conditions for non-zero values to avoid issues
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
+        }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
         $query = $this->db->get("stocks");
         return $query->result_array();
-        
     }
     public function checkstock($data ){
         $this->db->select_sum('balance');
-        $this->db->where('brand_fk',$data['brand_fk']);
-        $this->db->where('grade_fk',$data['grade_fk']);
-        $this->db->where('model_fk',$data['model_fk']);
-        $this->db->where('size_fk',$data['size_fk']);
-        $this->db->where('type_fk',$data['type_fk']);
-        $this->db->where('colour_fk',$data['colour_fk']);
-        $this->db->where('item_fk',$data['item_fk']);
-        $this->db->where('unit_fk',$data['unit_fk']);
+        $this->db->where('item_fk', $data['item_fk']);
+        
+        // Only add WHERE conditions for non-zero values to avoid issues
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
+        }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
         $query = $this->db->get("stocks");
         return $query->result_array();
     }
@@ -83,39 +191,56 @@ class m_stocks extends CI_Model {
         // Calculate new balance
         $new_balance = $available_stock - $quantity;
         
-        // Update stock
-        if($data['grade_fk']){
-            $this->db->where('grade_fk', $data['grade_fk']);
-            $update=true;
-        }
-        if($data['model_fk']){
-            $this->db->where('model_fk', $data['model_fk']);
-            $update=true;
-        }
-        if($data['size_fk']){
-            $this->db->where('size_fk', $data['size_fk']);
-            $update=true;
-        }
-        if($data['type_fk']){
-            $this->db->where('type_fk', $data['type_fk']);
-            $update=true;
-        }
-        if($data['colour_fk']){
-            $this->db->where('colour_fk', $data['colour_fk']);
-            $update=true;
-        }
-        if($data['item_fk']){
-            $this->db->where('item_fk', $data['item_fk']);
-            $update=true;
-        }
-        if($update){
-            $this->db->update('stocks', array('balance' => $new_balance));
+        // Update stock with proper WHERE clause
+        $this->db->where('item_fk', $data['item_fk']);
         
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
         }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
+        $this->db->update('stocks', array('balance' => $new_balance));
         // Log the deduction
         $log_data = $data;
         $log_data['balance'] = -$quantity; // Negative for deduction
-        $log_data['stock_type'] = 'deduction';
+        $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
         $log_data['entry_date'] = date('Y-m-d');
         $this->db->insert('stocks_logs', $log_data);
         
@@ -135,20 +260,71 @@ class m_stocks extends CI_Model {
             // If no stock record exists, create one
             $data['balance'] = $quantity;
             $this->db->insert('stocks', $data);
-            $this->db->insert('stocks_logs',$data);
+            
+            // Log the creation
+            $log_data = $data;
+            $log_data['balance'] = $quantity;
+            $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
+            $log_data['entry_date'] = date('Y-m-d');
+            $this->db->insert('stocks_logs', $log_data);
         } else {
             // Update existing stock
             $available_stock = $current_stock[0]['balance'];
             $new_balance = $available_stock + $quantity;
-            $this->db->where('grade_fk', $data['grade_fk']);
-            $this->db->where('model_fk', $data['model_fk']);
-            $this->db->where('size_fk', $data['size_fk']);
-            $this->db->where('type_fk', $data['type_fk']);
-            $this->db->where('colour_fk', $data['colour_fk']);
+            
+            // Build WHERE clause properly for stock update
             $this->db->where('item_fk', $data['item_fk']);
-            $this->db->where('unit_fk', $data['unit_fk']);
+            
+            if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+                $this->db->where('brand_fk', $data['brand_fk']);
+            } else {
+                $this->db->where('brand_fk', 0);
+            }
+            
+            if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+                $this->db->where('grade_fk', $data['grade_fk']);
+            } else {
+                $this->db->where('grade_fk', 0);
+            }
+            
+            if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+                $this->db->where('model_fk', $data['model_fk']);
+            } else {
+                $this->db->where('model_fk', 0);
+            }
+            
+            if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+                $this->db->where('size_fk', $data['size_fk']);
+            } else {
+                $this->db->where('size_fk', 0);
+            }
+            
+            if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+                $this->db->where('type_fk', $data['type_fk']);
+            } else {
+                $this->db->where('type_fk', 0);
+            }
+            
+            if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+                $this->db->where('colour_fk', $data['colour_fk']);
+            } else {
+                $this->db->where('colour_fk', 0);
+            }
+            
+            if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+                $this->db->where('unit_fk', $data['unit_fk']);
+            } else {
+                $this->db->where('unit_fk', 0);
+            }
+            
             $this->db->update('stocks', array('balance' => $new_balance));
-            $this->db->insert('stocks_logs',$data);
+            
+            // Log the restoration
+            $log_data = $data;
+            $log_data['balance'] = $quantity; // Positive for restoration
+            $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
+            $log_data['entry_date'] = date('Y-m-d');
+            $this->db->insert('stocks_logs', $log_data);
         }
         
         // Log the restoration
@@ -183,6 +359,21 @@ class m_stocks extends CI_Model {
     }
     public function getallattributes(){
 
+    }
+    
+    /**
+     * Get all items with their stock information
+     * @return array Array of items with stock details
+     */
+    public function getallitemsstock() {
+        $this->db->select('i.item_id, i.item_name, i.item_status, COALESCE(SUM(s.balance), 0) as total_stock');
+        $this->db->from('items i');
+        $this->db->join('stocks s', 'i.item_id = s.item_fk', 'left');
+        $this->db->where('i.item_status', 1);
+        $this->db->group_by('i.item_id');
+        $this->db->order_by('i.item_name', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
     }
     public function getbrands($status=false){
         if($status){

@@ -5,7 +5,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li><?php echo $this->lang->line("home"); ?></li><li>All</li>
+            <li><?php echo $this->lang->line("home"); ?></li><li>Cancelled Orders</li>
         </ol>
         <!-- end breadcrumb -->
     </div>
@@ -34,6 +34,50 @@
             </div>
         <?php endif; ?>
         
+        <!-- Cancellation Statistics Dashboard -->
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div class="widget bg-color-blue txt-color-white">
+                    <div class="widget-body">
+                        <div class="text-center">
+                            <h2><?php echo isset($cancellation_stats['total_cancelled']) ? $cancellation_stats['total_cancelled'] : '0'; ?></h2>
+                            <p>Total Cancelled Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="widget bg-color-red txt-color-white">
+                    <div class="widget-body">
+                        <div class="text-center">
+                            <h2><?php echo isset($cancellation_stats['cancelled_this_month']) ? $cancellation_stats['cancelled_this_month'] : '0'; ?></h2>
+                            <p>Cancelled This Month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="widget bg-color-orange txt-color-white">
+                    <div="widget-body">
+                        <div class="text-center">
+                            <h2><?php echo isset($cancellation_stats['cancelled_today']) ? $cancellation_stats['cancelled_today'] : '0'; ?></h2>
+                            <p>Cancelled Today</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="widget bg-color-green txt-color-white">
+                    <div class="widget-body">
+                        <div class="text-center">
+                            <h2><?php echo isset($cancellation_stats['recent_cancellations']) ? $cancellation_stats['recent_cancellations'] : '0'; ?></h2>
+                            <p>Last 7 Days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- widget grid -->
         <section id="widget-grid" class="">
             <!-- row -->
@@ -44,7 +88,7 @@
 
 
                             <fieldset>
-                                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-deletebutton="false" data-widget-editbutton="false">
+                                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-deletebutton="false" data-widget-editbutton="false">
                                     <!-- widget options:
                                     usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
     
@@ -59,8 +103,8 @@
     
                                     -->
                                     <header>
-                                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                        <h2>All Complete Orders</h2>
+                                        <span class="widget-icon"> <i class="fa fa-times-circle"></i> </span>
+                                        <h2>Cancelled Orders</h2>
 
                                     </header>
 
@@ -78,22 +122,36 @@
                                                 <thead>
                                                 <tr>
                                                     <th data-class="expand">Order Number</th>
+                                                    <th data-hide="">Original Status</th>
+                                                    <th data-hide="">Cancelled Date</th>
+                                                    <th data-hide="">Stock Restored</th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
                                                 </tr>
                                                 </thead>
 
                                                 <tbody>
-                                                    <?php 
+                                                                                                         <?php 
                                                 
-                                                    if (sizeof($all_complete_orders) > 0) { 
-                                                      //  print_r($all_draft_orders);
-                                                        ?>
-                                                        
-                                                        <?php foreach($all_complete_orders as $value) {  
-                                                    ?>
-                                                            <tr>
-                                                                <td><?php echo $value['order_number'] ?></td>
-                                                                <td>
+                                                     if (isset($all_cancelled_orders) && sizeof($all_cancelled_orders) > 0) { 
+                                                       //  print_r($all_cancelled_orders);
+                                                         ?>
+                                                         
+                                                         <?php foreach($all_cancelled_orders as $value) {  
+                                                     ?>
+                                                             <tr>
+                                                                 <td><?php echo isset($value['order_number']) ? $value['order_number'] : 'N/A'; ?></td>
+                                                                 <td>
+                                                                     <span class="label label-success">
+                                                                         <?php echo isset($value['original_status']) ? ucfirst($value['original_status']) : 'Confirm'; ?>
+                                                                     </span>
+                                                                 </td>
+                                                                 <td><?php echo isset($value['cancelled_date']) ? date('Y-m-d H:i', strtotime($value['cancelled_date'])) : 'N/A'; ?></td>
+                                                                 <td>
+                                                                     <span class="label label-success">
+                                                                         <i class="fa fa-check"></i> Yes
+                                                                     </span>
+                                                                 </td>
+                                                                 <td>
                                                                     <div class="btn-group">
                                                                         <button class="btn btn-primary">
                                                                             <?php echo $this->lang->line("dropdown"); ?>
@@ -107,15 +165,7 @@
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/show_invoice/<?php echo $value['order_number']; ?>">Generate Invoice</a>
-                                                                            </li>
-                                                                            <li class="divider"></li>
-                                                                            <li>
-                                                                                <a href="#" 
-                                                                                   onclick="showCancelOrderModal(<?php echo $value['order_number']; ?>)"
-                                                                                   class="text-danger">
-                                                                                    <i class="fa fa-times"></i> Cancel Order
-                                                                                </a>
+                                                                                <a href="<?php echo site_url(); ?>/orders/show_invoice/<?php echo $value['order_number']; ?>">View Invoice</a>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
@@ -123,7 +173,9 @@
                                                             </tr>
                                                         <?php } ?>
                                                     <?php } else { ?>
-
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">No cancelled orders found</td>
+                                                        </tr>
                                                     <?php } ?>
                                                 </tbody>
 
@@ -147,82 +199,7 @@
     </div>
     <!-- END MAIN CONTENT -->
 </div>
-<!-- Cancel Order Modal -->
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h4>
-            </div>
-            <form id="cancelOrderForm" method="post" action="">
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        <strong>Warning:</strong> Cancelling this order will restore the stock quantities. This action cannot be undone.
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cancellation_reason">Cancellation Reason (Optional)</label>
-                        <textarea class="form-control" id="cancellation_reason" name="cancellation_reason" rows="3" 
-                                  placeholder="Please provide a reason for cancellation..."></textarea>
-                    </div>
-                    
-                    <input type="hidden" id="order_number_to_cancel" name="order_number" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fa fa-times"></i> Cancel Order
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
    orders.init();
-   
-   function showCancelOrderModal(orderNumber) {
-       $('#order_number_to_cancel').val(orderNumber);
-       $('#cancelOrderModal').modal('show');
-   }
-   
-   // Handle form submission
-   $('#cancelOrderForm').on('submit', function(e) {
-       e.preventDefault();
-       
-       var orderNumber = $('#order_number_to_cancel').val();
-       var reason = $('#cancellation_reason').val();
-       
-       // Submit via AJAX
-       $.ajax({
-           url: '<?php echo site_url("orders/cancel_order_ajax"); ?>',
-           type: 'POST',
-           data: {
-               order_number: orderNumber,
-               cancellation_reason: reason
-           },
-           dataType: 'json',
-           success: function(response) {
-               if (response.success) {
-                   // Show success message and reload page
-                   alert(response.message);
-                   location.reload();
-               } else {
-                   alert('Error: ' + response.message);
-               }
-           },
-           error: function() {
-               alert('An error occurred while processing your request.');
-           }
-       });
-       
-       // Close modal
-       $('#cancelOrderModal').modal('hide');
-   });
 </script>
-<?php $this->load->view("common/footer"); ?>
+<?php $this->load->view("common/footer"); ?> 

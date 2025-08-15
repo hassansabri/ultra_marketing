@@ -207,9 +207,9 @@
 		<div class="col-md-2">
 			<div class="form-group" id="">
 				<select name="shop_id" class="form-control select2" id="shop_id">
-					<option value="0">Please Select Debiter</option>
-					<?php if($all_debiters){ ?>
-						<?php foreach($all_debiters as $value){?>
+					<option value="0">Please Select Crediters</option>
+					<?php if($all_crediters){ ?>
+						<?php foreach($all_crediters as $value){?>
 							<option value="<?php echo $value['shop_id'] ?>"><?php echo $value['shop_name'] ?></option>
 						<?php } ?>
 					<?php } ?>

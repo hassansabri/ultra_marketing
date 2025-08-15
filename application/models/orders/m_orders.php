@@ -275,6 +275,127 @@ $this->db->where("item_id", $items_id);
             return array();
         }
     }
+
+    /**
+     * Get all cancelled orders (working version)
+     * @return array Array of cancelled orders
+     */
+    public function getAllCancelledOrders(){
+        // Get orders that were modified after creation (effectively cancelled)
+        // This includes orders that were changed from 'confirm' to 'draft' status
+        $this->db->select('o.*, od.attribute_type, od.attribute_fk, od.attribute_quantity');
+        $this->db->from('orders o');
+        $this->db->join('order_detail od', 'o.order_number = od.order_number_fk', 'left');
+        $this->db->where('o.modified_date >', 'o.created_date');
+        $this->db->where('o.order_status', 'draft');
+        $this->db->group_by('o.order_number');
+        $this->db->order_by('o.modified_date', 'DESC');
+        $query = $this->db->get();
+        
+        if (sizeof($query->result_array()) > 0) {
+            $dat = array();
+            foreach ($query->result_array() as $value) {
+                $data = array(
+                    "order_id" => $value["order_id"],
+                    "order_number" => $value["order_number"],
+                    "item_fk" => $value["item_fk"],
+                    "order_quantity" => $value["order_quantity"],
+                    "order_price" => $value["order_price"],
+                    "created_date" => $value["created_date"],
+                    "modified_date" => $value["modified_date"],
+                    "cancelled_date" => $value["modified_date"], // Use modified_date as cancelled date
+                    "original_status" => "confirm", // Assume it was confirmed before cancellation
+                    "stock_restored" => 1, // Assume stock was restored
+                    "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"])
+                );
+                $dat[]=$data;
+            }
+            return $dat;
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * Get cancellation statistics and counts (working version)
+     * @return array Array with cancellation statistics
+     */
+    public function getCancellationStats() {
+        // Count orders that were modified after creation (effectively cancelled)
+        // These are orders that were changed from 'confirm' to 'draft' status
+        
+        // Total cancelled orders
+        $this->db->select('COUNT(DISTINCT order_number) as total');
+        $this->db->from('orders');
+        $this->db->where('modified_date >', 'created_date');
+        $this->db->where('order_status', 'cancelled');
+        $query = $this->db->get();
+        $total_cancelled = $query->row()->total;
+        
+        // Cancelled orders this month
+        $this->db->select('COUNT(DISTINCT order_number) as total');
+        $this->db->from('orders');
+        $this->db->where('CAST(modified_date AS DATE) >', 'CAST(created_date AS DATE)');
+        $this->db->where('order_status', 'cancelled');
+        $this->db->where('MONTH(modified_date)', date('m'));
+        $this->db->where('YEAR(modified_date)', date('Y'));
+        $query = $this->db->get();
+        $cancelled_this_month = $query->row()->total;
+        
+        // Cancelled orders this year
+        $this->db->select('COUNT(DISTINCT order_number) as total');
+        $this->db->from('orders');
+        $this->db->where('modified_date >', 'created_date');
+        $this->db->where('order_status', 'cancelled');
+        $this->db->where('YEAR(modified_date)', date('Y'));
+        $query = $this->db->get();
+        $cancelled_this_year = $query->row()->total;
+        
+        // Orders cancelled today
+        $this->db->select('COUNT(DISTINCT order_number) as total');
+        $this->db->from('orders');
+        $this->db->where('order_status', 'cancelled');
+        $this->db->where('DATE(modified_date)', date('Y-m-d'));
+        $query = $this->db->get();
+        $cancelled_today = $query->row()->total;
+        
+        // Recent cancellations (last 7 days)
+        $this->db->select('COUNT(DISTINCT order_number) as total');
+        $this->db->from('orders');
+        $this->db->where('modified_date >', 'created_date');
+        $this->db->where('order_status', 'cancelled');
+        $this->db->where('modified_date >=', date('Y-m-d H:i:s', strtotime('-7 days')));
+        $query = $this->db->get();
+        $recent_cancellations = $query->row()->total;
+        
+        return array(
+            'total_cancelled' => $total_cancelled,
+            'cancelled_this_month' => $cancelled_this_month,
+            'cancelled_this_year' => $cancelled_this_year,
+            'cancelled_today' => $cancelled_today,
+            'recent_cancellations' => $recent_cancellations,
+            
+        );
+    }
+
+    /**
+     * Get cancellation reasons summary (basic version)
+     * @return array Array with cancellation reasons and counts
+     */
+    public function getCancellationReasonsSummary() {
+        // For now, return empty array until the cancelled_orders table is created
+        return array();
+    }
+
+    /**
+     * Update stock restoration status for cancelled order (basic version)
+     * @param string $order_number Order number
+     * @return bool Success status
+     */
+    public function updateStockRestorationStatus($order_number) {
+        // For now, return true until the cancelled_orders table is created
+        return true;
+    }
     public function getOrder($order_number){
         $this->db->where('order_number',$order_number);
         
@@ -607,6 +728,9 @@ public function updateorder($order_number){
             return false;
         }
         
+        // Debug: Log the restoration attempt
+        log_message('debug', 'Attempting to restore stock for order: ' . $order_number . ' with ' . count($order_info) . ' items');
+        
         $success = true;
         
         foreach ($order_info as $order_item) {
@@ -707,6 +831,36 @@ public function updateorder($order_number){
     }
     public function getpackingtitle(){
 
+    }
+
+    /**
+     * Cancel an order by updating its status to cancelled (basic version)
+     * @param string $order_number Order number to cancel
+     * @param string $cancellation_reason Optional reason for cancellation
+     * @return bool Success status
+     */
+    public function cancelOrder($order_number, $cancellation_reason = null) {
+        // Get order info before cancellation
+        $order_info = $this->getOrder($order_number);
+        if (empty($order_info)) {
+            return false;
+        }
+        
+        // For now, just change status to draft (effectively cancelling it)
+        // This will be updated to 'cancelled' once the database is updated
+        $this->db->where('order_number', $order_number);
+        $this->db->where_in('order_status', array('draft', 'confirm'));
+        
+        $update_data = array(
+            'order_status' => 'draft', // Will be 'cancelled' after DB update
+            'modified_date' => date('Y-m-d H:i:s')
+        );
+        
+        $result = $this->db->update('orders', $update_data);
+        
+        // Note: Advanced tracking will be added once cancelled_orders table exists
+        
+        return $result;
     }
 }
   

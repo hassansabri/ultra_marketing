@@ -73,7 +73,7 @@
                                             <select class="form-control" name="shop_type" id="shop_type">
                                                 <option value="">Select Shop Type</option>
                                             
-                                                        <option <?php if($shop_detail[0]['shop_type'] == 'debiter')echo 'selected'; ?>  value="debiter" >Debiter</option>
+                                                        <option <?php if($shop_detail[0]['shop_type'] == 'crediter')echo 'selected'; ?>  value="debiter" >Crediter</option>
                                                         <option <?php if($shop_detail[0]['shop_type'] == 'supplier')echo 'selected'; ?>  value="suplliers" >Suplliers</option>
                                                  
                                             </select>

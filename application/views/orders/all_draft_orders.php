@@ -99,11 +99,10 @@
                                                                             <li>
                                                                                 <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Order</a>
                                                                             </li>
-                                                                            <!-- <li>
+                                                                            <li class="divider"></li>
+                                                                            <li>
                                                                                 <a href="<?php echo site_url(); ?>/orders/show_invoice/<?php echo $value['order_number']; ?>">Generate Invoice</a>
-                                                                            </li> -->
-
-                                                                           
+                                                                            </li>
                                                                         </ul>
                                                                     </div>
                                                                 </td>
