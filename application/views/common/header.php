@@ -58,7 +58,7 @@
         <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery-ui-1.9.2.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.steps.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDOdbqj_VlYUEcSaYc-hoasCL6bG29rvsU&sensor=false&libraries=places"></script>
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDOdbqj_VlYUEcSaYc-hoasCL6bG29rvsU&sensor=false&libraries=places"></script> -->
          <script type="text/javascript">
             var baseurl = '<?php echo site_url(); ?>';
             var global_url = '<?php echo base_url(); ?>';

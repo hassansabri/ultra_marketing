@@ -8,11 +8,15 @@ var hasvalue_global = false;
         setTimeout(function() {
   // Your code to be executed after 5 seconds
   html = $("#global-stock-warning").html() ;
-//   if ($("#global-stock-warning").is(':empty')) {
+  if ($("#global-stock-warning").html()=="") {
       $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning").html()+'</div>');
-//   }
-  $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
-  $('.myalert').show();
+  }
+  if ($(".mywarning").html()=="") {
+      $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
+
+  }
+
+    $('.myalert').show();
 }, 1000); // 5000 milliseconds = 5 seconds
     });
 $(document).ready(function () {
@@ -341,7 +345,7 @@ var orders={
         if (!val || val === "") {
             $(el).css('border-color', 'red');
             flag = false;
-        
+        if( $("select.packing-select").val()=='4'){}
         } else {
             $(el).css('border-color', '');
         }
@@ -753,6 +757,46 @@ var colours={
             });
         });
     }
+};
+var packingstock={
+    init:function(){
+         $(document).on("change", ".packings", function () {
+            $('#stock').html('');
+            var packing_id = $(this).val();
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/packing_stocks/getallstock',
+                data: "packing_id=" + packing_id,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                    $('#packingstock').html(response);
+                     $("#entry_date").datepicker({
+                        dateFormat: "yy-m-d",
+
+                    });
+                    
+
+$(".select2").select2({
+  theme: "classic"
+});
+                }
+            });
+        });
+        $(document).on("change", ".show", function () {
+            var id = $(this).val();
+            var html = $.trim($(this).find('option:selected').text());
+           var attrid =$(this).attr('atttype');
+        //    $('.att').prepend('<span>'+html+'</span>->');
+        if(id==0){
+            $('#'+attrid+'-id').html('');
+               }else{
+
+            $('#'+attrid+'-id').html('<input style="width:100%;" type="text" attid="'+id+'" id="'+attrid+'-aj" name="'+attrid+'" value="'+html+'"/>');
+        }
+        });
+    } 
 };
 var stock ={
     showstocklogs:function(){
