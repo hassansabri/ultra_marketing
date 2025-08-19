@@ -287,7 +287,7 @@ $this->db->where("item_id", $items_id);
         $this->db->from('orders o');
         $this->db->join('order_detail od', 'o.order_number = od.order_number_fk', 'left');
         $this->db->where('o.modified_date >', 'o.created_date');
-        $this->db->where('o.order_status', 'cancel');
+        $this->db->where('o.order_status', 'cancelled');
         $this->db->group_by('o.order_number');
         $this->db->order_by('o.modified_date', 'DESC');
         $query = $this->db->get();
@@ -328,7 +328,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancel');
+        $this->db->where('order_status', 'cancelled');
         $query = $this->db->get();
         $total_cancelled = $query->row()->total;
         
@@ -336,7 +336,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('CAST(modified_date AS DATE) >', 'CAST(created_date AS DATE)');
-        $this->db->where('order_status', 'cancel');
+        $this->db->where('order_status', 'cancelled');
         $this->db->where('MONTH(modified_date)', date('m'));
         $this->db->where('YEAR(modified_date)', date('Y'));
         $query = $this->db->get();
@@ -346,7 +346,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancel');
+        $this->db->where('order_status', 'cancelled');
         $this->db->where('YEAR(modified_date)', date('Y'));
         $query = $this->db->get();
         $cancelled_this_year = $query->row()->total;
@@ -354,7 +354,7 @@ $this->db->where("item_id", $items_id);
         // Orders cancelled today
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
-        $this->db->where('order_status', 'cancel');
+        $this->db->where('order_status', 'cancelled');
         $this->db->where('DATE(modified_date)', date('Y-m-d'));
         $query = $this->db->get();
         $cancelled_today = $query->row()->total;
@@ -363,7 +363,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancel');
+        $this->db->where('order_status', 'cancelled');
         $this->db->where('modified_date >=', date('Y-m-d H:i:s', strtotime('-7 days')));
         $query = $this->db->get();
         $recent_cancellations = $query->row()->total;
@@ -681,6 +681,7 @@ public function updateorder($order_number){
                     'size_fk' => 0,
                     'type_fk' => 0,
                     'colour_fk' => 0,
+                    'shop_fk' => $order_item['shop_id'],
                     'unit_fk' => 0
                 );
                 
@@ -694,6 +695,7 @@ public function updateorder($order_number){
                     if ($attribute_quantity > 0) {
                         $stock_data = array(
                             'item_fk' => $item_id,
+                            'shop_fk' => $order_item['shop_id'],
                             'brand_fk' => 0,
                             'grade_fk' => ($detail['attribute_type'] == 'grade') ? $detail['attribute_fk'] : 0,
                             'model_fk' => ($detail['attribute_type'] == 'model') ? $detail['attribute_fk'] : 0,
@@ -852,7 +854,7 @@ public function updateorder($order_number){
      //   $this->db->where_in('order_status','cancel');
         
         $update_data = array(
-            'order_status' => 'cancel', // Will be 'cancelled' after DB update
+            'order_status' => 'cancelled', // Will be 'cancelled' after DB update
             'modified_date' => date('Y-m-d H:i:s')
         );
         
