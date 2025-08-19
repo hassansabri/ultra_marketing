@@ -693,7 +693,7 @@ class orders extends CI_Controller {
         // Deduct stock after successful order completion
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
         // Insert ledger entry
-$this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'debit');
+        $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'debit');
         if (!$stock_deduction_success) {
 
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);

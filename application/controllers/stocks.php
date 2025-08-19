@@ -56,7 +56,7 @@
         $this->data['stock_type'] = $this->input->post('stock_type');
            $this->data['entry_date'] =  date('Y-m-d',strtotime($this->input->post('entry_date')));
         $this->model_stock->addstock($this->data);
-         $this->model_order->insertOrderLedger($this->data['shop_fk'],rand(11111,99999), $this->data['entry_date'],99999,'', 'xyz', 'credit');
+         $this->model_order->insertOrderLedger($this->data['shop_fk'],rand(11111,99999), $this->data['entry_date'],9999,'', 'xyz', 'credit');
         $this->ldata['all_logs']=$this->model_stock->getlogs($this->data);
         
         // update logs
