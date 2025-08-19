@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 19, 2025 at 09:45 AM
+-- Generation Time: Aug 19, 2025 at 10:36 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -47,8 +47,17 @@ INSERT INTO `brands` (`brand_id`, `brand_title`, `status`, `created_date`, `modi
 --
 -- Table structure for table `cancelled_orders`
 --
--- Error reading structure for table ultra_marketing.cancelled_orders: #1932 - Table 'ultra_marketing.cancelled_orders' doesn't exist in engine
--- Error reading data for table ultra_marketing.cancelled_orders: #1064 - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM `ultra_marketing`.`cancelled_orders`' at line 1
+
+CREATE TABLE `cancelled_orders` (
+  `cancellation_id` bigint(20) NOT NULL,
+  `order_number` bigint(20) NOT NULL,
+  `cancelled_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `cancelled_by` bigint(20) NOT NULL,
+  `cancellation_reason` varchar(255) DEFAULT NULL,
+  `original_status` enum('draft','confirm') NOT NULL,
+  `stock_restored` tinyint(1) DEFAULT 0,
+  `stock_restoration_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -341,7 +350,7 @@ CREATE TABLE `orders` (
   `shop_id` bigint(20) NOT NULL,
   `order_quantity` int(11) DEFAULT NULL,
   `order_price` int(11) DEFAULT NULL,
-  `order_status` enum('draft','confirm','cancel') NOT NULL DEFAULT 'draft',
+  `order_status` enum('draft','confirm','cancelled') NOT NULL DEFAULT 'draft',
   `created_by` bigint(20) NOT NULL,
   `confirm_by` bigint(20) DEFAULT NULL,
   `packing_type` bigint(20) NOT NULL DEFAULT 1,
@@ -356,10 +365,10 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `packing_type`, `packing_id`, `created_date`, `modified_date`) VALUES
 (108, 4157, 10, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-07-23 18:28:03', '2025-07-23 18:28:03'),
-(109, 2644, 10, 1, 2, 0, 'cancel', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-08-16 03:42:43'),
+(109, 2644, 10, 1, 2, 0, '', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-08-16 03:42:43'),
 (110, 227, 10, 1, 1, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:43:09', '2025-07-24 02:07:06'),
-(111, 2644, 11, 1, 1, 1, 'cancel', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-08-16 22:43:51'),
-(119, 7932, 11, 1, 1, 1, 'cancel', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-08-17 17:50:13'),
+(111, 2644, 11, 1, 1, 1, '', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-08-16 22:43:51'),
+(119, 7932, 11, 1, 1, 1, '', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-08-17 17:50:13'),
 (120, 7883, 10, 1, 100, 230, 'confirm', 5, 5, 1, 1, '2025-08-11 18:12:57', '2025-08-11 18:12:57'),
 (121, 6217, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:39:16', '2025-08-17 21:39:16'),
 (122, 1920, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:43:31', '2025-08-17 21:43:31'),
@@ -1187,6 +1196,15 @@ ALTER TABLE `brands`
   ADD PRIMARY KEY (`brand_id`);
 
 --
+-- Indexes for table `cancelled_orders`
+--
+ALTER TABLE `cancelled_orders`
+  ADD PRIMARY KEY (`cancellation_id`),
+  ADD KEY `order_number` (`order_number`),
+  ADD KEY `cancelled_by` (`cancelled_by`),
+  ADD KEY `cancelled_date` (`cancelled_date`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -1252,7 +1270,9 @@ ALTER TABLE `modules`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`) USING BTREE;
+  ADD PRIMARY KEY (`order_id`) USING BTREE,
+  ADD KEY `idx_order_status` (`order_status`),
+  ADD KEY `idx_modified_date` (`modified_date`);
 
 --
 -- Indexes for table `order_detail`
@@ -1389,6 +1409,12 @@ ALTER TABLE `user_roles`
 --
 ALTER TABLE `brands`
   MODIFY `brand_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `cancelled_orders`
+--
+ALTER TABLE `cancelled_orders`
+  MODIFY `cancellation_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories`
