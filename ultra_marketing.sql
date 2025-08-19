@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 01, 2025 at 04:43 PM
+-- Generation Time: Aug 19, 2025 at 09:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -41,6 +41,14 @@ CREATE TABLE `brands` (
 
 INSERT INTO `brands` (`brand_id`, `brand_title`, `status`, `created_date`, `modified_date`) VALUES
 (1, 'Sprinter', 1, '2025-06-08 23:38:17', '2025-07-04 01:06:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cancelled_orders`
+--
+-- Error reading structure for table ultra_marketing.cancelled_orders: #1932 - Table 'ultra_marketing.cancelled_orders' doesn't exist in engine
+-- Error reading data for table ultra_marketing.cancelled_orders: #1064 - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM `ultra_marketing`.`cancelled_orders`' at line 1
 
 -- --------------------------------------------------------
 
@@ -333,7 +341,7 @@ CREATE TABLE `orders` (
   `shop_id` bigint(20) NOT NULL,
   `order_quantity` int(11) DEFAULT NULL,
   `order_price` int(11) DEFAULT NULL,
-  `order_status` enum('draft','confirm') NOT NULL DEFAULT 'draft',
+  `order_status` enum('draft','confirm','cancel') NOT NULL DEFAULT 'draft',
   `created_by` bigint(20) NOT NULL,
   `confirm_by` bigint(20) DEFAULT NULL,
   `packing_type` bigint(20) NOT NULL DEFAULT 1,
@@ -348,10 +356,17 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `packing_type`, `packing_id`, `created_date`, `modified_date`) VALUES
 (108, 4157, 10, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-07-23 18:28:03', '2025-07-23 18:28:03'),
-(109, 2644, 10, 1, 2, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-07-24 03:42:43'),
+(109, 2644, 10, 1, 2, 0, 'cancel', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-08-16 03:42:43'),
 (110, 227, 10, 1, 1, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:43:09', '2025-07-24 02:07:06'),
-(111, 2644, 11, 1, 1, 1, 'draft', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-07-30 22:43:51'),
-(119, 7932, 11, 1, 1, 1, 'confirm', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-07-30 22:52:42');
+(111, 2644, 11, 1, 1, 1, 'cancel', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-08-16 22:43:51'),
+(119, 7932, 11, 1, 1, 1, 'cancel', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-08-17 17:50:13'),
+(120, 7883, 10, 1, 100, 230, 'confirm', 5, 5, 1, 1, '2025-08-11 18:12:57', '2025-08-11 18:12:57'),
+(121, 6217, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:39:16', '2025-08-17 21:39:16'),
+(122, 1920, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:43:31', '2025-08-17 21:43:31'),
+(123, 7517, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:46:33', '2025-08-17 21:46:33'),
+(124, 2978, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:14:48', '2025-08-17 23:14:48'),
+(125, 8054, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:30:48', '2025-08-17 23:30:48'),
+(126, 1131, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:39:45', '2025-08-17 23:39:45');
 
 -- --------------------------------------------------------
 
@@ -391,8 +406,12 @@ CREATE TABLE `order_ledger` (
 --
 
 INSERT INTO `order_ledger` (`ledger_id`, `order_number`, `date`, `amount`, `payment_method`, `type`, `shop_id`, `remarks`) VALUES
-(5, 4157, '2025-07-20 11:11:00', 1.00, 'Cash', 'debit', 1, 'aaaaaaaaaa'),
-(6, 4157, '2025-07-23 00:00:00', 1.00, 'Cash', 'credit', 1, 'aaaa');
+(7, 6217, '2025-08-17 21:39:16', 1.00, '', 'debit', 1, 'xyz'),
+(8, 1920, '2025-08-17 21:43:31', 1.00, '', 'debit', 1, 'xyz'),
+(9, 7517, '2025-08-17 21:46:33', 1.00, '', 'debit', 1, 'xyz'),
+(10, 2978, '2025-08-17 23:14:48', 1.00, '', 'debit', 1, 'xyz'),
+(11, 8054, '2025-08-17 23:30:48', 1.00, '', 'debit', 1, 'xyz'),
+(12, 1131, '2025-08-17 23:39:45', 1.00, '', 'debit', 1, 'xyz');
 
 -- --------------------------------------------------------
 
@@ -785,9 +804,18 @@ CREATE TABLE `shops` (
   `shop_latitude` float NOT NULL,
   `shop_longitude` float NOT NULL,
   `shop_status` int(11) NOT NULL,
+  `shop_type` enum('supplier','crediter') NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `shops`
+--
+
+INSERT INTO `shops` (`shop_id`, `shop_name`, `shop_owner`, `shop_number`, `shop_email`, `shop_country`, `shop_state`, `shop_city`, `shop_address`, `shop_latitude`, `shop_longitude`, `shop_status`, `shop_type`, `created_date`, `modified_date`) VALUES
+(1, 'Ajman Traders (SMC PVT LTD)', 'MUHAMMAD NADEEM SABRI', '65', 'TIPULAHORI@GMAIL.COM', 1, 4, 0, 'Eros Complex, Barnes St, Preedy Quarters Karachi, Pakistan', 24.8644, 67.0208, 1, 'supplier', '2025-08-02 18:56:46', '2025-08-02 16:01:06'),
+(2, 'xyz', 'xyz', '00000000', 'test1', 1, 2, 1, 'Plot 111, Block G Tariq Garden, Lahore, Pakistan', 31.4199, 74.2535, 1, 'crediter', '2025-08-17 20:25:12', '2025-08-17 17:25:15');
 
 -- --------------------------------------------------------
 
@@ -855,12 +883,26 @@ CREATE TABLE `stocks` (
   `colour_fk` bigint(20) DEFAULT NULL,
   `unit_fk` bigint(20) DEFAULT NULL,
   `item_fk` bigint(20) NOT NULL,
-  `stock_type` enum('opening_balance','stock_addition') NOT NULL,
+  `shop_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition') DEFAULT NULL,
   `entry_date` date NOT NULL,
   `balance` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `stocks`
+--
+
+INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(8, 0, 0, 0, 0, 0, 0, 0, 10, 2, NULL, '2025-08-17', 200, '2025-08-17 22:36:10', '2025-08-17 22:36:10'),
+(9, 0, 0, 0, 0, 0, 0, 0, 11, 2, NULL, '2025-08-17', 100, '2025-08-17 22:36:51', '2025-08-17 22:36:51'),
+(10, 0, 0, 0, 0, 0, 0, 0, 12, 2, NULL, '2025-08-17', 100, '2025-08-17 22:37:28', '2025-08-17 22:37:28'),
+(11, 0, 0, 0, 0, 0, 0, 0, 13, 2, NULL, '2025-08-17', 100, '2025-08-17 22:38:33', '2025-08-17 22:38:33'),
+(12, 0, 0, 0, 0, 0, 0, 0, 14, 2, NULL, '2025-08-17', 100, '2025-08-17 22:39:10', '2025-08-17 22:39:10'),
+(13, 0, 0, 0, 0, 0, 0, 0, 15, 2, NULL, '2025-08-17', 100, '2025-08-17 22:39:56', '2025-08-17 22:39:56'),
+(17, 0, 0, 0, 0, 0, 0, 0, 16, 2, NULL, '2025-08-17', 199, '2025-08-17 23:05:36', '2025-08-17 23:05:36');
 
 -- --------------------------------------------------------
 
@@ -878,12 +920,29 @@ CREATE TABLE `stocks_logs` (
   `colour_fk` bigint(20) DEFAULT NULL,
   `unit_fk` bigint(20) DEFAULT NULL,
   `item_fk` bigint(20) NOT NULL,
-  `stock_type` enum('opening_balance','stock_addition') DEFAULT NULL,
+  `shop_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition','stock_deduction') DEFAULT NULL,
   `entry_date` date NOT NULL,
   `balance` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `stocks_logs`
+--
+
+INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(16, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:36:10', '2025-08-17 22:36:10'),
+(17, 0, 0, 0, 0, 0, 0, 0, 11, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:36:51', '2025-08-17 22:36:51'),
+(18, 0, 0, 0, 0, 0, 0, 0, 12, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:37:29', '2025-08-17 22:37:29'),
+(19, 0, 0, 0, 0, 0, 0, 0, 13, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:38:33', '2025-08-17 22:38:33'),
+(20, 0, 0, 0, 0, 0, 0, 0, 14, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:39:10', '2025-08-17 22:39:10'),
+(21, 0, 0, 0, 0, 0, 0, 0, 15, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:39:56', '2025-08-17 22:39:56'),
+(25, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:59:41', '2025-08-17 22:59:41'),
+(27, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 23:05:36', '2025-08-17 23:05:36'),
+(28, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'stock_addition', '2025-08-17', 100, '2025-08-17 23:08:02', '2025-08-17 23:08:02'),
+(29, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'stock_deduction', '2025-08-17', 1, '2025-08-17 23:40:10', '2025-08-17 23:40:10');
 
 -- --------------------------------------------------------
 
@@ -1389,7 +1448,7 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
@@ -1401,7 +1460,7 @@ ALTER TABLE `order_detail`
 -- AUTO_INCREMENT for table `order_ledger`
 --
 ALTER TABLE `order_ledger`
-  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `packing_options`
@@ -1443,7 +1502,7 @@ ALTER TABLE `role_permissions`
 -- AUTO_INCREMENT for table `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sizes`
@@ -1461,13 +1520,13 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `stocks`
 --
 ALTER TABLE `stocks`
-  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `stocks_logs`
 --
 ALTER TABLE `stocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `types`

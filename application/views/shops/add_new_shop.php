@@ -81,7 +81,8 @@
                                                 <option value="">Select Shop Type</option>
                                             
                                                         <option  value="crediter" >Crediter</option>
-                                                        <option  value="suplliers" >Suplliers</option>
+                                                        <option  value="supplier
+                                                        " >supplier</option>
                                                  
                                             </select>
                                             </div>

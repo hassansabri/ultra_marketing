@@ -12,8 +12,8 @@
                                                     <th>Unit</th> -->
                                                     <th>Entry Date</th>
                                                     <th>stock Type</th>
-                                                    <th>current balance</th>
                                                     <th>Balance</th>
+                                                    <th>current balance</th>
                                                 </tr>
                                                 </thead>
 

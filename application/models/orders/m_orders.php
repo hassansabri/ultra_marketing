@@ -287,7 +287,7 @@ $this->db->where("item_id", $items_id);
         $this->db->from('orders o');
         $this->db->join('order_detail od', 'o.order_number = od.order_number_fk', 'left');
         $this->db->where('o.modified_date >', 'o.created_date');
-        $this->db->where('o.order_status', 'draft');
+        $this->db->where('o.order_status', 'cancel');
         $this->db->group_by('o.order_number');
         $this->db->order_by('o.modified_date', 'DESC');
         $query = $this->db->get();
@@ -304,7 +304,7 @@ $this->db->where("item_id", $items_id);
                     "created_date" => $value["created_date"],
                     "modified_date" => $value["modified_date"],
                     "cancelled_date" => $value["modified_date"], // Use modified_date as cancelled date
-                    "original_status" => "confirm", // Assume it was confirmed before cancellation
+                    "original_status" => $value["order_status"], // Assume it was confirmed before cancellation
                     "stock_restored" => 1, // Assume stock was restored
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"])
                 );
@@ -328,7 +328,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancelled');
+        $this->db->where('order_status', 'cancel');
         $query = $this->db->get();
         $total_cancelled = $query->row()->total;
         
@@ -336,7 +336,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('CAST(modified_date AS DATE) >', 'CAST(created_date AS DATE)');
-        $this->db->where('order_status', 'cancelled');
+        $this->db->where('order_status', 'cancel');
         $this->db->where('MONTH(modified_date)', date('m'));
         $this->db->where('YEAR(modified_date)', date('Y'));
         $query = $this->db->get();
@@ -346,7 +346,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancelled');
+        $this->db->where('order_status', 'cancel');
         $this->db->where('YEAR(modified_date)', date('Y'));
         $query = $this->db->get();
         $cancelled_this_year = $query->row()->total;
@@ -354,7 +354,7 @@ $this->db->where("item_id", $items_id);
         // Orders cancelled today
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
-        $this->db->where('order_status', 'cancelled');
+        $this->db->where('order_status', 'cancel');
         $this->db->where('DATE(modified_date)', date('Y-m-d'));
         $query = $this->db->get();
         $cancelled_today = $query->row()->total;
@@ -363,7 +363,7 @@ $this->db->where("item_id", $items_id);
         $this->db->select('COUNT(DISTINCT order_number) as total');
         $this->db->from('orders');
         $this->db->where('modified_date >', 'created_date');
-        $this->db->where('order_status', 'cancelled');
+        $this->db->where('order_status', 'cancel');
         $this->db->where('modified_date >=', date('Y-m-d H:i:s', strtotime('-7 days')));
         $query = $this->db->get();
         $recent_cancellations = $query->row()->total;
@@ -849,10 +849,10 @@ public function updateorder($order_number){
         // For now, just change status to draft (effectively cancelling it)
         // This will be updated to 'cancelled' once the database is updated
         $this->db->where('order_number', $order_number);
-        $this->db->where_in('order_status', array('draft', 'confirm'));
+     //   $this->db->where_in('order_status','cancel');
         
         $update_data = array(
-            'order_status' => 'draft', // Will be 'cancelled' after DB update
+            'order_status' => 'cancel', // Will be 'cancelled' after DB update
             'modified_date' => date('Y-m-d H:i:s')
         );
         

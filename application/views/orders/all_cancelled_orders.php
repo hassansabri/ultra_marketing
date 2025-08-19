@@ -122,7 +122,6 @@
                                                 <thead>
                                                 <tr>
                                                     <th data-class="expand">Order Number</th>
-                                                    <th data-hide="">Original Status</th>
                                                     <th data-hide="">Cancelled Date</th>
                                                     <th data-hide="">Stock Restored</th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
@@ -140,11 +139,6 @@
                                                      ?>
                                                              <tr>
                                                                  <td><?php echo isset($value['order_number']) ? $value['order_number'] : 'N/A'; ?></td>
-                                                                 <td>
-                                                                     <span class="label label-success">
-                                                                         <?php echo isset($value['original_status']) ? ucfirst($value['original_status']) : 'Confirm'; ?>
-                                                                     </span>
-                                                                 </td>
                                                                  <td><?php echo isset($value['cancelled_date']) ? date('Y-m-d H:i', strtotime($value['cancelled_date'])) : 'N/A'; ?></td>
                                                                  <td>
                                                                      <span class="label label-success">

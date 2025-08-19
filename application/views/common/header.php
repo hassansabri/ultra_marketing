@@ -341,9 +341,11 @@
                                         <?php 
                                         // Load the model and get count safely
                                         try {
-                                            $this->load->model('orders/m_orders', 'model_order');
-                                            $total = $this->model_order->getCancellationStats();
-                                            print_r($total);
+                                            
+                                            $CI =& get_instance();
+                                        $CI->load->model('orders/m_orders', 'model_order');
+                                            $total =  $CI->model_order->getCancellationStats();
+                                         //   print_r($total);
                                             $total_cancelled = $total['total_cancelled'];
                                             if ($total_cancelled > 0): ?>
                                                 <span class="badge bg-color-red pull-right"><?php echo $total_cancelled; ?></span>

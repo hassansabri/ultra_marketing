@@ -236,11 +236,11 @@ class m_stocks extends CI_Model {
             $this->db->where('unit_fk', 0);
         }
         
-        $this->db->update('stocks', array('balance' => $new_balance));
-        // Log the deduction
+         $this->db->update('stocks', array('balance' => $new_balance));
+        // // Log the deduction
         $log_data = $data;
         $log_data['balance'] = -$quantity; // Negative for deduction
-        $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
+        $log_data['stock_type'] = 'stock_deduction';
         $log_data['entry_date'] = date('Y-m-d');
         $this->db->insert('stocks_logs', $log_data);
         
@@ -257,14 +257,16 @@ class m_stocks extends CI_Model {
         // Get current stock
         $current_stock = $this->checkstock($data);
         if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+                  $log_data = $data;
             // If no stock record exists, create one
             $data['balance'] = $quantity;
+            $data['stock_type'] = '';
             $this->db->insert('stocks', $data);
             
             // Log the creation
-            $log_data = $data;
+      
             $log_data['balance'] = $quantity;
-            $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
+            $log_data['stock_type'] = $this->input->post('stock_type');// Use valid enum value
             $log_data['entry_date'] = date('Y-m-d');
             $this->db->insert('stocks_logs', $log_data);
         } else {
@@ -322,7 +324,7 @@ class m_stocks extends CI_Model {
             // Log the restoration
             $log_data = $data;
             $log_data['balance'] = $quantity; // Positive for restoration
-            $log_data['stock_type'] = 'stock_addition'; // Use valid enum value
+            $log_data['stock_type'] = $data['stock_type']; // Use valid enum value
             $log_data['entry_date'] = date('Y-m-d');
             $this->db->insert('stocks_logs', $log_data);
         }
