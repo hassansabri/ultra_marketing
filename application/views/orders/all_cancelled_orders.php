@@ -41,7 +41,7 @@
                     <div class="widget-body">
                         <div class="text-center">
                             <h2><?php echo isset($cancellation_stats['total_cancelled']) ? $cancellation_stats['total_cancelled'] : '0'; ?></h2>
-                            <p>Total Cancelled Orders</p>
+                            <p>Total Cancelled Invoice</p>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                                             <table id="datatable_fixed_column" class="table table-striped table-bordered" width="100%">
                                                 <thead>
                                                 <tr>
-                                                    <th data-class="expand">Order Number</th>
+                                                    <th data-class="expand">Invoice Number</th>
                                                     <th data-hide="">Cancelled Date</th>
                                                     <th data-hide="">Stock Restored</th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
@@ -155,7 +155,7 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu">
                                                                             <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Order</a>
+                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Invoice</a>
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <li>

@@ -776,7 +776,6 @@ var packingstock={
                         dateFormat: "yy-m-d",
 
                     });
-                    
 
 $(".select2").select2({
   theme: "classic"
@@ -796,7 +795,59 @@ $(".select2").select2({
             $('#'+attrid+'-id').html('<input style="width:100%;" type="text" attid="'+id+'" id="'+attrid+'-aj" name="'+attrid+'" value="'+html+'"/>');
         }
         });
-    } 
+    },
+    add:function(){
+        $.LoadingOverlay("show");
+ var packing_id = $('#packings').val();
+           
+            var balance = $('#balance').val();
+            if ($.trim($("#entry_date").val()) == "") {
+            alert('Field with sign(*) required');
+            $.LoadingOverlay("hide");
+            return false;
+        }
+         var entry_date = $('#entry_date').val();
+            var stock_type = $('#stock_type').val();
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/packing_stocks/addstock',
+                data: "packing_id=" + packing_id+'&entry_date='+ entry_date+'&stock_type='+stock_type+'&balance='+balance,
+                success: function (response)
+                {
+             $('#entry_date').val('');
+             $('#stock_type').val(0);
+            $('#balance').val('');
+                    $.LoadingOverlay("hide");
+                    var obj = JSON.parse(response);
+                     $('#mylogs').html(obj.logs);
+                    // alert(obj);
+                //    $('#balance').val(obj);
+
+
+                }
+            });
+    },
+    check:function(){
+    // $('#stock').html('');
+    $.LoadingOverlay("show");
+
+            var packing_id = $('#packings').val();
+           
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/packing_stocks/checkstock',
+                data: "packing_id=" + packing_id,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                    var obj = JSON.parse(response);
+                   alert('Stock contain = '+obj.balance);
+                   $('#mylogs').html(obj.logs);
+
+
+                }
+            });
+    },
 };
 var stock ={
     showstocklogs:function(){

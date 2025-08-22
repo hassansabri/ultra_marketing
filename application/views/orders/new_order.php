@@ -62,11 +62,11 @@
                                 </div>
                                  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 
-                                     Order Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number ?>"/></span>
+                                     Invoice Number : <input type="text" name="order_number" id="order_number" value="<?php echo $order_number ?>"/></span>
                                 </div>
                                  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="myorder">
                                 
-                                     Shop : <select id="shopid" name="shopid" class="form-control" required>
+                                     Suppliers : <select id="shopid" name="shopid" class="form-control" required>
                                          <option value="">Please select a shop</option>
                                           <?php if ($all_shops) { ?>
                                                          <?php foreach ($all_shops as $value) { ?>

@@ -163,6 +163,56 @@ class m_stocks extends CI_Model {
         $query = $this->db->get("stocks");
         return $query->result_array();
     }
+    public function checkpackingstock($data ){
+        $this->db->select_sum('balance');
+        $this->db->where('packing_fk', $data['packing_fk']);
+        
+        // Only add WHERE conditions for non-zero values to avoid issues
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
+        }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
+        $query = $this->db->get("packingstocks");
+        return $query->result_array();
+    }
 
     public function addstock($data){
         $this->restoreStock($data,$data['balance']);
@@ -243,6 +293,77 @@ class m_stocks extends CI_Model {
         $log_data['stock_type'] = 'stock_deduction';
         $log_data['entry_date'] = date('Y-m-d');
         $this->db->insert('stocks_logs', $log_data);
+        
+        return true;
+    }
+    public function deductpackingStock($data, $quantity) {
+        // First check if we have enough stock
+        
+        $current_stock = $this->checkpackingstock($data);
+        if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+            return false; // No stock record found
+        }
+        
+        $available_stock = $current_stock[0]['balance'];
+        if ($available_stock < $quantity) {
+            return false; // Insufficient stock
+        }
+        
+        // Calculate new balance
+        $new_balance = $available_stock - $quantity;
+        
+        // Update stock with proper WHERE clause
+        $this->db->where('item_fk', $data['item_fk']);
+        
+        if (isset($data['brand_fk']) && $data['brand_fk'] > 0) {
+            $this->db->where('brand_fk', $data['brand_fk']);
+        } else {
+            $this->db->where('brand_fk', 0);
+        }
+        
+        if (isset($data['grade_fk']) && $data['grade_fk'] > 0) {
+            $this->db->where('grade_fk', $data['grade_fk']);
+        } else {
+            $this->db->where('grade_fk', 0);
+        }
+        
+        if (isset($data['model_fk']) && $data['model_fk'] > 0) {
+            $this->db->where('model_fk', $data['model_fk']);
+        } else {
+            $this->db->where('model_fk', 0);
+        }
+        
+        if (isset($data['size_fk']) && $data['size_fk'] > 0) {
+            $this->db->where('size_fk', $data['size_fk']);
+        } else {
+            $this->db->where('size_fk', 0);
+        }
+        
+        if (isset($data['type_fk']) && $data['type_fk'] > 0) {
+            $this->db->where('type_fk', $data['type_fk']);
+        } else {
+            $this->db->where('type_fk', 0);
+        }
+        
+        if (isset($data['colour_fk']) && $data['colour_fk'] > 0) {
+            $this->db->where('colour_fk', $data['colour_fk']);
+        } else {
+            $this->db->where('colour_fk', 0);
+        }
+        
+        if (isset($data['unit_fk']) && $data['unit_fk'] > 0) {
+            $this->db->where('unit_fk', $data['unit_fk']);
+        } else {
+            $this->db->where('unit_fk', 0);
+        }
+        
+         $this->db->update('packingstocks', array('balance' => $new_balance));
+        // // Log the deduction
+        $log_data = $data;
+        $log_data['balance'] = $quantity; 
+        $log_data['stock_type'] = 'stock_deduction';
+        $log_data['entry_date'] = date('Y-m-d');
+        $this->db->insert('packingstocks_logs', $log_data);
         
         return true;
     }

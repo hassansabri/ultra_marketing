@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>assets/template/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>assets/template/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jquery.steps.css">
-        <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+        <!-- SmartAdmin Styles : Caution! DO NOT change the Invoice -->
         <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>assets/template/css/smartadmin-production-plugins.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>assets/template/css/smartadmin-production.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>assets/template/css/smartadmin-skins.min.css">
@@ -325,19 +325,20 @@
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/stocks" title=""><span class="menu-item-parent">All Stocks</span></a>
+                                    <a href="<?php echo site_url(); ?>/packing_stocks" title=""><span class="menu-item-parent">All Packing Stocks</span></a>
                                 </li> 
                             </ul>	
                         </li> 
                     <?php } ?> 
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Orders</span></a>
+                            <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Invoices</span></a>
                             <ul>
                                 <li class="">
-                                    <a href="<?php echo site_url(); ?>/orders/draftorders" title=""><span class="menu-item-parent">All Draft Orders</span></a>
-                                    <a href="<?php echo site_url(); ?>/orders/completeorders" title=""><span class="menu-item-parent">All Complete Orders</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders/draftorders" title=""><span class="menu-item-parent">All Draft Invoices</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders/completeorders" title=""><span class="menu-item-parent">All Complete Invoices</span></a>
                                     <a href="<?php echo site_url(); ?>/orders/cancelledorders" title="">
-                                        <span class="menu-item-parent">Cancelled Orders</span>
+                                        <span class="menu-item-parent">Cancelled Invoices</span>
                                         <?php 
                                         // Load the model and get count safely
                                         try {
@@ -355,14 +356,14 @@
                                         }
                                         ?>
                                     </a>
-                                    <a href="<?php echo site_url(); ?>/orders" title=""><span class="menu-item-parent"> New Order</span></a>
+                                    <a href="<?php echo site_url(); ?>/orders" title=""><span class="menu-item-parent"> New Invoice</span></a>
                                     </li> 
                             </ul>	
                         </li> 
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="<?php echo site_url(); ?>/orders/ledger" title="Order Ledger"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Order Ledger</span></a>
+                            <a href="<?php echo site_url(); ?>/orders/ledger" title="Invoice Ledger"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Invoice Ledger</span></a>
                         </li>
                     <?php } ?>
                     <?php  if ($this->session->userdata('logged_in')){ ?>

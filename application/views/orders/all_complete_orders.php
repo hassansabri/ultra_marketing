@@ -77,7 +77,7 @@
                                             <table id="datatable_fixed_column" class="table table-striped table-bordered" width="100%">
                                                 <thead>
                                                 <tr>
-                                                    <th data-class="expand">Order Number</th>
+                                                    <th data-class="expand">Invoice Number</th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
                                                 </tr>
                                                 </thead>
@@ -103,7 +103,7 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu">
                                                                             <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Order</a>
+                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Invoice</a>
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <li>
@@ -114,7 +114,7 @@
                                                                                 <a href="#" 
                                                                                    onclick="showCancelOrderModal(<?php echo $value['order_number']; ?>)"
                                                                                    class="text-danger">
-                                                                                    <i class="fa fa-times"></i> Cancel Order
+                                                                                    <i class="fa fa-times"></i> Cancel Invoice
                                                                                 </a>
                                                                             </li>
                                                                         </ul>

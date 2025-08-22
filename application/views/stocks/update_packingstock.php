@@ -4,7 +4,7 @@
 			Logs
 	</div>
 	<div ></div>
-	<?php $this->load->view("stocks/logs"); ?>
+	<?php $this->load->view("stocks/packinglogs"); ?>
 	</div>
  <div class="main-div">
 	<div class="sub-div">

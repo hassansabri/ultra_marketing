@@ -159,6 +159,24 @@ if($result[0]['category_name']){
              return 'none';
         }
     }
+    function getpackingstockvaluebyid($packing_id){
+           $CI = & get_instance();
+        $CI->db->select('balance')->from('packingstocks');
+        $CI->db->where('packing_fk', $packing_id);
+        $query = $CI->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            
+if($result[0]['balance']){
+    return $result[0]['balance'];
+}else{
+    return '0';
+}
+        } else {
+             return '0';
+        }
+    }
     function getpackingtitle($package_id){
          $CI = & get_instance();
         $CI->db->select('packing_title')->from('packing_options');

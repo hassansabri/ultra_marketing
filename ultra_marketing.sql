@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 19, 2025 at 10:36 AM
+-- Generation Time: Aug 22, 2025 at 10:42 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -104,7 +104,8 @@ CREATE TABLE `cities` (
 INSERT INTO `cities` (`city_id`, `city_name`, `city_status`, `created_date`, `modified_date`, `country_fk`, `state_fk`) VALUES
 (1, 'Lahore', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 2),
 (2, 'Islamabad', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 2),
-(3, 'Faisalabad', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 2);
+(3, 'Faisalabad', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 2),
+(4, 'Karachi', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -350,7 +351,7 @@ CREATE TABLE `orders` (
   `shop_id` bigint(20) NOT NULL,
   `order_quantity` int(11) DEFAULT NULL,
   `order_price` int(11) DEFAULT NULL,
-  `order_status` enum('draft','confirm','cancelled') NOT NULL DEFAULT 'draft',
+  `order_status` enum('draft','confirm','cancelled','complete') NOT NULL DEFAULT 'draft',
   `created_by` bigint(20) NOT NULL,
   `confirm_by` bigint(20) DEFAULT NULL,
   `packing_type` bigint(20) NOT NULL DEFAULT 1,
@@ -364,18 +365,15 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `packing_type`, `packing_id`, `created_date`, `modified_date`) VALUES
-(108, 4157, 10, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-07-23 18:28:03', '2025-07-23 18:28:03'),
-(109, 2644, 10, 1, 2, 0, '', 5, 5, 1, 1, '2025-07-24 04:10:22', '2025-08-16 03:42:43'),
-(110, 227, 10, 1, 1, 0, 'confirm', 5, 5, 1, 1, '2025-07-24 04:43:09', '2025-07-24 02:07:06'),
-(111, 2644, 11, 1, 1, 1, '', 5, 5, 1, 2, '2025-07-24 06:42:43', '2025-08-16 22:43:51'),
-(119, 7932, 11, 1, 1, 1, '', 5, 5, 1, 2, '2025-07-31 01:52:05', '2025-08-17 17:50:13'),
-(120, 7883, 10, 1, 100, 230, 'confirm', 5, 5, 1, 1, '2025-08-11 18:12:57', '2025-08-11 18:12:57'),
-(121, 6217, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:39:16', '2025-08-17 21:39:16'),
-(122, 1920, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:43:31', '2025-08-17 21:43:31'),
-(123, 7517, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 21:46:33', '2025-08-17 21:46:33'),
-(124, 2978, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:14:48', '2025-08-17 23:14:48'),
-(125, 8054, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:30:48', '2025-08-17 23:30:48'),
-(126, 1131, 16, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-17 23:39:45', '2025-08-17 23:39:45');
+(158, 7105, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-22 23:47:36', '2025-08-22 23:47:36'),
+(159, 6662, 11, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-23 00:00:01', '2025-08-23 00:00:01'),
+(160, 306, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 00:05:06', '2025-08-22 22:15:44'),
+(161, 4619, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 00:18:27', '2025-08-22 22:22:06'),
+(162, 706, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 00:20:05', '2025-08-22 22:17:09'),
+(163, 5791, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 00:29:56', '2025-08-22 22:39:51'),
+(164, 8174, 14, 1, 1, 1, 'confirm', 5, 5, 1, 1, '2025-08-23 00:33:22', '2025-08-23 00:33:22'),
+(165, 4679, 14, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 01:09:22', '2025-08-22 22:10:18'),
+(166, 4687, 14, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-23 01:12:36', '2025-08-22 22:14:32');
 
 -- --------------------------------------------------------
 
@@ -415,12 +413,98 @@ CREATE TABLE `order_ledger` (
 --
 
 INSERT INTO `order_ledger` (`ledger_id`, `order_number`, `date`, `amount`, `payment_method`, `type`, `shop_id`, `remarks`) VALUES
-(7, 6217, '2025-08-17 21:39:16', 1.00, '', 'debit', 1, 'xyz'),
-(8, 1920, '2025-08-17 21:43:31', 1.00, '', 'debit', 1, 'xyz'),
-(9, 7517, '2025-08-17 21:46:33', 1.00, '', 'debit', 1, 'xyz'),
-(10, 2978, '2025-08-17 23:14:48', 1.00, '', 'debit', 1, 'xyz'),
-(11, 8054, '2025-08-17 23:30:48', 1.00, '', 'debit', 1, 'xyz'),
-(12, 1131, '2025-08-17 23:39:45', 1.00, '', 'debit', 1, 'xyz');
+(34, 1092, '2025-08-22 22:40:07', 11.00, '', 'debit', 1, 'xyz'),
+(35, 4377, '2025-08-22 22:41:08', 11.00, '', 'debit', 1, 'xyz'),
+(36, 5021, '2025-08-22 22:42:23', 10.00, '', 'debit', 1, 'xyz'),
+(37, 5491, '2025-08-22 22:43:18', 11.00, '', 'debit', 1, 'xyz'),
+(38, 8685, '2025-08-22 22:45:09', 11.00, '', 'debit', 1, 'xyz'),
+(39, 5558, '2025-08-22 22:55:50', 1.00, '', 'debit', 1, 'xyz'),
+(40, 1059, '2025-08-22 23:00:45', 1.00, '', 'debit', 1, 'xyz'),
+(41, 384, '2025-08-22 23:14:07', 1.00, '', 'debit', 1, 'xyz'),
+(42, 615, '2025-08-22 23:17:31', 11.00, '', 'debit', 1, 'xyz'),
+(43, 5787, '2025-08-22 23:12:58', 1.00, '', 'debit', 1, 'xyz'),
+(44, 9199, '2025-08-22 23:15:17', 1.00, '', 'debit', 1, 'xyz'),
+(45, 6485, '2025-08-22 23:18:54', 1.00, '', 'debit', 1, 'xyz'),
+(46, 5804, '2025-08-22 23:29:06', 1.00, '', 'debit', 1, 'xyz'),
+(47, 5528, '2025-08-22 23:31:49', 1.00, '', 'debit', 1, 'xyz'),
+(48, 7105, '2025-08-22 23:47:36', 1.00, '', 'debit', 1, 'xyz'),
+(49, 6662, '2025-08-23 00:00:01', 1.00, '', 'debit', 1, 'xyz'),
+(50, 306, '2025-08-23 00:05:06', 1.00, '', 'debit', 1, 'xyz'),
+(51, 4619, '2025-08-23 00:18:27', 1.00, '', 'debit', 1, 'xyz'),
+(52, 8174, '2025-08-23 00:33:22', 1.00, '', 'debit', 1, 'xyz'),
+(53, 4679, '2025-08-23 01:09:22', 1.00, '', 'debit', 1, 'xyz'),
+(54, 4687, '2025-08-23 01:12:36', 1.00, '', 'debit', 1, 'xyz');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packingstocks`
+--
+
+CREATE TABLE `packingstocks` (
+  `stocks_id` bigint(20) NOT NULL,
+  `brand_fk` bigint(20) DEFAULT NULL,
+  `grade_fk` bigint(20) DEFAULT NULL,
+  `model_fk` bigint(20) DEFAULT NULL,
+  `size_fk` bigint(20) DEFAULT NULL,
+  `type_fk` bigint(20) DEFAULT NULL,
+  `colour_fk` bigint(20) DEFAULT NULL,
+  `unit_fk` bigint(20) DEFAULT NULL,
+  `packing_fk` bigint(20) NOT NULL,
+  `shop_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition') DEFAULT NULL,
+  `entry_date` date NOT NULL,
+  `balance` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `packingstocks`
+--
+
+INSERT INTO `packingstocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `packing_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '', '2025-08-20', 399, '2025-08-20 06:03:03', '2025-08-20 06:03:03'),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 0, '', '2025-08-20', 100, '2025-08-20 19:55:06', '2025-08-20 19:55:06'),
+(4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 0, '', '2025-08-20', 100, '2025-08-20 19:55:44', '2025-08-20 19:55:44'),
+(5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, '', '2025-08-20', 100, '2025-08-20 19:55:06', '2025-08-20 19:55:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packingstocks_logs`
+--
+
+CREATE TABLE `packingstocks_logs` (
+  `stocks_logs_id` bigint(20) NOT NULL,
+  `brand_fk` bigint(20) DEFAULT NULL,
+  `grade_fk` bigint(20) DEFAULT NULL,
+  `model_fk` bigint(20) DEFAULT NULL,
+  `size_fk` bigint(20) DEFAULT NULL,
+  `type_fk` bigint(20) DEFAULT NULL,
+  `colour_fk` bigint(20) DEFAULT NULL,
+  `unit_fk` bigint(20) DEFAULT NULL,
+  `packing_fk` bigint(20) NOT NULL,
+  `shop_fk` bigint(20) NOT NULL,
+  `stock_type` enum('opening_balance','stock_addition','stock_deduction','restore_stock') DEFAULT NULL,
+  `entry_date` date NOT NULL,
+  `balance` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `packingstocks_logs`
+--
+
+INSERT INTO `packingstocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `packing_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
+(13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-22', 100, '2025-08-23 00:47:40', '2025-08-23 00:47:40'),
+(14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-22', 100, '2025-08-23 01:01:05', '2025-08-23 01:01:05'),
+(15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-22', 100, '2025-08-23 01:04:15', '2025-08-23 01:04:15'),
+(16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-22', 100, '2025-08-23 01:07:35', '2025-08-23 01:07:35'),
+(17, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-22', 1, '2025-08-23 01:09:40', '2025-08-23 01:09:40'),
+(18, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-22', 1, '2025-08-23 01:13:15', '2025-08-23 01:13:15'),
+(19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:39:52', '2025-08-23 01:39:52');
 
 -- --------------------------------------------------------
 
@@ -443,7 +527,10 @@ CREATE TABLE `packing_options` (
 
 INSERT INTO `packing_options` (`packing_id`, `packing_title`, `packing_description`, `status`, `created_date`, `modified_date`) VALUES
 (1, 'Box', 'box', 1, '2025-07-30 18:12:48', '2025-07-30 18:12:48'),
-(2, 'Polythene', 'polythene', 1, '2025-07-30 18:12:48', '2025-07-30 18:12:48');
+(2, 'Big Polythene', 'Big polythene', 1, '2025-07-30 18:12:48', '2025-07-30 18:12:48'),
+(3, 'Small Polythene', 'Small Polythene', 1, '2025-08-19 22:50:14', '2025-08-19 22:50:14'),
+(4, 'Small+Big Polythene', 'Small+Big Polythene', 1, '2025-08-19 23:02:42', '2025-08-19 23:02:42'),
+(5, 'Loose Packing', 'Loose Packing', 1, '2025-08-20 06:30:36', '2025-08-20 06:30:36');
 
 -- --------------------------------------------------------
 
@@ -905,13 +992,13 @@ CREATE TABLE `stocks` (
 --
 
 INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(8, 0, 0, 0, 0, 0, 0, 0, 10, 2, NULL, '2025-08-17', 200, '2025-08-17 22:36:10', '2025-08-17 22:36:10'),
-(9, 0, 0, 0, 0, 0, 0, 0, 11, 2, NULL, '2025-08-17', 100, '2025-08-17 22:36:51', '2025-08-17 22:36:51'),
+(8, 0, 0, 0, 0, 0, 0, 0, 10, 2, NULL, '2025-08-17', 100, '2025-08-17 22:36:10', '2025-08-17 22:36:10'),
+(9, 0, 0, 0, 0, 0, 0, 0, 11, 2, NULL, '2025-08-17', 95, '2025-08-17 22:36:51', '2025-08-17 22:36:51'),
 (10, 0, 0, 0, 0, 0, 0, 0, 12, 2, NULL, '2025-08-17', 100, '2025-08-17 22:37:28', '2025-08-17 22:37:28'),
 (11, 0, 0, 0, 0, 0, 0, 0, 13, 2, NULL, '2025-08-17', 100, '2025-08-17 22:38:33', '2025-08-17 22:38:33'),
-(12, 0, 0, 0, 0, 0, 0, 0, 14, 2, NULL, '2025-08-17', 100, '2025-08-17 22:39:10', '2025-08-17 22:39:10'),
+(12, 0, 0, 0, 0, 0, 0, 0, 14, 2, NULL, '2025-08-17', 99, '2025-08-17 22:39:10', '2025-08-17 22:39:10'),
 (13, 0, 0, 0, 0, 0, 0, 0, 15, 2, NULL, '2025-08-17', 100, '2025-08-17 22:39:56', '2025-08-17 22:39:56'),
-(17, 0, 0, 0, 0, 0, 0, 0, 16, 2, NULL, '2025-08-17', 199, '2025-08-17 23:05:36', '2025-08-17 23:05:36');
+(17, 0, 0, 0, 0, 0, 0, 0, 16, 2, NULL, '2025-08-17', 100, '2025-08-17 23:05:36', '2025-08-17 23:05:36');
 
 -- --------------------------------------------------------
 
@@ -930,7 +1017,7 @@ CREATE TABLE `stocks_logs` (
   `unit_fk` bigint(20) DEFAULT NULL,
   `item_fk` bigint(20) NOT NULL,
   `shop_fk` bigint(20) NOT NULL,
-  `stock_type` enum('opening_balance','stock_addition','stock_deduction') DEFAULT NULL,
+  `stock_type` enum('opening_balance','stock_addition','stock_deduction','restore_stock') DEFAULT NULL,
   `entry_date` date NOT NULL,
   `balance` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
@@ -942,16 +1029,28 @@ CREATE TABLE `stocks_logs` (
 --
 
 INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(16, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:36:10', '2025-08-17 22:36:10'),
-(17, 0, 0, 0, 0, 0, 0, 0, 11, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:36:51', '2025-08-17 22:36:51'),
-(18, 0, 0, 0, 0, 0, 0, 0, 12, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:37:29', '2025-08-17 22:37:29'),
-(19, 0, 0, 0, 0, 0, 0, 0, 13, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:38:33', '2025-08-17 22:38:33'),
-(20, 0, 0, 0, 0, 0, 0, 0, 14, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:39:10', '2025-08-17 22:39:10'),
-(21, 0, 0, 0, 0, 0, 0, 0, 15, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:39:56', '2025-08-17 22:39:56'),
-(25, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 22:59:41', '2025-08-17 22:59:41'),
-(27, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'opening_balance', '2025-08-17', 100, '2025-08-17 23:05:36', '2025-08-17 23:05:36'),
-(28, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'stock_addition', '2025-08-17', 100, '2025-08-17 23:08:02', '2025-08-17 23:08:02'),
-(29, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'stock_deduction', '2025-08-17', 1, '2025-08-17 23:40:10', '2025-08-17 23:40:10');
+(8, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-22 23:47:55', '2025-08-22 23:47:55'),
+(9, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:00:32', '2025-08-23 00:00:32'),
+(10, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:05:45', '2025-08-23 00:05:45'),
+(11, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:09:35', '2025-08-23 00:09:35'),
+(12, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:15:27', '2025-08-23 00:15:27'),
+(13, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:17:08', '2025-08-23 00:17:08'),
+(14, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:18:39', '2025-08-23 00:18:39'),
+(15, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:20:35', '2025-08-23 00:20:35'),
+(16, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:30:17', '2025-08-23 00:30:17'),
+(17, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:31:25', '2025-08-23 00:31:25'),
+(18, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:31:31', '2025-08-23 00:31:31'),
+(19, 0, 0, 0, 0, 0, 0, 0, 14, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 00:33:58', '2025-08-23 00:33:58'),
+(20, 0, 0, 0, 0, 0, 0, 0, 14, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 01:09:40', '2025-08-23 01:09:40'),
+(21, 0, 0, 0, 0, 0, 0, 0, 14, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:10:18', '2025-08-23 01:10:18'),
+(22, 0, 0, 0, 0, 0, 0, 0, 14, 1, 'stock_deduction', '2025-08-22', 1, '2025-08-23 01:13:15', '2025-08-23 01:13:15'),
+(23, 0, 0, 0, 0, 0, 0, 0, 14, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:14:32', '2025-08-23 01:14:32'),
+(24, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:15:44', '2025-08-23 01:15:44'),
+(25, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:17:09', '2025-08-23 01:17:09'),
+(26, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:22:06', '2025-08-23 01:22:06'),
+(27, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:36:19', '2025-08-23 01:36:19'),
+(28, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:36:45', '2025-08-23 01:36:45'),
+(29, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-22', 1, '2025-08-23 01:39:52', '2025-08-23 01:39:52');
 
 -- --------------------------------------------------------
 
@@ -1287,6 +1386,18 @@ ALTER TABLE `order_ledger`
   ADD PRIMARY KEY (`ledger_id`);
 
 --
+-- Indexes for table `packingstocks`
+--
+ALTER TABLE `packingstocks`
+  ADD PRIMARY KEY (`stocks_id`);
+
+--
+-- Indexes for table `packingstocks_logs`
+--
+ALTER TABLE `packingstocks_logs`
+  ADD PRIMARY KEY (`stocks_logs_id`);
+
+--
 -- Indexes for table `packing_options`
 --
 ALTER TABLE `packing_options`
@@ -1474,7 +1585,7 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
@@ -1486,13 +1597,25 @@ ALTER TABLE `order_detail`
 -- AUTO_INCREMENT for table `order_ledger`
 --
 ALTER TABLE `order_ledger`
-  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT for table `packingstocks`
+--
+ALTER TABLE `packingstocks`
+  MODIFY `stocks_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `packingstocks_logs`
+--
+ALTER TABLE `packingstocks_logs`
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `packing_options`
 --
 ALTER TABLE `packing_options`
-  MODIFY `packing_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `packing_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment_options`

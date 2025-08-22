@@ -89,15 +89,10 @@
                                                         <h4><i class="fa fa-info-circle"></i> Order Information</h4>
                                                     </div>
                                                     <div class="panel-body">
-                                                        <p><strong>Order Number:</strong> <?php echo $order_number; ?></p>
+                                                        <p><strong>Invoice Number:</strong> <?php echo $order_number; ?></p>
                                                         <p><strong>Review Date:</strong> <?php echo date('l, F j, Y'); ?></p>
                                                         <p><strong>Total Items:</strong> <?php echo count($order_info); ?></p>
-                                                        <?php if(isset($packing_info[0]) && $packing_info[0]['packing_title']): ?>
-                                                            <p><strong>Packing Option:</strong> <?php echo $packing_info[0]['packing_title']; ?></p>
-                                                            <!-- <?php if($packing_info[0]['packing_cost'] > 0): ?>
-                                                                <p><strong>Packing Cost:</strong> $<?php echo number_format($packing_info[0]['packing_cost'], 2); ?></p>
-                                                            <?php endif; ?> -->
-                                                        <?php endif; ?>
+                                                         <p><strong>Packing Option:</strong> <?php echo $packing_info['packing_title']; ?></p>
                                                     </div>
                                                 </div>
                                             </div>

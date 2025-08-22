@@ -83,6 +83,13 @@ $this->db->where("item_id", $items_id);
         return $query->result_array();
 
   }
+    public function getpackingdetail($packing_id){
+$this->db->select("*");
+$this->db->where("packing_id", $packing_id);
+        $query = $this->db->get("packing_options");
+        return $query->result_array();
+
+  }
   public function gettypedetail($type_id,$status=false){
         if($status){$this->db->where('status',1);}
         
@@ -647,6 +654,48 @@ public function updateorder($order_number){
             'shortage' => $order_quantity
         );
     }
+    public function checkPackingStockAvailability($packing_id, $order_quantity, $attributes = array()) {
+        $this->load->model('stocks/m_packing_stocks', 'model_packingstock');
+        
+        // Prepare stock check data
+        $stock_data = array(
+            'packing_fk' => $packing_id,
+            'brand_fk' => isset($attributes['brand_fk']) ? $attributes['brand_fk'] : 0,
+            'grade_fk' => isset($attributes['grade_fk']) ? $attributes['grade_fk'] : 0,
+            'model_fk' => isset($attributes['model_fk']) ? $attributes['model_fk'] : 0,
+            'size_fk' => isset($attributes['size_fk']) ? $attributes['size_fk'] : 0,
+            'type_fk' => isset($attributes['type_fk']) ? $attributes['type_fk'] : 0,
+            'colour_fk' => isset($attributes['colour_fk']) ? $attributes['colour_fk'] : 0,
+            'unit_fk' => isset($attributes['unit_fk']) ? $attributes['unit_fk'] : 0
+        );
+        
+        $stock_result = $this->model_packingstock->checkstock($stock_data);
+        if (!empty($stock_result)) {
+            if(($packing_id == '4')){
+                foreach($stock_result as $sr){
+                    
+$available_stock[]=$sr[0]['balance'];
+}
+            }else{
+                $available_stock = $stock_result[0]['balance'];
+            }
+   // print_r($available_stock);
+            return array(
+                'available' => $available_stock,
+                'requested' => $order_quantity,
+                'sufficient' => true //($available_stock >= $order_quantity),
+                //'shortage' => max(0, $order_quantity - $available_stock)
+            );
+        }
+        
+        // If no stock record found, return 0 available
+        return array(
+            'available' => 0,
+            'requested' => $order_quantity,
+            'sufficient' => false,
+            'shortage' => $order_quantity
+        );
+    }
 
     /**
      * Deduct stock for an order
@@ -715,6 +764,40 @@ public function updateorder($order_number){
         
         return $success;
     }
+    public function deductStockForPacking($order_number,$packing_id) {
+        $this->load->model('stocks/m_packing_stocks', 'model_packingstock');
+        
+        // Get order details
+        $order_info = $this->getOrder($order_number);
+        if (empty($order_info)) {
+            return false;
+        }
+        
+        $success = true;
+        
+        foreach ($order_info as $order_item) {
+            $quantity = $order_item['order_quantity'];
+            
+         // No attributes, deduct from general stock
+                $stock_data = array(
+                    'packing_fk' => $packing_id,
+                    'brand_fk' => 0,
+                    'grade_fk' => 0,
+                    'model_fk' => 0,
+                    'size_fk' => 0,
+                    'type_fk' => 0,
+                    'colour_fk' => 0,
+                    'shop_fk' => 0,
+                    'unit_fk' => 0
+                );
+                if (!$this->model_packingstock->deductStock($stock_data, $quantity)) {
+                    $success = false;
+                }
+            
+        }
+        
+        return $success;
+    }
     
     /**
      * Restore stock for an order (for cancellation or modification)
@@ -722,8 +805,9 @@ public function updateorder($order_number){
      * @return bool Success status
      */
     public function restoreStockForOrder($order_number) {
-        $this->load->model('stocks/m_stocks', 'model_stock');
         
+        $this->load->model('stocks/m_stocks', 'model_stock');
+        $this->load->model('stocks/m_packing_stocks', 'model_packingstock');
         // Get order details
         $order_info = $this->getOrder($order_number);
         if (empty($order_info)) {
@@ -784,6 +868,69 @@ public function updateorder($order_number){
         
         return $success;
     }
+    public function restorePackingStockForOrder($order_number) {
+        $this->load->model('stocks/m_packing_stocks', 'model_packingstock');
+        
+        // Get order details
+        $order_info = $this->getOrder($order_number);
+        if (empty($order_info)) {
+            return false;
+        }
+        
+        // Debug: Log the restoration attempt
+        log_message('debug', 'Attempting to restore stock for order: ' . $order_number . ' with ' . count($order_info) . ' items');
+        
+        $success = true;
+        
+        foreach ($order_info as $order_item) {
+            $packing_id = $order_item['packing_id'];
+            $quantity = $order_item['order_quantity'];
+            
+            // Get order details for attributes
+            $order_details = $this->getorderdetail($order_number, $packing_id);
+            
+            if (empty($order_details)) {
+                // No attributes, restore to general stock
+                $stock_data = array(
+                    'packing_fk' => $packing_id,
+                    // 'brand_fk' => 0,
+                    // 'grade_fk' => 0,
+                    // 'model_fk' => 0,
+                    // 'size_fk' => 0,
+                    // 'type_fk' => 0,
+                    // 'colour_fk' => 0,
+                    // 'unit_fk' => 0
+                );
+                
+                if (!$this->model_packingstock->restorePackingStock($stock_data, $quantity)) {
+                    $success = false;
+                }
+            } else {
+                // Restore stock for each attribute combination
+                foreach ($order_details as $detail) {
+                    $attribute_quantity = $detail['order_quantity'];
+                    if ($attribute_quantity > 0) {
+                        $stock_data = array(
+                            'packing_fk' => $packing_id,
+                        //     'brand_fk' => 0,
+                        //     'grade_fk' => ($detail['attribute_type'] == 'grade') ? $detail['attribute_fk'] : 0,
+                        //     'model_fk' => ($detail['attribute_type'] == 'model') ? $detail['attribute_fk'] : 0,
+                        //     'size_fk' => ($detail['attribute_type'] == 'size') ? $detail['attribute_fk'] : 0,
+                        //     'type_fk' => ($detail['attribute_type'] == 'type') ? $detail['attribute_fk'] : 0,
+                        //     'colour_fk' => ($detail['attribute_type'] == 'colour') ? $detail['attribute_fk'] : 0,
+                        //     'unit_fk' => ($detail['attribute_type'] == 'unit') ? $detail['attribute_fk'] : 0
+                         );
+                        
+                        if (!$this->model_packingstock->restorePackingStock($stock_data, $attribute_quantity)) {
+                            $success = false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $success;
+    }
     
     /**
      * Update order shop_id
@@ -817,9 +964,9 @@ public function updateorder($order_number){
       if (sizeof($query->result_array()) > 0) {
             foreach ($query->result_array() as $value) {
                 $data = array(
-                     "title" => $this->getpackingtitle($value["packing_id"])
+                     "packing_title" => getpackingtitle($value["packing_id"])
                 );
-             $dat[]=$data;
+             $dat=$data;
             }
 //              echo '<pre>';
 //             print_r($dat);

@@ -50,7 +50,7 @@
                                     -->
                                     <header>
                                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                        <h2>All Draft Orders</h2>
+                                        <h2>All Draft Invoice</h2>
 
                                     </header>
 
@@ -67,7 +67,7 @@
                                             <table id="datatable_fixed_column" class="table table-striped table-bordered" width="100%">
                                                 <thead>
                                                 <tr>
-                                                    <th data-class="expand">Order Number</th>
+                                                    <th data-class="expand">Invoice Number</th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
                                                 </tr>
                                                 </thead>
@@ -93,11 +93,11 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu">
                                                                             <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $value['order_number']; ?>">Edit Order</a>
+                                                                                <a href="<?php echo site_url(); ?>/orders/editorder/<?php echo $value['order_number']; ?>">Edit Invoice</a>
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <li>
-                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Order</a>
+                                                                                <a href="<?php echo site_url(); ?>/orders/review/<?php echo $value['order_number']; ?>">Review Invoice</a>
                                                                             </li>
                                                                             <li class="divider"></li>
                                                                             <li>

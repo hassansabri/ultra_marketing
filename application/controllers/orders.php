@@ -63,60 +63,63 @@ class orders extends CI_Controller {
 
         // Get order details for each item
         $this->data['order_details'] = array();
-        foreach ($this->data['order_info'] as $oi) {
-            $item_id = $oi['item_id'];
-            $order_details = $this->model_order->getorderdetail($order_number, $item_id);
+        if($this->data['shop_info']){
 
-            // Get item details
-            $item_detail = $this->model_order->getitemdetail($item_id);
-
-            // Organize order details by attribute type
-            $organized_details = array();
-            foreach ($order_details as $detail) {
-                $attribute_type = $detail['attribute_type'];
-                $attribute_fk = $detail['attribute_fk'];
-                $quantity = $detail['attribute_quantity'];
-
-                // Get attribute details based on type
-                switch ($attribute_type) {
-                    case 'grade':
-                        $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
-                        break;
-                    case 'model':
-                        $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
-                        break;
-                    case 'size':
-                        $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
-                        break;
-                    case 'type':
-                        $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
-                        break;
-                    case 'colour':
-                        $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
-                        break;
-                    case 'unit':
-                        $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
-                        break;
-                    case 'packing':
-                        $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
-                        break;
-                    default:
-                        $attribute_detail = array();
+            foreach ($this->data['order_info'] as $oi) {
+                $item_id = $oi['item_id'];
+                $order_details = $this->model_order->getorderdetail($order_number, $item_id);
+    
+                // Get item details
+                $item_detail = $this->model_order->getitemdetail($item_id);
+    
+                // Organize order details by attribute type
+                $organized_details = array();
+                foreach ($order_details as $detail) {
+                    $attribute_type = $detail['attribute_type'];
+                    $attribute_fk = $detail['attribute_fk'];
+                    $quantity = $detail['attribute_quantity'];
+    
+                    // Get attribute details based on type
+                    switch ($attribute_type) {
+                        case 'grade':
+                            $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
+                            break;
+                        case 'model':
+                            $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
+                            break;
+                        case 'size':
+                            $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
+                            break;
+                        case 'type':
+                            $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
+                            break;
+                        case 'colour':
+                            $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
+                            break;
+                        case 'unit':
+                            $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                            break;
+                        case 'packing':
+                            $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
+                            break;
+                        default:
+                            $attribute_detail = array();
+                    }
+    
+                    if (!isset($organized_details[$attribute_type])) {
+                        $organized_details[$attribute_type] = array();
+                    }
+                    $organized_details[$attribute_type][] = array(
+                        'detail' => $attribute_detail,
+                        'quantity' => $quantity
+                    );
                 }
-
-                if (!isset($organized_details[$attribute_type])) {
-                    $organized_details[$attribute_type] = array();
-                }
-                $organized_details[$attribute_type][] = array(
-                    'detail' => $attribute_detail,
-                    'quantity' => $quantity
+    
+                $this->data['order_details'][$item_id] = array(
+                    'item_detail' => $item_detail[0],
+                    'attributes' => $organized_details
                 );
             }
-
-            $this->data['order_details'][$item_id] = array(
-                'item_detail' => $item_detail[0],
-                'attributes' => $organized_details
-            );
         }
 
         // Fetch ledger entries for the order
@@ -451,6 +454,7 @@ class orders extends CI_Controller {
         if (!empty($order_info) && $order_info[0]['order_status'] === 'confirm') {
             // Restore stock only for completed orders
             $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
+           
             if (!$stock_restoration_success) {
                 $this->session->set_flashdata('stock_errors', ['Failed to restore stock for cancelled order. Please contact administrator.']);
             }
@@ -597,7 +601,7 @@ class orders extends CI_Controller {
         $this->data['profile'] = $this->model_order->getprofiledetail();
 
         // Get packing information for the order
-        $this->data['item_packing_info'] = $this->model_order->getItemPackingInfo($order_number);
+        $this->data['packing_info'] = $this->model_order->getItemPackingInfo($order_number);
 
         // Get order details for each item
         $this->data['order_details'] = array();
@@ -669,6 +673,7 @@ class orders extends CI_Controller {
         foreach ($order_info as $oi) {
             $item_id = $oi['item_id'];
             $quantity = $oi['order_quantity'];
+            $packing_id = $oi['packing_id'];
 
             // Check stock availability
             $stock_check = $this->model_order->checkStockAvailability($item_id, $quantity);
@@ -678,6 +683,13 @@ class orders extends CI_Controller {
                 $stock_errors[] = "Insufficient stock for {$item_name}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
                 $has_stock_issues = true;
             }
+        }
+        $stock_check = $this->model_order->checkPackingStockAvailability($packing_id, $quantity);
+        if (!$stock_check['sufficient']) {
+            $packing_detail = $this->model_order->getpackingdetail($packing_id);
+            $packing_title = isset($packing_detail[0]['packing_title']) ? $packing_detail[0]['packing_title'] : 'Packing';
+            $stock_errors[] = "Insufficient1 stock for {$packing_title}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
+            $has_stock_issues = true;
         }
    
         // If there are stock issues, don't complete the order
@@ -692,8 +704,10 @@ class orders extends CI_Controller {
 
         // Deduct stock after successful order completion
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
+        $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id);
         // Insert ledger entry
-        $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price'],'', 'xyz', 'debit');
+        // exit;
+        $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
         if (!$stock_deduction_success) {
 
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
@@ -794,51 +808,6 @@ class orders extends CI_Controller {
             echo json_encode(array('success' => false, 'message' => 'Invalid request method'));
         }
     }
-
-    /**
-     * Cancel an order and restore stock
-     * @param string $order_number Order number to cancel
-     */
-    public function cancel_order($order_number = null) {
-        if (!$order_number) {
-            $this->session->set_flashdata('error', 'Order number is required');
-            redirect(site_url('orders/draftorders'));
-        }
-
-        // Check if order exists
-        $order_info = $this->model_order->getOrder($order_number);
-        if (empty($order_info)) {
-            $this->session->set_flashdata('error', 'Order not found');
-            redirect(site_url('orders/draftorders'));
-        }
-
-        // Check if order is already a draft (can't cancel draft orders)
-        if ($order_info[0]['order_status'] === 'draft') {
-            $this->session->set_flashdata('error', 'Draft orders cannot be cancelled');
-            redirect(site_url('orders/draftorders'));
-        }
-
-        // Attempt to cancel the order
-        $cancellation_success = $this->model_order->cancelOrder($order_number);
-        
-        if ($cancellation_success) {
-            // Restore stock for the cancelled order
-            $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
-            
-            if ($stock_restoration_success) {
-                // Update stock restoration status
-                $this->model_order->updateStockRestorationStatus($order_number);
-                $this->session->set_flashdata('success', 'Order cancelled successfully and stock restored');
-            } else {
-                $this->session->set_flashdata('warning', 'Order cancelled but failed to restore stock. Please contact administrator.');
-            }
-        } else {
-            $this->session->set_flashdata('error', 'Failed to cancel order');
-        }
-
-        redirect(site_url('orders/draftorders'));
-    }
-
     /**
      * Cancel an order via AJAX with reason
      */
@@ -875,6 +844,7 @@ class orders extends CI_Controller {
         if ($cancellation_success) {
             // Restore stock for the cancelled order
             $stock_restoration_success = $this->model_order->restoreStockForOrder($order_number);
+             $stock_restoration_success = $this->model_order->restorePackingStockForOrder($order_number);
             
             if ($stock_restoration_success) {
                 // Update stock restoration status
