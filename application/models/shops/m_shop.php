@@ -21,6 +21,16 @@ class m_shop extends CI_Model {
         $query = $this->db->get("shops");
         return $query->result_array();
     }
+     public function getallsuppliers(){
+            $this->db->where("shop_type",'supplier');
+            $query = $this->db->get("shops");
+            return $query->result_array();
+        }
+     public function getallcrediters(){
+            $this->db->where("shop_type",'crediter');
+            $query = $this->db->get("shops");
+            return $query->result_array();
+        }
     public function addnewshop($data){
 
     $this->db->insert('shops',$data);

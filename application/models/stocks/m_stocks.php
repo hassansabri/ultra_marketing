@@ -381,7 +381,7 @@ class m_stocks extends CI_Model {
                   $log_data = $data;
             // If no stock record exists, create one
             $data['balance'] = $quantity;
-            $data['stock_type'] = '';
+            // $data['stock_type'] = '';
             $this->db->insert('stocks', $data);
             
             // Log the creation
@@ -445,7 +445,7 @@ class m_stocks extends CI_Model {
             // Log the restoration
             $log_data = $data;
             $log_data['balance'] = $quantity; // Positive for restoration
-            $log_data['stock_type'] = 'restore_stock'; // Use valid enum value
+            $log_data['stock_type'] = isset($data['stock_type']) ? $data['stock_type'] : 'restore_stock'; // Use valid enum value
             $log_data['entry_date'] = date('Y-m-d');
             $this->db->insert('stocks_logs', $log_data);
         }
@@ -478,6 +478,11 @@ class m_stocks extends CI_Model {
     public function getallitems(){
         $this->db->where('item_status',1);
         $query = $this->db->get("items");
+        return $query->result_array();
+    }
+    public function getallpackings(){
+        $this->db->where('status',1);
+        $query = $this->db->get("packing_options");
         return $query->result_array();
     }
     public function getallattributes(){
@@ -595,12 +600,23 @@ class m_stocks extends CI_Model {
     /**
      * Get all items with zero or negative stock balance
      */
-    public function get_items_with_zero_stock() {
-        $this->db->select('stocks.item_fk, items.item_name');
+    public function get_items_with_low_stock() {
+        $this->db->select('stocks.item_fk, items.item_name, stocks.balance');
         $this->db->from('stocks');
         $this->db->join('items', 'items.item_id = stocks.item_fk');
-        $this->db->where('stocks.balance <=', 0);
+        $this->db->where('stocks.balance <', 100);
+        $this->db->or_where('stocks.balance', "");
         $this->db->group_by('stocks.item_fk');
+        $query = $this->db->get();
+        return $query->result_array();
+        }
+        public function get_packings_with_low_stock() {
+        $this->db->select('packingstocks.packing_fk, packing_options.packing_title,packingstocks.balance');
+        $this->db->from('packingstocks');
+        $this->db->join('packing_options', 'packing_options.packing_id = packingstocks.packing_fk');
+        $this->db->where('packingstocks.balance <', 100);
+        $this->db->or_where('packingstocks.balance', "");
+        $this->db->group_by('packingstocks.packing_fk');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -616,6 +632,23 @@ class m_stocks extends CI_Model {
         $data= $query->result_array();
         if(!$data){
             $notexists[]=$value['item_id'];
+        }
+        }
+    }
+    return $notexists;
+}
+    public function packing_not_exists_in_stock(){
+        $notexists = array();
+       $items= $this->getallpackings();
+       if(isset($items)){
+        foreach($items as $value){
+            $this->db->select('packing_fk');
+        $this->db->from('packingstocks');
+        $this->db->where('packing_fk', $value['packing_id']);
+        $query = $this->db->get();
+        $data= $query->result_array();
+        if(!$data){
+            $notexists[]=$value['packing_id'];
         }
         }
     }

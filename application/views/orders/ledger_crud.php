@@ -41,9 +41,9 @@
                                 <label for="amount">Amount</label>
                                 <input type="number" step="0.01" class="form-control" name="amount" id="amount" value="<?php echo isset($entry) ? htmlspecialchars($entry['amount']) : ''; ?>" required>
                             </div>
-                            <div class="form-group col-md-3 pm">
+                            <div class="form-group col-md-3">
                                 <label for="payment_method">Payment Method</label>
-                                <select class="form-control" name="payment_method" id="payment_method" required>
+                                <select class="form-control pm" name="payment_method" id="payment_method" required>
                                     <option value="">Select Payment Method</option>
                                     <?php
                                     if (isset($payment_options) && is_array($payment_options)) {
@@ -57,6 +57,21 @@
                                     ?>
                                 </select>
                             </div>
+                        <?php if( isset($payment_options[0]['payment_options_title']) && $payment_options[0]['payment_options_title']=='Check') { ?>
+                            <div class="form-group col-md-3 ci">
+                                <label for="payment_method">Check number</label>
+                                 <input class="form-control" name="check_number" type="text" value="<?php if(isset($entry_detail)) { echo $entry_detail['check_number']; } ?>"/>
+                                 
+                                </div>
+                                <div class="form-group col-md-3 ci">
+                                    <label for="payment_method">Check date</label>
+                                    <input name="check_date" class="form-control dp" type="text" value="<?php if(isset($entry_detail)) { echo $entry_detail['check_date']; } ?>"/>
+                                </div>
+                                <div class="form-group col-md-3 ci">
+                                    <label for="payment_method">Bank</label>
+                                    <input class="form-control" name="bank_name" type="text" value="<?php if(isset($entry_detail)) { echo $entry_detail['bank_name']; } ?>"/>
+                            </div>
+                            <?php } ?>
                             <div style="clear:both"></div>
                             <div class="form-group">
                                 <label for="type">Type</label>

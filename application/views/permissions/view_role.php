@@ -37,7 +37,7 @@
                                         ?>
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <strong><?php if(isset($module[$i]['module_name']))echo htmlspecialchars(); ?></strong>
+                                                <!-- <strong><?php if(isset($module[$i]['module_name']))echo htmlspecialchars(); ?></strong> -->
                                                 <span class="badge">Permissions: <?php if(isset($module[$i]['permission_count']))echo $module[$i]['permission_count']; ?></span>
                                             </div>
                                             <div class="panel-body" style="padding:0;">

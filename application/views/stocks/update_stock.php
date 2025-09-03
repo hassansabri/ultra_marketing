@@ -217,6 +217,9 @@
 			</div>
 		</div>
 		<div class="col-md-2">
+			<input placeholder="amount" type="text" name="amount" id="amount" style="width:100%" />
+		</div>
+		<div class="col-md-2">
 			<div class="form-group" id="">
 				<button class="btn btn-default" onclick="stock.check();">
                     <i class="fa fa-eye"></i>check

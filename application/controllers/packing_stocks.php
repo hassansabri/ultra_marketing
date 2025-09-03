@@ -28,6 +28,7 @@
          $this->data['packing_fk']=$this->input->post('packing_id');
         $this->data['balance']=$this->input->post('balance');
         $this->data['stock_type'] = $this->input->post('stock_type');
+      //   $this->data['amount'] = $this->input->post('amount');
            $this->data['entry_date'] =  date('Y-m-d',strtotime($this->input->post('entry_date')));
         $this->model_packingstock->addstock($this->data);
         $this->ldata['all_logs']=$this->model_packingstock->getlogs($this->data);

@@ -5,7 +5,7 @@
     <div id="ribbon">
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li><?php echo $this->lang->line("home"); ?></li><li>All Shops</li><li><?php echo $this->lang->line("create_new"); ?></li>
+            <li><?php echo $this->lang->line("home"); ?></li><li><?php echo $this->lang->line("create_new"); ?></li>
         </ol>
         <!-- end breadcrumb -->
     </div>
@@ -20,9 +20,9 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="well">
                             <div class="widget-body">
-                                <form id="adduser-form" method="post" action="<?php echo site_url(); ?>/shops/updateshop/<?php echo $shop_detail[0]["shop_id"]; ?>" class="" enctype="multipart/form-data">
+                                <form id="adduser-form" method="post" action="<?php echo site_url(); ?>/shops/addshop/" class="" enctype="multipart/form-data">
                                     <fieldset>
-                                        <?php  if ($update == "yes") { ?>
+                                        <?php if ($update == "yes") { ?>
                                             <?php if ($error == "yes") { ?>
                                                 <div class="alert alert-danger fade in">
                                                     <button class="close" data-dismiss="alert">
@@ -46,33 +46,39 @@
                                         </legend>
                                         <div class="form-group">
                                             <label> Shop <?php echo $this->lang->line("name"); ?></label>
-                                            <input name="shop_name" id="shop_name" class="form-control" type="text" value="<?php echo $shop_detail[0]["shop_name"]; ?>">
+                                            <input name="shop_name" id="shop_name" class="form-control" type="text" value="<?php
+                                            if (isset($_POST["shop_name"])) {
+                                                echo $_POST["shop_name"];
+                                            }
+                                            ?>">
                                         </div>
                                         <div class="form-group">
                                             <label> Shop owner</label>
                                             <input name="shop_owner" id="shop_owner" class="form-control" type="text" value="<?php
-                                         echo $shop_detail[0]["shop_owner"];
-
+                                            if (isset($_POST["shop_name"])) {
+                                                echo $_POST["shop_owner"];
+                                            }
                                             ?>">
                                         </div>
                                         <div class="form-group">
                                             <label> Shop Email</label>
                                             <input name="shop_email" id="shop_email " class="form-control" type="text" value="<?php
-                                           echo $shop_detail[0]["shop_email"];
+                                            if (isset($_POST["shop_email"])) {
+                                            }
                                             ?>">
                                         </div>
                                         <div class="form-group">
                                             <label> Shop Number</label>
                                             <input name="shop_number" id="shop_number " class="form-control" type="text" value="<?php
-                                         echo   $shop_detail[0]["shop_number"];
-                                            ?>" >
+                                            if (isset($_POST["shop_number"])) {
+                                            }
+                                            ?>">
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" >
-                                            <label>shop type</label>
-                                            <select class="form-control" name="shop_type" id="shop_type" >
-                                                        <option <?php if($shop_detail[0]['shop_type'] == 'crediter')echo 'selected'; ?>  value="debiter" >Crediter</option>
-                                                        <option <?php if($shop_detail[0]['shop_type'] == 'supplier')echo 'selected'; ?>  value="suplliers" >Suppliers</option>
+                                            <label>select shop type</label>
+                                            <select class="form-control" name="shop_type" id="shop_type">
+                                                        <option  value="supplier" >supplier</option>
                                                  
                                             </select>
                                             </div>
@@ -84,7 +90,7 @@
                                                 <option value="">Select Country</option>
                                                 <?php if ($countries) { ?>
                                                     <?php foreach ($countries as $value) { ?>
-                                                        <option <?php if($shop_detail[0]['shop_country'] == $value['country_id'])echo 'selected'; ?> value="<?php echo $value["country_id"]; ?>" ><?php echo $value["country_name"]; ?></option>
+                                                        <option  value="<?php echo $value["country_id"]; ?>" ><?php echo $value["country_name"]; ?></option>
                                                     <?php } ?>
                                                 <?php } ?>
                                             </select>
@@ -92,45 +98,38 @@
                                             <div class="col-md-4 custompdding">
                                             <label>select State</label>
                                             <select class="form-control" name="state" id="state1">
-                                                     <?php $states =  getStates($shop_detail[0]['shop_country']); ?>
-                                             <?php if ($states) { ?>
-                                                    <?php foreach ($states as $value) { ?>
-                                                        <option <?php if($shop_detail[0]['shop_state'] == $value['state_id'])echo 'selected'; ?> value="<?php echo $value["state_id"]; ?>" ><?php echo $value["state_name"]; ?></option>
-                                                    <?php } ?>
-                                                <?php } ?>
+                                                <option value="">Select State</option>
                                             
                                             </select>
                                             </div>
                                             <div class="col-md-4 custompdding">
                                             <label>select city</label>
                                             <select class="form-control" name="city" id="city_id">
-                                               <?php $cities=getcities($shop_detail[0]['shop_country'],$shop_detail[0]['shop_state']);?>
-                                               <?php if ($cities) { ?>
-                                                    <?php foreach ($cities as $value) { ?>
-                                                        <option <?php if($shop_detail[0]['shop_city'] == $value['city_id'])echo 'selected'; ?> value="<?php echo $value["city_id"]; ?>" ><?php echo $value["city_name"]; ?></option>
-                                                    <?php } ?>
-                                                <?php } ?>
+                                                <option value="">Select City</option>
                                              
                                             </select>
                                             </div>
                                                 <div class="form-group col-md-6 custompdding" >
                                                 <label> Latitude</label>
                                                 <input name="shop_latitude" id="us2-lat" class="form-control" type="text" value="<?php
-                                                echo $shop_detail[0]["shop_latitude"];
+                                                if (isset($_POST["shop_latitude"])) {
+                                                }
                                                 ?>">
                                             </div>
                                             </div>
                                                 <div class="form-group col-md-6 custompdding" >
                                                 <label> Longitude</label>
                                                 <input name="shop_longitude" id="us2-lon" class="form-control" type="text" value="<?php
-                                                 echo $shop_detail[0]["shop_longitude"];
+                                                if (isset($_POST["shop_longitude"])) {
+                                                }
                                                 ?>">
                                             </div>
                                                </div>
                                                 <div class="form-group" >
                                                 <label> Address</label>
                                                      <input name="shop_address" id="us2-address" class="form-control" type="text" value="<?php
-                                                echo $shop_detail[0]["shop_address"];
+                                                if (isset($_POST["shop_address"])) {
+                                                }
                                                 ?>">
                                               
                                             </div>
@@ -166,12 +165,12 @@
     <!-- END MAIN CONTENT -->
 </div>
 <?php
-    $lat = $shop_detail[0]["shop_latitude"];
-    $longni = $shop_detail[0]["shop_longitude"];
+    $lat =  31.41986;
+    $longni = 74.25348;
     $radius = 50;
     ?>
     <script src="<?php echo base_url(); ?>assets/js/locationpicker.jquery.min.js"></script>
-<script type="text/javascript">
+<script>
     shops.init();
 
     //    $(document).ready(function () {
@@ -191,7 +190,7 @@
     //     locationNameInput: $('#us2-address')
     // },
     // enableAutocomplete: true,
-    //  });
+    //     });
     // });
 </script>
 <?php $this->load->view("common/footer"); ?>

@@ -177,24 +177,24 @@
 <script>
     shops.init();
 
-       $(document).ready(function () {
-        $('#google_map').locationpicker({
-            location: {
-                latitude: <?php echo $lat; ?>,
-                longitude: <?php echo $longni; ?>
-            },
-            radius: <?php echo $radius; ?>,
-            zoom: 19,
-            scrollwheel: false,
-            enableAutocomplete: true,
-            inputBinding: {
-        latitudeInput: $('#us2-lat'),
-        longitudeInput: $('#us2-lon'),
-       // radiusInput: $('#us2-radius'),
-        locationNameInput: $('#us2-address')
-    },
-    enableAutocomplete: true,
-        });
-    });
+    //    $(document).ready(function () {
+    //     $('#google_map').locationpicker({
+    //         location: {
+    //             latitude: <?php echo $lat; ?>,
+    //             longitude: <?php echo $longni; ?>
+    //         },
+    //         radius: <?php echo $radius; ?>,
+    //         zoom: 19,
+    //         scrollwheel: false,
+    //         enableAutocomplete: true,
+    //         inputBinding: {
+    //     latitudeInput: $('#us2-lat'),
+    //     longitudeInput: $('#us2-lon'),
+    //    // radiusInput: $('#us2-radius'),
+    //     locationNameInput: $('#us2-address')
+    // },
+    // enableAutocomplete: true,
+    //     });
+    // });
 </script>
 <?php $this->load->view("common/footer"); ?>

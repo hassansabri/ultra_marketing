@@ -223,6 +223,27 @@ class M_permissions extends CI_Model {
         $this->db->order_by('p.permission_name', 'ASC');
         return $this->db->get()->result_array();
     }
+    public function getRolePermissionid($role_id) { 
+        $this->db->select('p.permission_id');
+        $this->db->from('role_permissions rp');
+        $this->db->join('permissions p', 'p.permission_id = rp.permission_id');
+        $this->db->join('modules m', 'm.module_id = p.module_id');
+        $this->db->where('rp.role_id', $role_id);
+        $this->db->where('p.is_active', 1);
+        $this->db->order_by('m.module_order', 'ASC');
+        $this->db->order_by('p.permission_name', 'ASC');
+        
+  $query = $this->db->get();
+        if (sizeof($query->result_array()) > 0) {
+            $dat = array();
+            foreach ($query->result_array() as $value) {
+                $dat[] = $value["permission_id"];
+            }
+            return $dat;
+        } else {
+            return array();
+        }
+    }
     
     /**
      * Assign permission to role
@@ -277,7 +298,28 @@ class M_permissions extends CI_Model {
         }
         return true;
     }
-    
+    public function updateRolePermissions2($role_id, $permission_id, $granted_by,$val) {
+        // Remove all existing permissions
+        
+        if($val=='yes'){
+
+            // Add new permissions
+                $data = [];
+                    $data = [
+                        'role_id' => $role_id,
+                        'permission_id' => $permission_id,
+                        'granted_by' => $granted_by
+                    ];
+                
+                 $this->db->insert('role_permissions', $data);
+            
+        }else{
+            $this->db->where('role_id', $role_id);
+            $this->db->where('permission_id', $permission_id);
+        $this->db->delete('role_permissions');
+        }
+        return true;
+    }
     // =====================================================
     // USER ROLE MANAGEMENT
     // =====================================================

@@ -564,6 +564,24 @@ public function updateorder($order_number){
         $this->db->insert('order_ledger', $data);
         return $this->db->insert_id();
     }
+    public function insertOrderLedgerDetail($ledger_fk,$shop_id,$order_number, $date,$amount,$check_number,$bank_name) {
+        $data = array(
+            'ledger_fk' => $ledger_fk,
+            'order_number' => $order_number,
+            'check_date' => $date,
+            'shop_id' => $shop_id,
+            'amount' => $amount,
+            'check_number' => $check_number,
+            'bank_name' => $bank_name
+        );
+        $this->db->insert('order_ledger_detail', $data);
+        return $this->db->insert_id();
+    }
+    public function deleteOrderLedgerDetail($ledger_fk) {
+        $this->db->where('ledger_fk', $ledger_fk);
+        $this->db->delete('order_ledger_detail');
+        return $this->db->insert_id();
+    }
 
     // Fetch all ledger entries for an order
     public function getOrderLedger($order_number) {
@@ -603,6 +621,15 @@ public function updateorder($order_number){
         $this->db->join('orders', 'orders.order_number = order_ledger.order_number', 'left');
         $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
         $this->db->where('order_ledger.ledger_id', $ledger_id);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    public function getOrderLedgerDetailById($ledger_id) {
+        $this->db->select('order_ledger_detail.*, orders.shop_id, shops.shop_name');
+        $this->db->from('order_ledger_detail');
+        $this->db->join('orders', 'orders.order_number = order_ledger_detail.order_number', 'left');
+        $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
+        $this->db->where('order_ledger_detail.ledger_fk', $ledger_id);
         $query = $this->db->get();
         return $query->row_array();
     }

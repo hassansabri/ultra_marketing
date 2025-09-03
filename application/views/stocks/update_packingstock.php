@@ -28,7 +28,9 @@
 		<div class="col-md-2">
 			<input placeholder="balance" type="text" name="quantity" id="balance" style="width:100%" />
 		</div>
-		
+		<div class="col-md-2">
+			<input placeholder="amount" type="text" name="amount" id="amount" style="width:100%" />
+		</div>
 		<div class="col-md-2">
 			<div class="form-group" id="">
 				<button class="btn btn-default" onclick="packingstock.check();">

@@ -34,9 +34,13 @@
         $this->load->view("shops/all_shops", $this->data);
         
     }
-public function addnewshop(){
+public function addnewsupplier(){
     $this->data["update"] = "no";   
-    $this->load->view('shops/add_new_shop', $this->data);
+    $this->load->view('shops/add_new_supplier', $this->data);
+}
+public function addnewcrediter(){
+    $this->data["update"] = "no";   
+    $this->load->view('shops/add_new_crediter', $this->data);
 }
 public function getstates(){
    $country_id=0;
@@ -84,8 +88,17 @@ public function getstates(){
             $sdat['shop_latitude'] = $this->input->post('shop_latitude');
             $sdat['shop_longitude'] = $this->input->post('shop_longitude');
             $sdat['shop_address'] = $this->input->post('shop_address');
+            $sdat['shop_type'] = $this->input->post('shop_type');
            $this->model_shops->addnewshop($sdat);
-           redirect(site_url() . 'shops/index');
+           redirect(site_url() . 'shops/index/addnew'.$sdat['shop_type']);
+         }
+         public function suppliers(){
+            $this->data["all_shops"] = $this->model_shops->getallsuppliers();
+        $this->load->view("shops/all_shops", $this->data);
+         }
+         public function crediters(){
+            $this->data["all_shops"] = $this->model_shops->getallcrediters();
+        $this->load->view("shops/all_shops", $this->data);
          }
          
          public function editshop($shop_id=false){

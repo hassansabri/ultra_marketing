@@ -8,43 +8,17 @@ var hasvalue_global = false;
         setTimeout(function() {
   // Your code to be executed after 5 seconds
   html = $("#global-stock-warning").html() ;
-  if ($("#global-stock-warning").html()=="") {
+  html2 = $("#global-stock-warning2").html() ;
       $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning").html()+'</div>');
-  }
-  if ($(".mywarning").html()=="") {
+      $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning2").html()+'</div>');
+      $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning3").html()+'</div>');
       $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
-
-  }
-
     $('.myalert').show();
 }, 1000); // 5000 milliseconds = 5 seconds
     });
 $(document).ready(function () {
     $('#demo-setting').css('display', 'none');
     $(document).on('click', '.getuser', function (ele) {
-        var question_id = $(this).attr('id');
-        var optval = $(this).attr('opval');
-        $('#question_id').val(question_id);
-        $('#optval').val(optval);
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/getUserNameByQuestionAndOptVal',
-            type: 'post',
-            data: $("#usernames").serialize(),
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
-                $('#allusernames').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $('#allusernames_body').html(obj.html);
-            } else {
-                alert(obj.msg);
-            }
-        });
     });
     $(document).on('change', '.radiobtn', function (ele) {
         console.log('change');
@@ -77,128 +51,109 @@ $(document).ready(function () {
         });
 
     });
-    $(document).on('change', '.approval', function (ele) {
-        var question_id = $(this).attr('id');
-        var val = "";
-        if ($(this).is(':checked')) {
-            val = "yes";
-        } else {
-            val = "no";
-        }
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/changeQuestionStatus',
-            type: 'post',
-            data: 'is_approved=' + val + '&question_id=' + question_id
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
 
-            } else {
-                alert(obj.msg);
-            }
-        });
-
-    });
-    $(document).on('change', '.approved_form', function (ele) {
-        var question_id = $(this).attr('id');
-        var val = "";
-        if ($(this).is(':checked')) {
-            val = "yes";
-        } else {
-            val = "no";
-        }
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/changeFormStatus',
-            type: 'post',
-            data: 'is_approved=' + val + '&form_id=' + question_id
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
-                location.reload(true);
-            } else {
-                alert(obj.msg);
-            }
-        });
-
-    });
-    $(document).on('change', '.rating_section', function (ele) {
-        var form_id = $(this).attr('form_id');
-        var section_id = $(this).attr('section_id');
-        var val = "";
-        if ($(this).is(':checked')) {
-            val = "yes";
-        } else {
-            val = "no";
-        }
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/markSectionAsRating',
-            type: 'post',
-            data: 'is_rating=' + val + '&form_id=' + form_id + '&section_id=' + section_id
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
-
-            } else {
-                alert(obj.msg);
-            }
-        });
-
-    });
-    $(document).on('change', '.rating_subsection', function (ele) {
-        var group_titles_id = $(this).attr('group_titles_id');
-        var val = "";
-        if ($(this).is(':checked')) {
-            val = "yes";
-        } else {
-            val = "no";
-        }
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/markSubSectionAsRating',
-            type: 'post',
-            data: 'is_rating=' + val + '&group_titles_id=' + group_titles_id
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
-
-            } else {
-                alert(obj.msg);
-            }
-        });
-
-    });
-    $(document).on('change', '.rating_q', function (ele) {
-        var question_id = $(this).attr('id');
-        var val = "";
-        if ($(this).is(':checked')) {
-            val = "yes";
-        } else {
-            val = "no";
-        }
-        $.LoadingOverlay("show");
-        $.ajax({
-            url: baseurl + '/survey/markQuestionAsRating',
-            type: 'post',
-            data: 'is_rating=' + val + '&question_id=' + question_id
-        }).done(function (msg) {
-            $.LoadingOverlay("hide");
-            var obj = JSON.parse(msg);
-            if (obj.success == "yes") {
-
-            } else {
-                alert(obj.msg);
-            }
-        });
-
-    });
 });
+var country={
+    
+    init:function(){
+            $(document).on("change", ".changestatuscountry", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var countryid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/countries/changestatus',
+                data: "country_id=" + countryid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+            $(document).on("change", ".changestatusstate", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var stateid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/countries/changestatetstatus',
+                data: "state_id=" + stateid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+            $(document).on("change", ".changestatuscity", function () {
+            var status;
+
+            if ($(this).val() == "1") {
+                $(this).val("0");
+                status = "0";
+            } else {
+                $(this).val("1");
+                status = "1";
+            }
+            var cityid = $(this).attr('id');
+            $.LoadingOverlay("show");
+            $.ajax({
+                type: "POST",
+                url: baseurl + '/countries/changecitystatus',
+                data: "city_id=" + cityid + "&status=" + status,
+                success: function (response)
+                {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        });
+    }
+};
+var permissions={
+    init:function(){
+        $(document).ready(function(){
+            $(document).on('click','.rp',function(){
+                $.LoadingOverlay("show");
+                var id = $(this).attr('role_id');
+                var permission_id = $(this).val();
+                var val='';
+                if ($(this).is(':checked')) {
+            val = "yes";
+        } else {
+            val = "no";
+        }
+            $.ajax({
+                url: baseurl + '/permissions/assign_permissions_by_role',
+                type: 'POST',
+                data: 
+                    "role_id=" + id + '&permission_id=' + permission_id  + '&val=' + val
+                
+            }).done(function(response) {
+                $.LoadingOverlay("hide");
+                alert('Success');
+                location.reload(true);
+           
+            });
+            });
+        });
+
+    }
+};
 var orders={
     /*
      * Stock validation functions:
@@ -213,10 +168,32 @@ var orders={
      * - For validation only: call orders.validateStockOnly()
      */
     init:function(){
+     $(document).ready(function(){
+        // $('.ci').hide();
+           $("#shopid").select2({
+  theme: "classic"
+});
+$(".dp").datepicker({
+                        dateFormat: "yy-mm-dd",
+                    });
+     });
         $(document).on('keypress', '.number', function (e) {
          if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
         //   $("#errmsg").html("Number Only").stop().show().fadeOut("slow");
         return false;
+        }
+        
+    });
+        $(document).on('change', '.pm', function (ele) {
+            var id = $(this).val();
+           if (id==('Check')) {
+             $(".dp").datepicker({
+                        dateFormat: "yy-mm-dd",
+                    });
+            $('.ci').show();
+        } else {
+            $('.ci').hide();
+        
         }
         
     });

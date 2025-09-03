@@ -83,13 +83,13 @@
             <!-- pulled right: nav area -->
             <div class="pull-right">
                 <!-- collapse menu button -->
-                <div id="hide-menu" class="btn-header pull-right">
+                <!-- <div id="hide-menu" class="btn-header pull-right">
                     <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-                </div>
+                </div> -->
                 <!-- end collapse menu -->
                 <!-- #MOBILE -->
                 <!-- Top menu profile link : this shows only when top menu is active -->
-                <ul id="" class="header-dropdown-list hidden-xs padding-5">
+                <!-- <ul id="" class="header-dropdown-list hidden-xs padding-5">
                     <li class="">
                         <a href="#" class="dropdown-toggle no-margin userdropdown " data-toggle="dropdown"> 
                             <?php
@@ -118,33 +118,33 @@
                             <li class="divider"></li>
                         </ul>
                     </li>
-                </ul>
+                </ul> -->
                 <div id="logout" class="btn-header transparent pull-right">
                     <span> <a href="<?php echo site_url(); ?>/login/logout" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
                 </div>
                 <!-- fullscreen button -->
-                <div id="fullscreen" class="btn-header transparent pull-right">
+                <!-- <div id="fullscreen" class="btn-header transparent pull-right">
                     <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
-                </div>
+                </div> -->
                 <!-- end fullscreen button -->
                 <!-- multiple lang dropdown : find all flags in the flags page -->
                 <ul class="header-dropdown-list hidden-xs">
                     <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+                        <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
                             <img src="<?php echo base_url(); ?>assets/template/img/blank.gif" class="flag flag-<?php echo $cflag; ?>" alt="United States"> 
                             <span>
                                 <?php echo $cflagText; ?> 
                             </span> 
                             <i class="fa fa-angle-down"></i> 
-                        </a>
-                        <ul class="dropdown-menu pull-right">
+                        </a> -->
+                        <!-- <ul class="dropdown-menu pull-right">
                             <li class="">
                                 <a onclick="return chnagetoenglish();" href="javascript:void(0);"><img src="<?php echo base_url(); ?>assets/template/img/blank.gif" class="flag flag-us" alt="United States"> English</a>
                             </li>
                             <li class="">
                                 <a onclick="return chnagetoarabic();" href="javascript:void(0);"><img src="<?php echo base_url(); ?>assets/template/img/blank.gif" class="flag flag-ae" alt="United Arab Emirates"> عربي</a>
                             </li>
-                        </ul>
+                        </ul> -->
                     </li>
                 </ul>
                 <!-- end multiple lang -->
@@ -156,10 +156,10 @@
             <div class="login-info">
                 <span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
                     <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-                        <img src="<?php echo base_url(); ?>script/timthumb.php?src=<?php echo base_url(); ?>images/user/<?php echo $user_image_h; ?>&w=30&h=0&zc=20&q=1" alt="me" class="online" /> 
-                        <span>
+                        <!-- <img src="<?php echo base_url(); ?>script/timthumb.php?src=<?php echo base_url(); ?>images/user/<?php echo $user_image_h; ?>&w=30&h=0&zc=20&q=1" alt="me" class="online" />  -->
+                        <!-- <span>
                             <?php echo $name = $this->session->userdata('name'); ?>
-                        </span>
+                        </span> -->
                         <i class="fa fa-angle-down"></i>
                     </a> 
                 </span>
@@ -176,7 +176,7 @@
                 <ul>                     
                     <!-- 2 is for users management-->
                     <?php  if (has_module_permission('users')&&$this->session->userdata('uid')&&$this->session->userdata('logged_in')){ ?>
-                    <?php  { ?>
+                    <?php if (has_module_permission('users')&&$this->session->userdata('uid')&&$this->session->userdata('logged_in')) { ?>
                         <?php } ?> 
                         <li class="">      
                             <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">manage all users</span></a>
@@ -189,7 +189,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="">      
+                        <!-- <li class="">      
                             <a href="#" title="Units"><i class="fa fa-lg fa-fw fa-cubes"></i> <span class="menu-item-parent">manage units</span></a>
                             <ul>
                                 <li class="">
@@ -199,18 +199,31 @@
                                     <a href="<?php echo site_url(); ?>/units/addunit" title="Add Unit"><span class="menu-item-parent">Add Unit</span></a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
                     <?php } ?> 
 
                        <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
-                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage all Shops</span></a>
+                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage all Suppliers</span></a>
                             <ul>
                                 <li class="">
-                                    <a href="<?php echo site_url(); ?>/shops" title="All Shops"><span class="menu-item-parent">All shops</span></a>
+                                    <a href="<?php echo site_url(); ?>/shops/suppliers" title=""><span class="menu-item-parent">All suppliers</span></a>
                                 </li>
                                 <li class="">
-                                    <a href="<?php echo site_url(); ?>/shops/addnewshop" title="New Shop"><span class="menu-item-parent">Add Shop</span></a>
+                                    <a href="<?php echo site_url(); ?>/shops/addnewsupplier" title=""><span class="menu-item-parent">Add Suppliers</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?> 
+                       <?php  if ($this->session->userdata('logged_in')){ ?>
+                        <li class="">      
+                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage all Crediters</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/shops/crediters" title=""><span class="menu-item-parent">All crediters</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/shops/addnewcrediter" title=""><span class="menu-item-parent">Add Crediter</span></a>
                                 </li>
                             </ul>	
                         </li> 
@@ -241,7 +254,7 @@
                             </ul>	
                         </li> 
                     <?php } ?>
-                     <?php  if ($this->session->userdata('logged_in')){ ?>
+                     <!-- <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage all Brands</span></a>
                             <ul>
@@ -318,7 +331,7 @@
                                 </li>
                             </ul>	
                         </li> 
-                    <?php } ?>
+                    <?php } ?> -->
                     <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="javasript:;" title=""><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Manage Stock</span></a>
@@ -366,7 +379,7 @@
                             <a href="<?php echo site_url(); ?>/orders/ledger" title="Invoice Ledger"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Invoice Ledger</span></a>
                         </li>
                     <?php } ?>
-                    <?php  if ($this->session->userdata('logged_in')){ ?>
+                    <!-- <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
                             <a href="#" title="Reports"><i class="fa fa-lg fa-fw fa-chart-bar"></i> <span class="menu-item-parent">Reports & Analytics</span></a>
                             <ul>
@@ -393,7 +406,7 @@
                                 </li>
                             </ul>
                         </li>
-                    <?php } ?>
+                    <?php } ?> -->
                     <!-- Profile Management -->
                     <?php if ($this->session->userdata('logged_in')) { ?>
                         <li class="">
@@ -401,6 +414,49 @@
                             <ul>
                                 <li class="">
                                     <a href="<?php echo site_url(); ?>/profile" title="All Profiles"><span class="menu-item-parent">All Profiles</span></a>
+                                </li>
+                             
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->session->userdata('logged_in')) { ?>
+                        <li class="">
+                            <a href="#" title="country Management"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">Country Management</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries" title="All Countries"><span class="menu-item-parent">All Countries</span></a>
+                                    </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries/addcountry" title="Add Country"><span class="menu-item-parent">Add Country</span></a>
+                                </li>
+                             
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->session->userdata('logged_in')) { ?>
+                        <li class="">
+                            <a href="#" title="state Management"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">State Management</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries/all_states" title="All Profiles"><span class="menu-item-parent">All states</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries/addstate" title=""><span class="menu-item-parent">Add state</span></a>
+                                </li>
+                             
+                            </ul>
+                            
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->session->userdata('logged_in')) { ?>
+                        <li class="">
+                            <a href="#" title="city Management"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">City Management</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries/all_cities" title=""><span class="menu-item-parent">All Cities</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/countries/addcity" title=""><span class="menu-item-parent">Add City</span></a>
                                 </li>
                              
                             </ul>
@@ -462,27 +518,32 @@
                 <?php
                 $CI =& get_instance();
                 $CI->load->model('stocks/m_stocks', 'model_stock');
-                $out_of_stock_items = $CI->model_stock->get_items_with_zero_stock();
                 $not_exists_items = $CI->model_stock->get_items_not_exists_in_stock();
+                $out_of_stock_items = $CI->model_stock->get_items_with_low_stock();
+                $out_of_stock_packing = $CI->model_stock->get_packings_with_low_stock();
+                $not_exists_packing = $CI->model_stock->packing_not_exists_in_stock();
             
                 if (!empty($out_of_stock_items)):
                 ?>
-                <div id="global-stock-warning" class=" mywarning  alert alert-danger" style="margin-left: 220px;
+                <div id="global-stock-warning" class="   alert alert-danger" style="margin-left: 220px;
             padding: 0;
             padding-bottom: 0px;
             padding-bottom: 52px;
             position: relative;display:none;">
-                    <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following items are out of stock!</h4>
-                    <ul style="margin-bottom:0;">
-                        <?php foreach($out_of_stock_items as $item): ?>
-                            <li><?php echo $item['item_name']; ?></li>
-                        <?php endforeach; ?>
+                        <?php if($out_of_stock_items){ ?>
+                            <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following items are low in stock!</h4>
+                            <ul style="margin-bottom:0;">
+
+                          <?php foreach($out_of_stock_items as $item): ?>
+                            <li><?php echo $item['item_name']; ?>(<?php echo $item['balance']; ?>)</li>
+                        <?php endforeach;
+                        } ?>
                     </ul>
                 </div>
                 <?php endif; ?>
-              <?php  if (!empty($not_exists_items)):
+                         <?php  if (!empty($not_exists_items)):
                 ?>
-                <div id="global-stock-warning" class="alert alert-danger" style="margin-left: 220px;
+                <div id="global-stock-warning" class="mywarning alert alert-danger" style="margin-left: 220px;
             padding: 0;
             padding-bottom: 0px;
             padding-bottom: 52px;
@@ -495,4 +556,40 @@
                     </ul>
                 </div>
                 <?php endif; ?>
+
+
+                
+
+
+              <?php  if (!empty($out_of_stock_packing)):
+                ?>
+                <div id="global-stock-warning2" class="alert alert-danger" style="margin-left: 220px;
+            padding: 0;
+            padding-bottom: 0px;
+            padding-bottom: 52px;
+            position: relative;display:none">
+                    <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following packings are low in stock!</h4>
+                    <ul style="margin-bottom:0;">
+                        <?php foreach($out_of_stock_packing as $packing): ?>
+                            <li><?php echo $name = getpackingtitle($packing['packing_fk']);  ?>(<?php echo $packing['balance']; ?>)</li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+              <?php  if (!empty($not_exists_packing)):
+                ?>
+                <div id="global-stock-warning3" class="alert alert-danger" style="margin-left: 220px;
+            padding: 0;
+            padding-bottom: 0px;
+            padding-bottom: 52px;
+            position: relative;display:none">
+                    <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following packings are not exits in stock!</h4>
+                    <ul style="margin-bottom:0;">
+                        <?php foreach($not_exists_packing as $packing): ?>
+                            <li><?php echo $name = getpackingtitle($packing);  ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+             
             </div>

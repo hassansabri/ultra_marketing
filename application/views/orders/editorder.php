@@ -60,8 +60,8 @@
                                  </div>
                                 
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    Suppliers : <select id="shopid" name="shopid" class="form-control" required>
-                                        <option value="">Please select a shop</option>
+                                    Suppliers : <select id="shopid" name="shopid" required>
+                                        <option value="">Please select a suplier</option>
                                         <?php if (isset($all_shops) && $all_shops) { ?>
                                             <?php foreach ($all_shops as $value) { ?>
                                                 <option value="<?php echo $value["shop_id"]; ?>" <?php echo (isset($current_shop_id) && $current_shop_id == $value["shop_id"]) ? 'selected' : ''; ?>><?php echo $value["shop_name"]; ?></option>
@@ -208,6 +208,7 @@
 </div>
 
 <script>
+    
         const availableTags = [
       <?php 
          if (sizeof($all_items) > 0) { ?>

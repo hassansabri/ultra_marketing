@@ -732,50 +732,63 @@ class orders extends CI_Controller {
             $shop_id = $this->input->post('shop_id');
             $order_number = $this->input->post('order_number');
             $date = $this->input->post('date');
+            $type = $this->input->post('type');
             $amount = $this->input->post('amount');
             $payment_method = $this->input->post('payment_method');
             $remarks = $this->input->post('remarks');
-            $type = $this->input->post('type');
+            $check_number = $this->input->post('check_number');
+            $bank_name = $this->input->post('bank_name');
 
             // Insert ledger entry
-            $this->model_order->insertOrderLedger($shop_id, $order_number, $date, $amount, $payment_method, $remarks, $type);
-
-            // Update order with shop_id if not already set
-            if ($shop_id) {
-                $this->model_order->updateOrderShop($order_number, $shop_id);
+           $ledger_fk =  $this->model_order->insertOrderLedger($shop_id, $order_number, $date, $amount, $payment_method, $remarks, $type);
+            if($payment_method == 'Check'){
+                 $date =  date('Y-m-d',strtotime($this->input->post('date')));
+                 $this->model_order->deleteOrderLedgerDetail($ledger_fk,$shop_id, $order_number, $date,$amount,$check_number,$bank_name);
+                 $this->model_order->insertOrderLedgerDetail($ledger_fk,$shop_id, $order_number, $date,$amount,$check_number,$bank_name);
+                 // delete and insert order ledger detail
+                 
+                }
+                // Update order with shop_id if not already set
+                // if ($shop_id) {
+                    //     $this->model_order->updateOrderShop($order_number, $shop_id);
+                    // }
+                    
+                    redirect(site_url('orders/ledger'));
+                }
+                $this->data['all_shops'] = $this->model_order->getallshops();
+                $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
+                $this->load->view('orders/ledger_crud', $this->data);
             }
-
-            redirect(site_url('orders/ledger'));
-        }
-        $this->data['all_shops'] = $this->model_order->getallshops();
-        $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
-        $this->load->view('orders/ledger_crud', $this->data);
-    }
-
-    // Edit a ledger entry (GET for form, POST for update)
-    public function edit_ledger_entry($ledger_id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $shop_id = $this->input->post('shop_id');
-            $order_number = $this->input->post('order_number');
-
-            $data = array(
-                'order_number' => $order_number,
-                'date' => $this->input->post('date'),
-                'amount' => $this->input->post('amount'),
-                'payment_method' => $this->input->post('payment_method'),
-                'remarks' => $this->input->post('remarks'),
-                'type' => $this->input->post('type'),
-            );
+            
+            // Edit a ledger entry (GET for form, POST for update)
+            public function edit_ledger_entry($ledger_id) {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $shop_id = $this->input->post('shop_id');
+                    $order_number = $this->input->post('order_number');
+                    
+                    $data = array(
+                        'order_number' => $order_number,
+                        'date' => $this->input->post('date'),
+                        'amount' => $this->input->post('amount'),
+                        'payment_method' => $this->input->post('payment_method'),
+                        'remarks' => $this->input->post('remarks'),
+                        'type' => $this->input->post('type'),
+                    );
+                    $this->model_order->deleteOrderLedgerDetail($ledger_id);
+                    $date =  date('Y-m-d',strtotime($this->input->post('check_date')));
+                 
+                    $this->model_order->insertOrderLedgerDetail($ledger_id,$shop_id, $order_number, $date,$this->input->post('amount'),$this->input->post('check_number'),$this->input->post('bank_name'));
             $this->model_order->updateOrderLedger($ledger_id, $data);
 
             // Update order with shop_id if provided
-            if ($shop_id) {
-                $this->model_order->updateOrderShop($order_number, $shop_id);
-            }
+            // if ($shop_id) {
+            //     $this->model_order->updateOrderShop($order_number, $shop_id);
+            // }
 
-            redirect(site_url('orders/ledger'));
+            redirect(site_url('orders/edit_ledger_entry/'.$ledger_id));
         }
         $this->data['entry'] = $this->model_order->getOrderLedgerById($ledger_id);
+        $this->data['entry_detail'] = $this->model_order->getOrderLedgerDetailById($ledger_id);
         $this->data['all_shops'] = $this->model_order->getallshops();
         $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
         $this->load->view('orders/ledger_crud', $this->data);

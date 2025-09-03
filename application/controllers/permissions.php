@@ -158,10 +158,8 @@ class Permissions extends CI_Controller {
         $data['title'] = 'Module Management';
         $data['modules'] = $this->m_permissions->getAllModules();
         $data['permission_summary'] = $this->m_permissions->getPermissionSummary();
-        
-        $this->load->view('common/header', $data);
         $this->load->view('permissions/modules', $data);
-        $this->load->view('common/footer');
+        
     }
     
     public function add_module() {
@@ -178,7 +176,7 @@ class Permissions extends CI_Controller {
                     'module_icon' => $this->input->post('module_icon'),
                     'module_order' => $this->input->post('module_order'),
                     'is_active' => $this->input->post('is_active') ? 1 : 0,
-                    'created_by' => $this->session->userdata('user_id'),
+                   // 'created_by' => $this->session->userdata('users_id'),
                     'created_at' => date('Y-m-d H:i:s')
                 ];
                 
@@ -194,10 +192,8 @@ class Permissions extends CI_Controller {
         }
         
         $data['title'] = 'Add New Module';
-        
-        $this->load->view('common/header', $data);
         $this->load->view('permissions/add_module', $data);
-        $this->load->view('common/footer');
+        
     }
     
     public function edit_module($module_id) {
@@ -404,7 +400,7 @@ class Permissions extends CI_Controller {
     
     public function role_permissions($role_id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $permission_ids = $this->input->post('permissions');
+            $permission_ids = $this->input->post('permissions_id');
             
             if ($this->m_permissions->updateRolePermissions($role_id, $permission_ids, $this->session->userdata('user_id'))) {
                 $this->session->set_flashdata('success', 'Role permissions updated successfully.');
@@ -420,6 +416,8 @@ class Permissions extends CI_Controller {
         $data['all_permissions'] = $this->m_permissions->getAllPermissions();
         $data['modules'] = $this->m_permissions->getAllModules();
         $data['permission_summary'] = $this->m_permissions->getRolePermissionSummary($role_id);
+        $data['permission_id'] = $this->m_permissions->getRolePermissionid($role_id);
+        $data['role_id'] = $role_id;
         
         if (!$data['role']) {
             $this->session->set_flashdata('error', 'Role not found.');
@@ -587,6 +585,13 @@ class Permissions extends CI_Controller {
         $module_id = $this->input->post('module_id');
         $permissions = $this->m_permissions->getPermissionsByModule($module_id);
         echo json_encode($permissions);
+    }
+    public function assign_permissions_by_role() {
+        $permission_ids = $this->input->post('permission_id');
+        $role_id = $this->input->post('role_id');
+        $val = $this->input->post('val');
+       $flag =  $this->m_permissions->updateRolePermissions2($role_id, $permission_ids, $this->session->userdata('user_id'),$val);
+        echo json_encode($flag);
     }
     
     public function check_permission() {
