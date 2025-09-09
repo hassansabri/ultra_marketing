@@ -485,6 +485,12 @@ class m_stocks extends CI_Model {
         $query = $this->db->get("packing_options");
         return $query->result_array();
     }
+    public function getallpackings2(){
+        $this->db->where('status',1);
+        $this->db->where('packing_id !=',4);
+        $query = $this->db->get("packing_options");
+        return $query->result_array();
+    }
     public function getallattributes(){
 
     }
@@ -604,7 +610,7 @@ class m_stocks extends CI_Model {
         $this->db->select('stocks.item_fk, items.item_name, stocks.balance');
         $this->db->from('stocks');
         $this->db->join('items', 'items.item_id = stocks.item_fk');
-        $this->db->where('stocks.balance <', 100);
+        $this->db->where('stocks.balance <', 5);
         $this->db->or_where('stocks.balance', "");
         $this->db->group_by('stocks.item_fk');
         $query = $this->db->get();
@@ -614,7 +620,7 @@ class m_stocks extends CI_Model {
         $this->db->select('packingstocks.packing_fk, packing_options.packing_title,packingstocks.balance');
         $this->db->from('packingstocks');
         $this->db->join('packing_options', 'packing_options.packing_id = packingstocks.packing_fk');
-        $this->db->where('packingstocks.balance <', 100);
+        $this->db->where('packingstocks.balance <', 5);
         $this->db->or_where('packingstocks.balance', "");
         $this->db->group_by('packingstocks.packing_fk');
         $query = $this->db->get();
@@ -640,6 +646,7 @@ class m_stocks extends CI_Model {
     public function packing_not_exists_in_stock(){
         $notexists = array();
        $items= $this->getallpackings();
+       $items= $this->getallpackings2();
        if(isset($items)){
         foreach($items as $value){
             $this->db->select('packing_fk');

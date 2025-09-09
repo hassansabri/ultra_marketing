@@ -419,6 +419,8 @@ $this->db->where("packing_id", $packing_id);
                     "order_price" => $value["order_price"],
                     "created_date" => $value["created_date"],
                     "packing_id" => $value["packing_id"],
+                    "packing_quantity" => $value["packing_quantity"],
+                    "packing_limit" => $value["packing_limit"],
                     "shop_id" => isset($value["shop_id"]) ? $value["shop_id"] : null,
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
                     "item_detail" => $this->getitemdetail($value["item_fk"])
@@ -453,7 +455,7 @@ $this->db->where("packing_id", $packing_id);
        //  echo $this->db->last_query();
             return $query->result_array();
     }
-    public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id,$packing_id){
+    public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id,$packing_id,$packing_quantity,$bigpolythenelimit){
         $data=array(
             'order_number'=>$order_number,
             'item_fk'=>$item_id,
@@ -461,6 +463,8 @@ $this->db->where("packing_id", $packing_id);
             'order_price'=>$order_price,
             'shop_id'=>$shop_id,
             'packing_id'=>$packing_id,
+            'packing_quantity'=>$packing_quantity,
+            'packing_limit'=>$bigpolythenelimit,
             'created_by'=>$this->session->userdata('uid')
         );
          $this->db->insert('orders',$data);
@@ -517,19 +521,35 @@ public function ifitemalredyexist($order_number, $item_id){
         return false;
       }
 }
-public function updateOrderQuantityAndPrice($shopid,$order_number, $item_id, $quantity,$price,$packing_id) {
-    echo $item_id;
+public function showlastprice($shop_id,$item_id,$order_number){
+    $this->db->select('order_price');
+    $this->db->where('order_number !=', $order_number);
+    $this->db->where('item_fk', $item_id);
+    $this->db->where('shop_id', $shop_id);
+    $this->db->where('order_status', 'confirm');
+    // $this->db->order_by('order_id', 'asc');
+    $this->db->limit(1);
+        $query = $this->db->get("orders");
+        $dat=$query->result_array();
+      if (sizeof($query->result_array()) > 0) {
+        return $dat[0]['order_price'];
+      }else{
+        return 0;
+      }
+}
+public function updateOrderQuantityAndPrice($shopid,$order_number, $item_id, $quantity,$price,$packing_id,$packing_quantity,$packing_limit) {
+    // echo $packing_quantity;
     $exist = $this->ifitemalredyexist($order_number, $item_id);
     if(!$exist){
         // insert order with default values
-        $this->insertdraftorder($order_number, $item_id, $quantity, $price,$shopid,$packing_id);
+        $this->insertdraftorder($order_number, $item_id, $quantity, $price,$shopid,$packing_id,$packing_quantity,$packing_limit);
     }
     $item_ids = array();
     // $this->insertdraftorder($order_number,$item_id);
     $now = date('Y-m-d H:i:s');
     $this->db->where('order_number', $order_number);
     $this->db->where('item_fk', $item_id);
-    $this->db->update('orders', array('order_quantity' => $quantity,'order_price' => $price,'modified_date'=>$now,'packing_id' => $packing_id));
+    $this->db->update('orders', array('order_quantity' => $quantity,'order_price' => $price,'modified_date'=>$now,'packing_id' => $packing_id,'packing_quantity' => $packing_quantity,'packing_limit' => $packing_limit));
     $afftectedRows = $this->db->affected_rows();
     if ($afftectedRows) {   
             $item_ids[]=$item_id;
@@ -585,6 +605,12 @@ public function updateorder($order_number){
 
     // Fetch all ledger entries for an order
     public function getOrderLedger($order_number) {
+        $this->db->where('order_number', $order_number);
+        $this->db->order_by('date', 'ASC');
+        $query = $this->db->get('order_ledger');
+        return $query->result_array();
+    }
+    public function getOrderLedgerByItem($order_number,$item_id=null) {
         $this->db->where('order_number', $order_number);
         $this->db->order_by('date', 'ASC');
         $query = $this->db->get('order_ledger');
@@ -687,24 +713,30 @@ public function updateorder($order_number){
         // Prepare stock check data
         $stock_data = array(
             'packing_fk' => $packing_id,
-            'brand_fk' => isset($attributes['brand_fk']) ? $attributes['brand_fk'] : 0,
-            'grade_fk' => isset($attributes['grade_fk']) ? $attributes['grade_fk'] : 0,
-            'model_fk' => isset($attributes['model_fk']) ? $attributes['model_fk'] : 0,
-            'size_fk' => isset($attributes['size_fk']) ? $attributes['size_fk'] : 0,
-            'type_fk' => isset($attributes['type_fk']) ? $attributes['type_fk'] : 0,
-            'colour_fk' => isset($attributes['colour_fk']) ? $attributes['colour_fk'] : 0,
-            'unit_fk' => isset($attributes['unit_fk']) ? $attributes['unit_fk'] : 0
+            // 'brand_fk' => isset($attributes['brand_fk']) ? $attributes['brand_fk'] : 0,
+            // 'grade_fk' => isset($attributes['grade_fk']) ? $attributes['grade_fk'] : 0,
+            // 'model_fk' => isset($attributes['model_fk']) ? $attributes['model_fk'] : 0,
+            // 'size_fk' => isset($attributes['size_fk']) ? $attributes['size_fk'] : 0,
+            // 'type_fk' => isset($attributes['type_fk']) ? $attributes['type_fk'] : 0,
+            // 'colour_fk' => isset($attributes['colour_fk']) ? $attributes['colour_fk'] : 0,
+            // 'unit_fk' => isset($attributes['unit_fk']) ? $attributes['unit_fk'] : 0
         );
         
         $stock_result = $this->model_packingstock->checkstock($stock_data);
+       // print_r($stock_result);
         if (!empty($stock_result)) {
             if(($packing_id == '4')){
                 foreach($stock_result as $sr){
-                    
-$available_stock[]=$sr[0]['balance'];
-}
-            }else{
-                $available_stock = $stock_result[0]['balance'];
+        if(isset($sr[0]['balance'])){
+            $available_stock[]=$sr[0]['balance'];
+
+        }else{
+            
+            $available_stock = 0;
+        }           
+    }
+}else{
+                $available_stock = 0;
             }
    // print_r($available_stock);
             return array(
@@ -791,7 +823,7 @@ $available_stock[]=$sr[0]['balance'];
         
         return $success;
     }
-    public function deductStockForPacking($order_number,$packing_id) {
+    public function deductStockForPacking($order_number,$packing_id,$packing_quantity,$packing_limit) {
         $this->load->model('stocks/m_packing_stocks', 'model_packingstock');
         
         // Get order details
@@ -801,7 +833,8 @@ $available_stock[]=$sr[0]['balance'];
         }
         
         $success = true;
-        
+//         print_r($order_info);
+// exit;
         foreach ($order_info as $order_item) {
             $quantity = $order_item['order_quantity'];
             
@@ -817,7 +850,7 @@ $available_stock[]=$sr[0]['balance'];
                     'shop_fk' => 0,
                     'unit_fk' => 0
                 );
-                if (!$this->model_packingstock->deductStock($stock_data, $quantity)) {
+                if (!$this->model_packingstock->deductStock($stock_data, $quantity,$packing_quantity,$packing_limit)) {
                     $success = false;
                 }
             
@@ -911,7 +944,8 @@ $available_stock[]=$sr[0]['balance'];
         
         foreach ($order_info as $order_item) {
             $packing_id = $order_item['packing_id'];
-            $quantity = $order_item['order_quantity'];
+            $quantity = $order_item['packing_quantity'];
+            $packing_limit = $order_item['packing_limit'];
             
             // Get order details for attributes
             $order_details = $this->getorderdetail($order_number, $packing_id);
@@ -929,7 +963,7 @@ $available_stock[]=$sr[0]['balance'];
                     // 'unit_fk' => 0
                 );
                 
-                if (!$this->model_packingstock->restorePackingStock($stock_data, $quantity)) {
+                if (!$this->model_packingstock->restorePackingStock($stock_data, $quantity,$packing_limit)) {
                     $success = false;
                 }
             } else {

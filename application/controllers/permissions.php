@@ -210,7 +210,7 @@ class Permissions extends CI_Controller {
                     'module_icon' => $this->input->post('module_icon'),
                     'module_order' => $this->input->post('module_order'),
                     'is_active' => $this->input->post('is_active') ? 1 : 0,
-                    'updated_by' => $this->session->userdata('user_id'),
+                    // 'updated_by' => $this->session->userdata('user_id'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ];
                 

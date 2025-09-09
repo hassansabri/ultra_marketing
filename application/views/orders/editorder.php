@@ -78,21 +78,23 @@
 
 <div id="abcdiv" class="m<?php echo $oi['item_id']?>">
     <div class="main-div" >
-        <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>
-        <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
-      <input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>"/>
-        <select name="packing_option_<?php echo $oi['item_id']; ?>" class="packing-select" data-item-id="<?php echo $oi['item_id']; ?>" style="color: #000;">
-            <option value="">Select packing option</option>
-            <?php if (isset($all_packing_options) && $all_packing_options) { ?>
-                <?php foreach ($all_packing_options as $option) { ?>
-                    <option value="<?php echo $option["packing_id"]; ?>" <?php if($oi['packing_id'] == $option['packing_id'])echo 'selected'; ?>>
-                        <?php echo $option["packing_title"]; ?> 
+        <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>&nbsp;<i class="shopLastPrice fa fa-info" style="cursor:pointer;width: 15px;font-weight: bold;"></i>
+        <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;max-width:15%" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
+      <input class="number" placeholder="item price" style="color: #000;max-width:15%" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>"/>
+      <select name="packing_option_<?php echo $oi['item_id']; ?>" class="packing-select" data-item-id="<?php echo $oi['item_id']; ?>" style="color: #000;">
+          <option value="">Select packing option</option>
+          <?php if (isset($all_packing_options) && $all_packing_options) { ?>
+            <?php foreach ($all_packing_options as $option) { ?>
+                <option value="<?php echo $option["packing_id"]; ?>" <?php if($oi['packing_id'] == $option['packing_id'])echo 'selected'; ?>>
+                    <?php echo $option["packing_title"]; ?> 
                     
-                    </option>
+                </option>
                 <?php } ?>
-            <?php } ?>
-        </select>
-        <span class="cross-span" onclick="orders.remove_order('<?php echo $oi['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
+                <?php } ?>
+            </select>
+            <input class='number' type="number" id="packing_quantity" name="packing_quantity[]" placeholder="packing quantity" value="<?php echo isset($oi['packing_quantity']) ? $oi['packing_quantity'] : 0; ?>" style="color: #000;max-width:15%"/>
+                <span id="limit_<?php echo $oi['item_id']; ?>" style="<?php if($oi['packing_id']==4){}else{ echo 'display:none';} ?> "><input value="<?php echo isset($oi['packing_limit']) ? $oi['packing_limit'] : ''; ?>" class='number' type="number" id="bigpolythenelimit" name="bigpolythenelimit[]" placeholder="big polythene default limit 10" style="color: #000;max-width:20%;"/></span>
+            <span class="cross-span" onclick="orders.remove_order('<?php echo $oi['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
                  <input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $oi['item_id']?>"/></div>
                 </div>
              <div class="col-md-2 hidee" id="grade-div">
@@ -189,6 +191,9 @@
 				<div class="form-actions">
 					<div class="row">
 						<div class="col-md-12">
+                            <button class="btn btn-default" type="button" id="or">
+								 Review order
+							</button>
 							<button class="btn btn-default" type="button" id="of">
 								<i class="fa fa-eye"></i>
 								<?php echo $this->lang->line("Submit"); ?>
@@ -198,6 +203,21 @@
 				</div>
 			</div>
 		</form>
+        <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div id="html">
+                            agag
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
                     <!-- <div id="myorder"></div> -->
                     
                 </div>

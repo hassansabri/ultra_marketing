@@ -19,7 +19,7 @@
                         </header>
                         <div>
                             <div class="widget-body">
-                                <?php echo form_open('permissions/edit_module', ['class' => 'form-horizontal', 'id' => 'add-module-form']); ?>
+                                <?php echo form_open('permissions/edit_module/'. $module['module_id'], ['class' => 'form-horizontal', 'id' => 'add-module-form']); ?>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">Module Name <span class="text-danger">*</span></label>
                                     <div class="col-md-9">
@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                     <div class="col-md-9 col-md-offset-3">
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-save"></i> Create Module
+                                            <i class="fa fa-save"></i> Update Module
                                         </button>
                                         <a href="<?php echo site_url('permissions/modules'); ?>" class="btn btn-default">
                                             <i class="fa fa-times"></i> Cancel

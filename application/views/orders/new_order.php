@@ -55,7 +55,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="myorder">
                         <div class="well">
                             <div class="widget-body">
-                                <?php $order_number = rand(0000,9999); ?>
+                                
                                  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                      Type Item Name : <input class="tags"/><span> 
                                 
@@ -85,15 +85,37 @@
 					<div class="row">
 						<div class="col-md-12">
 							<input type="hidden" value="sbmt" name="button" />
-							<button class="btn btn-default" type="button" id="of">
+							<button class="btn btn-default" type="button" id="of" disabled>
 								<i class="fa fa-eye"></i>
-								<?php echo $this->lang->line("Submit"); ?>
+								 <?php echo $this->lang->line("Submit"); ?>
+							</button>
+							<button class="btn btn-default" type="button" id="ou">
+								<i class="fa fa-eye"></i>
+								 Update
+							</button>
+							<button class="btn btn-default" type="button" id="or">
+								 Review order
 							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
+         <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div id="html">
+                            agag
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
                     <!-- <div id="myorder"></div> -->
                     
                 </div>

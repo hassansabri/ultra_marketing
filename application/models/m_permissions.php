@@ -282,6 +282,7 @@ class M_permissions extends CI_Model {
     public function updateRolePermissions($role_id, $permission_ids, $granted_by = null) {
         // Remove all existing permissions
         $this->db->where('role_id', $role_id);
+        $this->db->where('role_id', 'DESC');
         $this->db->delete('role_permissions');
         
         // Add new permissions
@@ -518,7 +519,10 @@ class M_permissions extends CI_Model {
         $this->db->where('module_name', $module_name);
         $this->db->where('permission_type', $permission_type);
         $result = $this->db->get()->row_array();
-        return $result['count'] > 0;
+        //echo $this->db->last_query();
+        $c = $result['count'];
+        if($c > 0 ){ return true; }else{ return false; }
+        // return $result['count'];
     }
     
     // =====================================================

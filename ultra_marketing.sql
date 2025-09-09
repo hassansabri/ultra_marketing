@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2025 at 04:12 PM
+-- Generation Time: Sep 09, 2025 at 09:13 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -107,7 +107,7 @@ INSERT INTO `cities` (`city_id`, `city_name`, `city_status`, `created_date`, `mo
 (3, 'Faisalabad', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 2),
 (4, 'Karachi', 1, '2025-05-14 16:10:43', '2025-05-14 16:10:43', 1, 4),
 (5, 'Rashidiya', 1, '2025-08-27 01:31:54', '2025-08-26 22:42:17', 3, 6),
-(6, 'Landhi', 1, '2025-08-29 21:11:48', '2025-08-29 18:11:54', 1, 4);
+(6, 'Landhi', 1, '2025-08-29 21:11:48', '2025-09-04 06:16:52', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -341,7 +341,10 @@ INSERT INTO `modules` (`module_id`, `module_name`, `module_display_name`, `modul
 (9, 'reports', 'Reports & Analytics', 'View reports and analytics', 'fa-chart-bar', 9, 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28'),
 (10, 'ledger', 'Ledger Management', 'Manage financial ledgers', 'fa-book', 10, 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28'),
 (11, 'settings', 'System Settings', 'System configuration and settings', 'fa-cog', 11, 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28'),
-(12, 'profile', 'Profile Management', 'User profile and preferences', 'fa-user', 12, 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28');
+(12, 'profile', 'Profile Management', 'User profile and preferences', 'fa-user', 12, 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28'),
+(28, 'Countries', 'Country', 'aaa', NULL, NULL, 1, '2025-08-31 14:48:28', '2025-08-31 17:48:28'),
+(29, 'States', 'State', 'state', NULL, NULL, 1, '2025-09-03 15:39:20', '2025-09-03 20:57:16'),
+(30, 'Cities', 'cities', 'cities', NULL, NULL, 1, '2025-09-04 00:24:49', '2025-09-04 00:25:36');
 
 -- --------------------------------------------------------
 
@@ -351,42 +354,21 @@ INSERT INTO `modules` (`module_id`, `module_name`, `module_display_name`, `modul
 
 CREATE TABLE `orders` (
   `order_id` bigint(20) NOT NULL,
-  `order_number` bigint(20) NOT NULL,
-  `item_fk` bigint(20) NOT NULL,
-  `shop_id` bigint(20) NOT NULL,
+  `order_number` bigint(20) DEFAULT NULL,
+  `item_fk` bigint(20) DEFAULT NULL,
+  `shop_id` bigint(20) DEFAULT NULL,
   `order_quantity` int(11) DEFAULT NULL,
   `order_price` int(11) DEFAULT NULL,
   `order_status` enum('draft','confirm','cancelled','complete') NOT NULL DEFAULT 'draft',
-  `created_by` bigint(20) NOT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
   `confirm_by` bigint(20) DEFAULT NULL,
-  `packing_type` bigint(20) NOT NULL DEFAULT 1,
-  `packing_id` bigint(20) NOT NULL DEFAULT 1,
+  `packing_type` bigint(20) DEFAULT 1,
+  `packing_id` bigint(20) DEFAULT 1,
+  `packing_quantity` int(11) DEFAULT NULL,
+  `packing_limit` int(11) DEFAULT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`order_id`, `order_number`, `item_fk`, `shop_id`, `order_quantity`, `order_price`, `order_status`, `created_by`, `confirm_by`, `packing_type`, `packing_id`, `created_date`, `modified_date`) VALUES
-(2, 9714, 10, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:29:17', '2025-08-24 08:43:32'),
-(3, 8878, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:32:12', '2025-08-24 08:43:17'),
-(4, 6072, 12, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:34:03', '2025-08-24 08:42:29'),
-(5, 7198, 13, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:35:25', '2025-08-24 08:42:42'),
-(6, 2009, 14, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:36:29', '2025-08-24 08:42:03'),
-(7, 4647, 15, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:37:50', '2025-08-24 08:42:16'),
-(8, 7307, 16, 1, 1, 1, 'cancelled', 5, 5, 1, 1, '2025-08-24 11:39:02', '2025-08-24 08:42:57'),
-(9, 3014, 10, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:41:35', '2025-08-24 08:59:58'),
-(10, 869, 12, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:48:23', '2025-08-24 08:59:06'),
-(11, 2472, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:50:00', '2025-08-24 08:59:40'),
-(12, 3815, 13, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:51:50', '2025-08-24 09:01:05'),
-(13, 224, 14, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:53:40', '2025-08-24 08:58:36'),
-(14, 710, 15, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:55:36', '2025-08-24 08:58:51'),
-(15, 2235, 16, 1, 1, 1, 'cancelled', 5, 5, 1, 2, '2025-08-24 11:56:40', '2025-08-24 08:59:23'),
-(16, 3888, 10, 1, 11, 1, 'cancelled', 5, 5, 1, 4, '2025-08-24 21:44:05', '2025-08-24 18:47:41'),
-(17, 747, 11, 1, 1, 1, 'cancelled', 5, 5, 1, 4, '2025-08-24 22:44:31', '2025-08-24 19:47:17'),
-(18, 9626, 16, 1, 11, 1, 'confirm', 5, 5, 1, 4, '2025-08-29 21:13:37', '2025-08-29 21:13:37');
 
 -- --------------------------------------------------------
 
@@ -420,14 +402,6 @@ CREATE TABLE `order_ledger` (
   `shop_id` bigint(20) NOT NULL,
   `remarks` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `order_ledger`
---
-
-INSERT INTO `order_ledger` (`ledger_id`, `order_number`, `date`, `amount`, `payment_method`, `type`, `shop_id`, `remarks`) VALUES
-(25, 9626, '2025-08-29 21:13:37', 11, 'Check', 'debit', 1, 'xyz'),
-(29, 9626, '2025-08-29 19:44:00', 1, 'Check', 'credit', 1, '');
 
 -- --------------------------------------------------------
 
@@ -482,9 +456,9 @@ CREATE TABLE `packingstocks` (
 --
 
 INSERT INTO `packingstocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `packing_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:23:34', '2025-08-24 11:23:34'),
-(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'opening_balance', '2025-08-24', 98, '2025-08-24 11:24:08', '2025-08-24 11:24:08'),
-(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 0, 'opening_balance', '2025-08-24', 89, '2025-08-24 11:24:30', '2025-08-24 11:24:30'),
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'opening_balance', '2025-08-24', 99, '2025-08-24 11:23:34', '2025-08-24 11:23:34'),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'opening_balance', '2025-08-24', 88, '2025-08-24 11:24:08', '2025-08-24 11:24:08'),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 0, 'opening_balance', '2025-08-24', 88, '2025-08-24 11:24:30', '2025-08-24 11:24:30'),
 (4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:25:00', '2025-08-24 11:25:00');
 
 -- --------------------------------------------------------
@@ -510,53 +484,6 @@ CREATE TABLE `packingstocks_logs` (
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `packingstocks_logs`
---
-
-INSERT INTO `packingstocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `packing_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:23:34', '2025-08-24 11:23:34'),
-(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:24:08', '2025-08-24 11:24:08'),
-(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:24:30', '2025-08-24 11:24:30'),
-(4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 0, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:25:00', '2025-08-24 11:25:00'),
-(5, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:29:44', '2025-08-24 11:29:44'),
-(6, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:32:34', '2025-08-24 11:32:34'),
-(7, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:34:28', '2025-08-24 11:34:28'),
-(8, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:35:45', '2025-08-24 11:35:45'),
-(9, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:36:54', '2025-08-24 11:36:54'),
-(10, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:38:10', '2025-08-24 11:38:10'),
-(11, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:39:31', '2025-08-24 11:39:31'),
-(12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:03', '2025-08-24 11:42:03'),
-(13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:16', '2025-08-24 11:42:16'),
-(14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:29', '2025-08-24 11:42:29'),
-(15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:42', '2025-08-24 11:42:42'),
-(16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:57', '2025-08-24 11:42:57'),
-(17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:43:17', '2025-08-24 11:43:17'),
-(18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:43:32', '2025-08-24 11:43:32'),
-(19, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:45:48', '2025-08-24 11:45:48'),
-(20, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:48:41', '2025-08-24 11:48:41'),
-(21, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:50:19', '2025-08-24 11:50:19'),
-(22, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:52:08', '2025-08-24 11:52:08'),
-(23, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:54:04', '2025-08-24 11:54:04'),
-(24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:55:54', '2025-08-24 11:55:54'),
-(25, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:57:05', '2025-08-24 11:57:05'),
-(26, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:58:37', '2025-08-24 11:58:37'),
-(27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:58:51', '2025-08-24 11:58:51'),
-(28, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:06', '2025-08-24 11:59:06'),
-(29, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:23', '2025-08-24 11:59:23'),
-(30, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:40', '2025-08-24 11:59:40'),
-(31, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:40', '2025-08-24 11:59:40'),
-(32, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:58', '2025-08-24 11:59:58'),
-(33, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 12:01:05', '2025-08-24 12:01:05'),
-(34, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 2, '2025-08-24 21:44:25', '2025-08-24 21:44:25'),
-(35, 0, 0, 0, 0, 0, 0, 0, 3, 0, 'stock_deduction', '2025-08-24', 11, '2025-08-24 21:44:25', '2025-08-24 21:44:25'),
-(36, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 'restore_stock', '2025-08-24', 2, '2025-08-24 21:47:41', '2025-08-24 21:47:41'),
-(37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 0, 'restore_stock', '2025-08-24', 11, '2025-08-24 21:47:41', '2025-08-24 21:47:41'),
-(38, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 22:45:24', '2025-08-24 22:45:24'),
-(39, 0, 0, 0, 0, 0, 0, 0, 3, 0, 'stock_deduction', '2025-08-24', 1, '2025-08-24 22:45:24', '2025-08-24 22:45:24'),
-(42, 0, 0, 0, 0, 0, 0, 0, 2, 0, 'stock_deduction', '2025-08-29', 2, '2025-08-29 21:14:05', '2025-08-29 21:14:05'),
-(43, 0, 0, 0, 0, 0, 0, 0, 3, 0, 'stock_deduction', '2025-08-29', 11, '2025-08-29 21:14:05', '2025-08-29 21:14:05');
 
 -- --------------------------------------------------------
 
@@ -689,7 +616,20 @@ INSERT INTO `permissions` (`permission_id`, `module_id`, `permission_name`, `per
 (115, 12, 'profile_view', 'View Profile', 'View own profile', 'view', 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28', 0),
 (116, 12, 'profile_edit', 'Edit Profile', 'Edit own profile', 'edit', 1, '2025-07-20 02:23:28', '2025-07-20 02:23:28', 0),
 (148, 2, 'user', 'user', 'user', 'view', 1, '2025-07-21 14:16:51', '2025-07-21 17:16:51', 5),
-(149, 2, 'user_view', 'user', 'user', 'view', 1, '2025-07-22 11:26:06', '2025-07-22 14:26:06', 5);
+(149, 2, 'user_view', 'user', 'user', 'view', 1, '2025-07-22 11:26:06', '2025-07-22 14:26:06', 5),
+(151, 28, 'add country', 'add country', 'add country', 'create', 1, '2025-08-31 17:55:31', '2025-08-31 22:32:27', 5),
+(152, 28, 'edit country', 'edit country', 'xyz', 'edit', 1, '2025-08-31 19:26:07', '2025-08-31 22:26:07', 5),
+(153, 28, 'view country', 'view country', 'xyz', 'view', 1, '2025-08-31 19:29:05', '2025-08-31 22:29:05', 5),
+(154, 28, 'app country', 'app country', 'xyz', 'approve', 1, '2025-08-31 19:30:52', '2025-08-31 22:30:52', 5),
+(155, 29, 'view_state', ' viw state', 'view state', 'view', 1, '2025-09-03 15:49:25', '2025-09-03 18:49:25', 5),
+(156, 29, 'edit_state', 'edit state', 'edit state', 'edit', 1, '2025-09-03 15:51:15', '2025-09-03 18:51:15', 5),
+(157, 29, 'add_state', 'add state', 'add state', 'create', 1, '2025-09-03 15:53:14', '2025-09-03 18:53:14', 5),
+(158, 29, 'delete_state', 'delete state', 'delete state', 'delete', 1, '2025-09-03 15:55:18', '2025-09-04 00:46:59', 5),
+(159, 29, 'app_state', 'app state', 'app state', 'approve', 1, '2025-09-04 00:01:35', '2025-09-04 03:01:35', 5),
+(160, 30, 'viw_city', 'view cities', 'view cities', 'view', 1, '2025-09-04 00:29:12', '2025-09-04 03:29:12', 5),
+(161, 30, 'edit_city', 'edit city', 'edit city', 'edit', 1, '2025-09-04 00:31:04', '2025-09-04 03:31:04', 5),
+(162, 30, 'create_city', 'create city', 'create city', 'create', 1, '2025-09-04 00:33:09', '2025-09-04 03:33:09', 5),
+(163, 30, 'app_city', 'approve city', 'approve the city', 'approve', 1, '2025-09-04 00:35:02', '2025-09-04 03:35:02', 5);
 
 -- --------------------------------------------------------
 
@@ -739,12 +679,12 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`role_id`, `role_name`, `role_description`, `role_color`, `is_active`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin', 'Full system access with all permissions', NULL, 1, 0, '2025-07-20 02:18:40', '2025-07-20 02:18:40'),
-(2, 'Admin', 'Administrative access with most permissions', NULL, 0, 0, '2025-07-20 02:18:40', '2025-07-20 11:33:09'),
-(3, 'Manager', 'Management level access with limited administrative permissions', NULL, 0, 0, '2025-07-20 02:18:40', '2025-07-20 12:01:19'),
-(4, 'User', 'Standard user access with basic permissions', NULL, 1, 0, '2025-07-20 02:18:40', '2025-07-20 02:18:40'),
-(5, 'Viewer', 'Read-only access to view data only', NULL, 1, 0, '2025-07-20 02:18:40', '2025-07-20 02:18:40'),
-(7, 'cus', 'custom asdasdasd', NULL, 1, 5, '2025-07-22 15:58:22', '2025-07-22 18:58:22');
+(1, 'Super Admin', 'Full system access with all permissions', NULL, 1, 5, '2025-07-20 02:18:40', '2025-08-31 21:17:48'),
+(2, 'Admin', 'Administrative access with most permissions', NULL, 0, 5, '2025-07-20 02:18:40', '2025-08-31 21:17:40'),
+(3, 'Manager', 'Management level access with limited administrative permissions', NULL, 0, 5, '2025-07-20 02:18:40', '2025-08-31 21:17:34'),
+(4, 'User', 'Standard user access with basic permissions', NULL, 1, 5, '2025-07-20 02:18:40', '2025-08-31 21:17:29'),
+(5, 'Viewer', 'Read-only access to view data only', NULL, 1, 5, '2025-07-20 02:18:40', '2025-08-31 21:17:19'),
+(7, 'custom', 'custom test', NULL, 1, 5, '2025-07-22 15:58:22', '2025-08-31 17:39:52');
 
 -- --------------------------------------------------------
 
@@ -918,7 +858,25 @@ INSERT INTO `role_permissions` (`role_permission_id`, `role_id`, `permission_id`
 (165, 3, 112, '2025-07-20 02:23:28', NULL),
 (166, 3, 114, '2025-07-20 02:23:28', NULL),
 (167, 3, 115, '2025-07-20 02:23:28', NULL),
-(168, 3, 116, '2025-07-20 02:23:28', NULL);
+(168, 3, 116, '2025-07-20 02:23:28', NULL),
+(202, 1, 149, '2025-09-01 01:35:42', 5),
+(203, 1, 148, '2025-09-01 01:37:01', 5),
+(206, 7, 153, '2025-09-01 01:39:32', 5),
+(213, 1, 155, '2025-09-04 02:30:21', 5),
+(214, 1, 153, '2025-09-04 02:30:40', 5),
+(215, 1, 156, '2025-09-04 02:30:54', 5),
+(216, 1, 152, '2025-09-04 02:31:10', 5),
+(217, 1, 158, '2025-09-04 02:31:26', 5),
+(218, 1, 154, '2025-09-04 02:31:43', 5),
+(219, 1, 157, '2025-09-04 02:31:55', 5),
+(220, 1, 151, '2025-09-04 02:32:06', 5),
+(221, 7, 155, '2025-09-04 02:53:49', 5),
+(222, 1, 159, '2025-09-04 03:04:13', 5),
+(223, 7, 160, '2025-09-04 03:35:54', 5),
+(224, 1, 163, '2025-09-04 03:36:43', 5),
+(225, 1, 162, '2025-09-04 03:36:56', 5),
+(226, 1, 160, '2025-09-04 03:37:12', 5),
+(227, 1, 161, '2025-09-04 04:07:45', 5);
 
 -- --------------------------------------------------------
 
@@ -962,8 +920,9 @@ CREATE TABLE `shops` (
 --
 
 INSERT INTO `shops` (`shop_id`, `shop_name`, `shop_owner`, `shop_number`, `shop_email`, `shop_country`, `shop_state`, `shop_city`, `shop_address`, `shop_latitude`, `shop_longitude`, `shop_status`, `shop_type`, `created_date`, `modified_date`) VALUES
-(1, 'Ajman Traders (SMC PVT LTD)', 'MUHAMMAD NADEEM SABRI', '65', 'TIPULAHORI@GMAIL.COM', 1, 4, 0, 'Eros Complex, Barnes St, Preedy Quarters Karachi, Pakistan', 24.8644, 67.0208, 1, 'supplier', '2025-08-02 18:56:46', '2025-08-02 16:01:06'),
-(2, 'xyz', 'xyz', '00000000', 'test1', 1, 2, 1, 'Plot 111, Block G Tariq Garden, Lahore, Pakistan', 31.4199, 74.2535, 1, 'crediter', '2025-08-17 20:25:12', '2025-08-17 17:25:15');
+(1, 'Ajman Traders (SMC PVT LTD)', 'MUHAMMAD NADEEM SABRI', '65', 'TIPULAHORI@GMAIL.COM', 1, 4, 4, 'Eros Complex, Barnes St, Preedy Quarters Karachi, Pakistan', 24.8644, 67.0208, 1, 'supplier', '2025-08-02 18:56:46', '2025-08-02 16:01:06'),
+(2, 'Crediter test', 'xyz', '00000000', 'test1', 1, 2, 1, 'Plot 111, Block G Tariq Garden, Lahore, Pakistan', 31.4199, 74.2535, 1, 'crediter', '2025-08-17 20:25:12', '2025-08-17 17:25:15'),
+(3, 'Ajman Traders1', 'test', '00000000', 'test', 1, 4, 4, 'xyz', 123, 123, 0, 'supplier', '2025-08-31 06:19:23', '2025-08-31 03:22:06');
 
 -- --------------------------------------------------------
 
@@ -1046,12 +1005,12 @@ CREATE TABLE `stocks` (
 
 INSERT INTO `stocks` (`stocks_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
 (1, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:14:04', '2025-08-24 11:14:04'),
-(2, 0, 0, 0, 0, 0, 0, 0, 11, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:15:01', '2025-08-24 11:15:01'),
+(2, 0, 0, 0, 0, 0, 0, 0, 11, 2, 'opening_balance', '2025-08-24', 85, '2025-08-24 11:15:01', '2025-08-24 11:15:01'),
 (3, 0, 0, 0, 0, 0, 0, 0, 12, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:15:45', '2025-08-24 11:15:45'),
 (4, 0, 0, 0, 0, 0, 0, 0, 13, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:16:21', '2025-08-24 11:16:21'),
 (5, 0, 0, 0, 0, 0, 0, 0, 14, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:17:03', '2025-08-24 11:17:03'),
 (6, 0, 0, 0, 0, 0, 0, 0, 15, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:17:35', '2025-08-24 11:17:35'),
-(7, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'opening_balance', '2025-08-24', 89, '2025-08-24 11:18:10', '2025-08-24 11:18:10');
+(7, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'opening_balance', '2025-08-24', 204, '2025-08-24 11:18:10', '2025-08-24 11:18:10');
 
 -- --------------------------------------------------------
 
@@ -1076,52 +1035,6 @@ CREATE TABLE `stocks_logs` (
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `stocks_logs`
---
-
-INSERT INTO `stocks_logs` (`stocks_logs_id`, `brand_fk`, `grade_fk`, `model_fk`, `size_fk`, `type_fk`, `colour_fk`, `unit_fk`, `item_fk`, `shop_fk`, `stock_type`, `entry_date`, `balance`, `created_date`, `modified_date`) VALUES
-(1, 0, 0, 0, 0, 0, 0, 0, 10, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:14:04', '2025-08-24 11:14:04'),
-(2, 0, 0, 0, 0, 0, 0, 0, 11, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:15:01', '2025-08-24 11:15:01'),
-(3, 0, 0, 0, 0, 0, 0, 0, 12, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:15:45', '2025-08-24 11:15:45'),
-(4, 0, 0, 0, 0, 0, 0, 0, 13, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:16:21', '2025-08-24 11:16:21'),
-(5, 0, 0, 0, 0, 0, 0, 0, 14, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:17:04', '2025-08-24 11:17:04'),
-(6, 0, 0, 0, 0, 0, 0, 0, 15, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:17:35', '2025-08-24 11:17:35'),
-(7, 0, 0, 0, 0, 0, 0, 0, 16, 2, 'opening_balance', '2025-08-24', 100, '2025-08-24 11:18:10', '2025-08-24 11:18:10'),
-(9, 0, 0, 0, 0, 0, 0, 0, 10, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:29:44', '2025-08-24 11:29:44'),
-(10, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:32:34', '2025-08-24 11:32:34'),
-(11, 0, 0, 0, 0, 0, 0, 0, 12, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:34:28', '2025-08-24 11:34:28'),
-(12, 0, 0, 0, 0, 0, 0, 0, 13, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:35:45', '2025-08-24 11:35:45'),
-(13, 0, 0, 0, 0, 0, 0, 0, 14, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:36:54', '2025-08-24 11:36:54'),
-(14, 0, 0, 0, 0, 0, 0, 0, 15, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:38:10', '2025-08-24 11:38:10'),
-(15, 0, 0, 0, 0, 0, 0, 0, 16, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:39:31', '2025-08-24 11:39:31'),
-(16, 0, 0, 0, 0, 0, 0, 0, 14, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:03', '2025-08-24 11:42:03'),
-(17, 0, 0, 0, 0, 0, 0, 0, 15, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:16', '2025-08-24 11:42:16'),
-(18, 0, 0, 0, 0, 0, 0, 0, 12, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:29', '2025-08-24 11:42:29'),
-(19, 0, 0, 0, 0, 0, 0, 0, 13, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:42', '2025-08-24 11:42:42'),
-(20, 0, 0, 0, 0, 0, 0, 0, 16, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:42:57', '2025-08-24 11:42:57'),
-(22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:43:32', '2025-08-24 11:43:32'),
-(23, 0, 0, 0, 0, 0, 0, 0, 10, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:45:48', '2025-08-24 11:45:48'),
-(24, 0, 0, 0, 0, 0, 0, 0, 12, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:48:41', '2025-08-24 11:48:41'),
-(25, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:50:19', '2025-08-24 11:50:19'),
-(26, 0, 0, 0, 0, 0, 0, 0, 13, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:52:08', '2025-08-24 11:52:08'),
-(27, 0, 0, 0, 0, 0, 0, 0, 14, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:54:04', '2025-08-24 11:54:04'),
-(28, 0, 0, 0, 0, 0, 0, 0, 15, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:55:54', '2025-08-24 11:55:54'),
-(29, 0, 0, 0, 0, 0, 0, 0, 16, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 11:57:05', '2025-08-24 11:57:05'),
-(30, 0, 0, 0, 0, 0, 0, 0, 14, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:58:37', '2025-08-24 11:58:37'),
-(31, 0, 0, 0, 0, 0, 0, 0, 15, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:58:51', '2025-08-24 11:58:51'),
-(32, 0, 0, 0, 0, 0, 0, 0, 12, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:06', '2025-08-24 11:59:06'),
-(33, 0, 0, 0, 0, 0, 0, 0, 16, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:23', '2025-08-24 11:59:23'),
-(34, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:40', '2025-08-24 11:59:40'),
-(35, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:40', '2025-08-24 11:59:40'),
-(36, 0, 0, 0, 0, 0, 0, 0, 10, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 11:59:58', '2025-08-24 11:59:58'),
-(37, 0, 0, 0, 0, 0, 0, 0, 13, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 12:01:05', '2025-08-24 12:01:05'),
-(38, 0, 0, 0, 0, 0, 0, 0, 10, 1, 'stock_deduction', '2025-08-24', 11, '2025-08-24 21:44:25', '2025-08-24 21:44:25'),
-(39, 0, 0, 0, 0, 0, 0, 0, 10, 0, 'restore_stock', '2025-08-24', 11, '2025-08-24 21:47:41', '2025-08-24 21:47:41'),
-(40, 0, 0, 0, 0, 0, 0, 0, 11, 1, 'stock_deduction', '2025-08-24', 1, '2025-08-24 22:45:24', '2025-08-24 22:45:24'),
-(41, 0, 0, 0, 0, 0, 0, 0, 11, 0, 'restore_stock', '2025-08-24', 1, '2025-08-24 22:47:17', '2025-08-24 22:47:17'),
-(42, 0, 0, 0, 0, 0, 0, 0, 16, 1, 'stock_deduction', '2025-08-29', 11, '2025-08-29 21:14:05', '2025-08-29 21:14:05');
 
 -- --------------------------------------------------------
 
@@ -1204,7 +1117,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`users_id`, `user_name`, `name`, `user_type`, `email`, `password`, `gender`, `phone`, `user_image`, `passport_no`, `blood_group`, `emergency_number`, `designation`, `is_active`, `is_delete`, `created_date`, `modified_date`, `random_id`) VALUES
 (5, 'Hassan', 'Ultra Marketing', 'normal', 'hassan.life@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03234391439', '65882836.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1753788188, ''),
-(7, 'Muhammad Nadeem', 'Ultra Marketing', 'normal', 'tipulahore@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03114774666', '62452867.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1746458903, '');
+(7, 'Muhammad Nadeem', 'Ultra Marketing', 'normal', 'tipulahore@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03114774666', '62452867.jpg', '111', 's', '111', 'asdf', 1, 0, 0, 1746458903, ''),
+(8, 'Jibreelhassan', 'Jibreel Hassan', 'normal', 'jibreelhassan@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 1, '03136031994', '50905816.jpg', '0000000', 'B+', '0000000', 'Normal User', 1, 0, 0, 1756651776, '');
 
 -- --------------------------------------------------------
 
@@ -1335,7 +1249,8 @@ CREATE TABLE `user_roles` (
 
 INSERT INTO `user_roles` (`user_role_id`, `users_id`, `role_id`, `assigned_at`, `assigned_by`, `is_active`) VALUES
 (1, 5, 1, '2025-07-22 14:52:11', 5, 1),
-(6, 7, 1, '2025-07-29 12:37:34', 5, 1);
+(6, 7, 1, '2025-07-29 12:37:34', 5, 1),
+(7, 8, 7, '2025-08-31 14:44:03', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1662,13 +1577,13 @@ ALTER TABLE `items_attributes`
 -- AUTO_INCREMENT for table `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `order_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
@@ -1680,7 +1595,7 @@ ALTER TABLE `order_detail`
 -- AUTO_INCREMENT for table `order_ledger`
 --
 ALTER TABLE `order_ledger`
-  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `ledger_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `order_ledger_detail`
@@ -1698,7 +1613,7 @@ ALTER TABLE `packingstocks`
 -- AUTO_INCREMENT for table `packingstocks_logs`
 --
 ALTER TABLE `packingstocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `packing_options`
@@ -1716,7 +1631,7 @@ ALTER TABLE `payment_options`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT for table `profile`
@@ -1734,13 +1649,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `role_permissions`
 --
 ALTER TABLE `role_permissions`
-  MODIFY `role_permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
+  MODIFY `role_permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
 
 --
 -- AUTO_INCREMENT for table `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `shop_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sizes`
@@ -1764,7 +1679,7 @@ ALTER TABLE `stocks`
 -- AUTO_INCREMENT for table `stocks_logs`
 --
 ALTER TABLE `stocks_logs`
-  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `stocks_logs_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `types`
@@ -1782,7 +1697,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `users_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `users_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users_data`
@@ -1800,7 +1715,7 @@ ALTER TABLE `users_types`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

@@ -25,23 +25,24 @@ class m_packing_stocks extends CI_Model {
         $query = $this->db->get("packingstocks");
         return $query->result_array();
     }
-    public function deductStock($data, $quantity) {
+    public function deductStock($data, $quantity,$packing_quantity,$packing_limit=10) {
         // First check if we have enough stock
         
-         $current_stock = $this->checkstock($data);
-        // if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
-        //     return false; // No stock record found
-        // }
-        
+        // Calculate new balance
+        if(($data['packing_fk'] == '4')){
+           
+        $data['packing_fk']=2;
+            $current_stock = $this->checkstock($data);
+         //print_r($current_stock);
+        if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+            return false; // No stock record found
+        }
         $available_stock = $current_stock[0]['balance'];
         if ($available_stock < $quantity) {
             return false; // Insufficient stock
         }
-        
-        // Calculate new balance
-        if(($data['packing_fk'] == '4')){
-            $big = ceil($quantity/10) ;
-            $small = $quantity;
+            $big = ceil($packing_quantity/$packing_limit) ;
+            $small = $packing_quantity;
             $new_balance = $available_stock - $big;
             // Update stock with proper WHERE clause
             $data['packing_fk']=2;
@@ -55,19 +56,30 @@ class m_packing_stocks extends CI_Model {
         $this->db->insert('packingstocks_logs', $log_data);
 
             $new_balance = $available_stock - $small;
+
             // Update stock with proper WHERE clause
             $data['packing_fk']=3;
         $this->db->where('packing_fk', 3);
          $this->db->update('packingstocks', array('balance' => $new_balance));
         // // Log the deduction
         $log_data = $data;
-        $log_data['balance'] = $quantity; 
+        $log_data['balance'] = $packing_quantity; 
         $log_data['stock_type'] = 'stock_deduction';
         $log_data['entry_date'] = date('Y-m-d');
         $this->db->insert('packingstocks_logs', $log_data);
 
         }else{
-            $new_balance = $available_stock - $quantity;
+            $current_stock = $this->checkstock($data);
+         //print_r($current_stock);
+        if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
+            return false; // No stock record found
+        }
+        
+        $available_stock = $current_stock[0]['balance'];
+        if ($available_stock < $quantity) {
+            return false; // Insufficient stock
+        }
+            $new_balance = $available_stock - $packing_quantity;
         
         // Update stock with proper WHERE clause
         $this->db->where('packing_fk', $data['packing_fk']);
@@ -102,7 +114,7 @@ class m_packing_stocks extends CI_Model {
         // exit;
          // Log the deduction
         $log_data = $data;
-        $log_data['balance'] = $quantity; 
+        $log_data['balance'] = $packing_quantity; 
         $log_data['stock_type'] = 'stock_deduction';
         $log_data['entry_date'] = date('Y-m-d');
         $this->db->insert('packingstocks_logs', $log_data);
@@ -118,44 +130,27 @@ $this->db->select_sum('balance');
         return $query->result_array();
     }
     public function checkstock($data ){
+       //  print_r($data);
         $d=array();
-        if(($data['packing_fk'] == '4')){
-            $this->db->select_sum('balance');
-        $this->db->where('packing_fk', 2);
-        $query = $this->db->get("packingstocks");
-      $d= $flag1 =  $query->result_array();
-
-        $this->db->select_sum('balance');
-        $this->db->where('packing_fk', 3);
-        $query = $this->db->get("packingstocks");
-       $d= $flag2 = $query->result_array();
-        if(sizeof($flag1)>0 && sizeof($flag2)>0){
-            return $d;
-
-        }else{
-            return $d;
-        }
-        }else{
+      
+        
             $this->db->select_sum('balance');
         $this->db->where('packing_fk', $data['packing_fk']);
         $query = $this->db->get("packingstocks");
         return $query->result_array();
-        }
+        
         
     }
 
     public function addstock($data){
         $this->restorePackingStockForOrder($data,$data['balance']);
     }
-    public function restorePackingStock($data, $quantity){
-        $current_stock = $this->checkstock($data);
-                if (empty($current_stock) || !isset($current_stock[0]['balance'])) {
-
-                }else{
+    public function restorePackingStock($data, $quantity,$packing_limit=10){
+        
 if($data['packing_fk']=='4'){
    
                 $available_stock = $quantity;
-                 $big = ceil($available_stock/10) ;
+                 $big = ceil($available_stock/$packing_limit) ;
             $small = $quantity;
             // restore stock for big polythene
             $new_balance =  getpackingstockvaluebyid(2) + $big;
@@ -183,6 +178,7 @@ if($data['packing_fk']=='4'){
             $log_data['entry_date'] = date('Y-m-d');
             $this->db->insert('packingstocks_logs', $log_data);
                 }else{
+                    $current_stock = $this->checkstock($data);
  $available_stock = $current_stock[0]['balance'];
             $new_balance = $available_stock + $quantity;
             
@@ -199,7 +195,7 @@ if($data['packing_fk']=='4'){
                 }
                 return true;
 
-    }
+    
 }
         public function restorePackingStockForOrder($data, $quantity) {
         // Get current stock

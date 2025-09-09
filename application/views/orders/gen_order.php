@@ -3,11 +3,11 @@
         
 		
 		<div class="main-div" style="">
-            <div class="sub-div"><?php echo $item_detail[0]['item_name']?>
+            <div class="sub-div"><?php echo $item_detail[0]['item_name']?>&nbsp;<i class="shopLastPrice fa fa-info" style="cursor:pointer;width: 15px;font-weight: bold;"></i>
 			<input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/>
-			<input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;" name="item_qty[]" type="number" min="1" value="1"/>
-			<input class="number" placeholder="item price" style="color: #000;" name="item_price[]" value=""/>
-			<select name="packing_option_<?php echo $item_detail[0]['item_id']; ?>" class=" packing-select" data-item-id="<?php echo $item_detail[0]['item_id']; ?>" style="color: #000;">
+			<input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;max-width:15%" name="item_qty[]" type="number" min="1" value="1"/>
+			<input class="number" placeholder="item price" style="color: #000;max-width:15%" name="item_price[]" value=""/>
+			<select name="packing_option_<?php echo $item_detail[0]['item_id']; ?>" class="packing-select" data-item-id="<?php echo $item_detail[0]['item_id']; ?>" style="color: #000;">
 				<option value="">Select packing option</option>
 				<?php if (isset($all_packing_options) && $all_packing_options) { ?>
 					<?php foreach ($all_packing_options as $option) { ?>
@@ -18,9 +18,9 @@
 					<?php } ?>
 				<?php } ?>
 			</select>
-			<div class="packing-description" id="packing_desc_<?php echo $item_detail[0]['item_id']; ?>" style="display: none; margin-top: 5px; font-size: 11px; color: #666;">
-				<strong>Description:</strong> <span class="desc-text"></span>
-			</div>
+			<span><input class='number' type="number" id="packing_quantity" name="packing_quantity[]" placeholder="packing quantity" style="color: #000;max-width:15%;"/></span>
+			
+                <span id="limit_<?php echo $item_detail[0]['item_id'];?>" style="display:none"><input class='number' type="number" id="bigpolythenelimit" name="bigpolythenelimit[]" placeholder="big polythene default limit 10" style="color: #000;max-width:20%;"/></span>
 			<span class="cross-span" onclick="orders.remove_order('<?php echo $item_detail[0]['item_id']?>','<?php echo $order_number; ?>');"><i class="fa fa-remove"></i></span>
 		</div>
             </div>

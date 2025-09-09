@@ -9,10 +9,10 @@ var hasvalue_global = false;
   // Your code to be executed after 5 seconds
   html = $("#global-stock-warning").html() ;
   html2 = $("#global-stock-warning2").html() ;
-      $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning").html()+'</div>');
-      $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning2").html()+'</div>');
-      $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning3").html()+'</div>');
-      $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
+  //    $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning").html()+'</div>');
+   //   $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning2").html()+'</div>');
+    //  $('#main').prepend('<div class="myalert alert alert-danger">'+$("#global-stock-warning3").html()+'</div>');
+     // $('#main').prepend('<div class="myalert alert alert-danger">'+$(".mywarning").html()+'</div>');
     $('.myalert').show();
 }, 1000); // 5000 milliseconds = 5 seconds
     });
@@ -168,6 +168,22 @@ var orders={
      * - For validation only: call orders.validateStockOnly()
      */
     init:function(){
+        $(document).on('click', '.shopLastPrice', function (ele) {
+             $.LoadingOverlay("show");
+        var id = $(this).val();
+            $.ajax({
+                url: baseurl + '/orders/showlastprice',
+                type: 'POST',
+              data: 'order_number='+ $("#order_number").val() + '&shop_id=' + $("#shopid").val() + '&item_id=' + $(this).closest('.main-div').find('input[name="item_ids[]"]').val(),
+            }).done(function(response) {
+                $.LoadingOverlay("hide");
+             //   console.log(response);
+             var obj = JSON.parse(response);//
+            
+            alert(obj);
+            });
+        
+    });
      $(document).ready(function(){
         // $('.ci').hide();
            $("#shopid").select2({
@@ -279,17 +295,133 @@ $(".dp").datepicker({
     });
     
     // Real-time validation for shop selection
-    $(document).on('change', '#shopid', function() {
-      
+    $(document).on('change', '.packing-select', function() {
+        var item_id = $(this).closest('.main-div').find('input[name="item_ids[]"]').val();
+      if($(this).val()==4){
+        $('#limit_'+item_id).show();
+      }else{
+        $('#limit_'+item_id).hide();
+      }
     });
     
 
+    $(document).on('click','#ou',function(){
+        // Check if any items are added to order
+    var itemIds = $("input[name='item_ids[]']");
+    if (itemIds.length === 0) {
+        alert('Please add at least one item to the order');
+        //  $(this).css('border-color', 'red');
+        return false;
+    }
+        var shopSelect = $('#shopid');
+  if (!shopSelect.val() || shopSelect.val() === '') {
+      $('#shop-error').show();
+      shopSelect.css('border-color', 'red');
+      return false
+      
+  } else {
+      $('#shop-error').hide();
+      shopSelect.css('border-color', '');
+  }
+  $.LoadingOverlay("show");
+        $.ajax({
+            url: baseurl + '/orders/neworderupdate',
+             data: $("#orderForm").serialize(),
+                type: 'post'
+        }).done(function (msg) {
+            $.LoadingOverlay("hide");
+            var obj = JSON.parse(msg);
+            //alert(obj);
+        });
+        $('#of').prop('disabled',false);
+    });
+    $(document).on('click','#or',function(event){
+        $('#ou').click();
+        flag=true;
+        // Check if any items are added to order
+        var itemIds = $("input[name='item_ids[]']");
+        if (itemIds.length === 0) {
+            alert('Please add at least one item to the order');
+            //  $(this).css('border-color', 'red');
+            return false;
+        }
+        var shopSelect = $('#shopid');
+        if (!shopSelect.val() || shopSelect.val() === '') {
+            $('#shop-error').show();
+            shopSelect.css('border-color', 'red');
+            return false;
+            
+        } else {
+            $('#shop-error').hide();
+            shopSelect.css('border-color', '');
+        }
+        $('input[name="item_qty[]"]').each(function() {
+
+       var qty = $(this).val();
+       
+               if (!qty || qty <= 0) {
+                   $(this).css('border-color', 'red');
+                   flag=false;
+                } else {
+                    $(this).css('border-color', '');
+                }
+            });
+            $('input[name="item_price[]"]').each(function() {
+                
+                var qty = $(this).val();
+                if (!qty || qty <= 0) {
+                    $(this).css('border-color', 'red');
+                    flag=false;
+                } else {
+                    $(this).css('border-color', '');
+                }
+            });
+             $("select.packing-select").each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+            flag = false;
+        }else{
+
+            $(el).css('border-color', '');
+        }
+        
+    });
+    $('input[name="packing_quantity[]"]').each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+            flag = false;
+        }else{
+
+            $(el).css('border-color', '');
+        }
+        
+    });
+            if(flag){
+
+                $.LoadingOverlay("show");
+    
+      $('#showModal').modal();
+            $.ajax({
+                url: baseurl + '/orders/neworderreview',
+                 data: 'order_number='+ $("#order_number").val(),
+                    type: 'post'
+            }).done(function (msg) {
+                $.LoadingOverlay("hide");
+                var obj = JSON.parse(msg);
+                $('#html').html(obj);
+                // alert(obj);
+            });
+            }
+    });
     $(document).on('click','#of',function(){
         var flag=true;
         var shopSelect = $('#shopid');
   if (!shopSelect.val() || shopSelect.val() === '') {
       $('#shop-error').show();
       shopSelect.css('border-color', 'red');
+      return false
       
   } else {
       $('#shop-error').hide();
@@ -322,7 +454,7 @@ $(".dp").datepicker({
         if (!val || val === "") {
             $(el).css('border-color', 'red');
             flag = false;
-        if( $("select.packing-select").val()=='4'){}
+        if( $(val).val()=='4'){}
         } else {
             $(el).css('border-color', '');
         }
@@ -333,6 +465,7 @@ $(".dp").datepicker({
             //  e.preventDefault(); // Always prevent default submission
             
             if(flag){
+                $('#ou').click();
                 $('#orderForm').trigger('submit');
 
             }

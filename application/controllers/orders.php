@@ -28,26 +28,27 @@ class orders extends CI_Controller {
     }
 
     public function index() {
+        $this->data['order_number'] = rand(0000,9999);
         $this->data['all_items'] = $this->model_order->getAllItems();
         $this->data["all_brands"] = $this->model_order->getallbrands();
         $this->data["all_shops"] = $this->model_order->getallshops();
         $this->data['all_packing_options'] = $this->model_order->getAllPackingOptions();
+        $this->model_order->insertdraftorder($this->data['order_number'], 0,0, 0, 0,0, null, null);
         $this->load->view('orders/new_order', $this->data);
     }
-
     public function show_invoice($order_number = null) {
         // If no order number provided, redirect to draft orders
         if (!$order_number) {
             redirect(site_url() . 'orders/draftorders');
         }
-
+        
         // Get order information
         $this->data['order_info'] = $this->model_order->getOrder($order_number);
         $this->data['order_number'] = $order_number;
-
+        
         // Get profile details for company information
         $this->data['profile'] = $this->model_order->getprofiledetail();
-
+        
         // Get packing information for the order
         //  $this->data['item_packing'] = $this->model_order->getItemPackingInfo($this->data['order_info'][0]['itemidS']);
         // Fetch shop info for the order (get shop_id from first order_info row)
@@ -60,123 +61,123 @@ class orders extends CI_Controller {
             }
         }
         $this->data['shop_info'] = $shop_info;
-
+        
         // Get order details for each item
         $this->data['order_details'] = array();
         if($this->data['shop_info']){
-
+            
             foreach ($this->data['order_info'] as $oi) {
                 $item_id = $oi['item_id'];
                 $order_details = $this->model_order->getorderdetail($order_number, $item_id);
     
                 // Get item details
                 $item_detail = $this->model_order->getitemdetail($item_id);
-    
+                
                 // Organize order details by attribute type
                 $organized_details = array();
                 foreach ($order_details as $detail) {
                     $attribute_type = $detail['attribute_type'];
                     $attribute_fk = $detail['attribute_fk'];
                     $quantity = $detail['attribute_quantity'];
-    
+                    
                     // Get attribute details based on type
                     switch ($attribute_type) {
                         case 'grade':
                             $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
                             break;
-                        case 'model':
-                            $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
-                            break;
-                        case 'size':
-                            $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
-                            break;
-                        case 'type':
-                            $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
-                            break;
-                        case 'colour':
-                            $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
-                            break;
-                        case 'unit':
-                            $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
-                            break;
-                        case 'packing':
-                            $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
-                            break;
-                        default:
-                            $attribute_detail = array();
-                    }
-    
-                    if (!isset($organized_details[$attribute_type])) {
-                        $organized_details[$attribute_type] = array();
-                    }
-                    $organized_details[$attribute_type][] = array(
-                        'detail' => $attribute_detail,
-                        'quantity' => $quantity
-                    );
-                }
-    
-                $this->data['order_details'][$item_id] = array(
-                    'item_detail' => $item_detail[0],
-                    'attributes' => $organized_details
-                );
-            }
-        }
-
-        // Fetch ledger entries for the order
-        $this->data['order_ledger'] = $this->model_order->getOrderLedger($order_number);
-
-        // Fetch shop ledger entries if shop info is available
-        $this->data['shop_ledger'] = array();
-        if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
-            $this->data['shop_ledger'] = $this->model_order->getShopLedger($this->data['order_info'][0]['shop_id']);
-        }
-
-        $this->load->view("orders/invoice", $this->data);
-    }
-
-    public function initorder() {
-        $item_id = $this->input->post('item_id');
-        $this->data['flag'] = $this->input->post('flag');
-        $this->data['order_number'] = $this->input->post('order_number');
-        $attribute_fk = $this->model_order->getitemattributes($item_id);
-
-
-        // print_r($attribute_fk);
-        if ($attribute_fk) {
-            foreach ($attribute_fk[0] as $value2) {
-                $this->data['brands'][] = $this->model_order->getbranddetail($value2, '1');
-            }
-        }
-// print_r($attribute_fk[1]);
-        if ($attribute_fk[0]) {
-            foreach ($attribute_fk[0] as $value) {
-                $this->data['grades'][] = $this->model_order->getgradedetail($value, '1');
-            }
-        }
-
-        if ($attribute_fk[1]) {
-            foreach ($attribute_fk[1] as $value) {
-                $this->data['models'][] = $this->model_order->getmodeldetail($value, '1');
-            }
-        }
-        if ($attribute_fk[2]) {
-            foreach ($attribute_fk[2] as $value) {
-                $this->data['sizes'][] = $this->model_order->getsizedetail($value, '1');
-            }
-        }
-        if ($attribute_fk[3]) {
-            foreach ($attribute_fk[3] as $value) {
-                $this->data['types'][] = $this->model_order->gettypedetail($value, '1');
-            }
-        }
-        if ($attribute_fk[4]) {
-            foreach ($attribute_fk[4] as $value) {
-                $this->data['colours'][] = $this->model_order->getcolourdetail($value, '1');
-            }
-        }
-        if ($attribute_fk[5]) {
-            foreach ($attribute_fk[5] as $value) {
-                $this->data['units'][] = $this->model_order->getunitdetail($value, '1');
+                            case 'model':
+                                $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
+                                break;
+                                case 'size':
+                                    $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
+                                    break;
+                                    case 'type':
+                                        $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
+                                        break;
+                                        case 'colour':
+                                            $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
+                                            break;
+                                            case 'unit':
+                                                $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                                                break;
+                                                case 'packing':
+                                                    $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
+                                                    break;
+                                                    default:
+                                                    $attribute_detail = array();
+                                                }
+                                                
+                                                if (!isset($organized_details[$attribute_type])) {
+                                                    $organized_details[$attribute_type] = array();
+                                                }
+                                                $organized_details[$attribute_type][] = array(
+                                                    'detail' => $attribute_detail,
+                                                    'quantity' => $quantity
+                                                );
+                                            }
+                                            
+                                            $this->data['order_details'][$item_id] = array(
+                                                'item_detail' => $item_detail[0],
+                                                'attributes' => $organized_details
+                                            );
+                                        }
+                                    }
+                                    
+                                    // Fetch ledger entries for the order
+                                    $this->data['order_ledger'] = $this->model_order->getOrderLedger($order_number);
+                                    
+                                    // Fetch shop ledger entries if shop info is available
+                                    $this->data['shop_ledger'] = array();
+                                    if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
+                                        $this->data['shop_ledger'] = $this->model_order->getShopLedger($this->data['order_info'][0]['shop_id']);
+                                    }
+                                    
+                                    $this->load->view("orders/invoice", $this->data);
+                                }
+                                
+                                public function initorder() {
+                                    $item_id = $this->input->post('item_id');
+                                    $this->data['flag'] = $this->input->post('flag');
+                                    $this->data['order_number'] = $this->input->post('order_number');
+                                    $attribute_fk = $this->model_order->getitemattributes($item_id);
+                                    
+                                    
+                                    // print_r($attribute_fk);
+                                    if ($attribute_fk) {
+                                        foreach ($attribute_fk[0] as $value2) {
+                                            $this->data['brands'][] = $this->model_order->getbranddetail($value2, '1');
+                                        }
+                                    }
+                                    // print_r($attribute_fk[1]);
+                                    if ($attribute_fk[0]) {
+                                        foreach ($attribute_fk[0] as $value) {
+                                            $this->data['grades'][] = $this->model_order->getgradedetail($value, '1');
+                                        }
+                                    }
+                                    
+                                    if ($attribute_fk[1]) {
+                                        foreach ($attribute_fk[1] as $value) {
+                                            $this->data['models'][] = $this->model_order->getmodeldetail($value, '1');
+                                        }
+                                    }
+                                    if ($attribute_fk[2]) {
+                                        foreach ($attribute_fk[2] as $value) {
+                                            $this->data['sizes'][] = $this->model_order->getsizedetail($value, '1');
+                                        }
+                                    }
+                                    if ($attribute_fk[3]) {
+                                        foreach ($attribute_fk[3] as $value) {
+                                            $this->data['types'][] = $this->model_order->gettypedetail($value, '1');
+                                        }
+                                    }
+                                    if ($attribute_fk[4]) {
+                                        foreach ($attribute_fk[4] as $value) {
+                                            $this->data['colours'][] = $this->model_order->getcolourdetail($value, '1');
+                                        }
+                                    }
+                                    if ($attribute_fk[5]) {
+                                        foreach ($attribute_fk[5] as $value) {
+                                            $this->data['units'][] = $this->model_order->getunitdetail($value, '1');
             }
         }
         $this->data["item_id"] = $item_id;
@@ -185,10 +186,10 @@ class orders extends CI_Controller {
         $html = $this->load->view('orders/gen_order', $this->data, true);
         echo json_encode($html);
     }
-
+    
     public function allattributes($item_id = false) {
         $attribute_fk = $this->model_order->getitemattributes($item_id);
-        print_r($attribute_fk);
+        // print_r($attribute_fk);
         $this->data = array();
         $this->data = array(
             'grades' => array(),
@@ -202,7 +203,7 @@ class orders extends CI_Controller {
                 $this->data['grades'][] = $this->model_order->getgradedetail($value, '1');
             }
         }
-
+        
         if ($attribute_fk[1]) {
             foreach ($attribute_fk[1] as $value) {
                 $this->data['models'][] = $this->model_order->getmodeldetail($value, '1');
@@ -223,14 +224,112 @@ class orders extends CI_Controller {
                 $this->data['colours'][] = $this->model_order->getcolourdetail($value, '1');
             }
         }
-
+        
         $this->data["item_detail"] = $this->model_order->getitemdetail($item_id);
         return $this->data;
     }
-
-    public function draft_order() {
+    public function neworderreview(){
         $order_number = $this->input->post('order_number');
+       // echo $order_number;
+        // Get order information
+        $this->data['order_info'] = $this->model_order->getOrder($order_number);
+        $this->data['order_number'] = $order_number;
+        
+        // Get profile details for company information
+        $this->data['profile'] = $this->model_order->getprofiledetail();
+        
+        // Get packing information for the order
+        //  $this->data['item_packing'] = $this->model_order->getItemPackingInfo($this->data['order_info'][0]['itemidS']);
+        // Fetch shop info for the order (get shop_id from first order_info row)
+        $shop_info = null;
+        if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
+            $this->load->model('shops/m_shop', 'model_shop');
+            $shop = $this->model_shop->getshopdetail($this->data['order_info'][0]['shop_id']);
+            if ($shop && isset($shop[0])) {
+                $shop_info = $shop[0];
+            }
+        }
+        $this->data['shop_info'] = $shop_info;
+        
+        // Get order details for each item
+        $this->data['order_details'] = array();
+        if($this->data['shop_info']){
+            
+            foreach ($this->data['order_info'] as $oi) {
+                $item_id = $oi['item_id'];
+                $order_details = $this->model_order->getorderdetail($order_number, $item_id);
+    
+                // Get item details
+                $item_detail = $this->model_order->getitemdetail($item_id);
+                
+                // Organize order details by attribute type
+                $organized_details = array();
+                foreach ($order_details as $detail) {
+                    $attribute_type = $detail['attribute_type'];
+                    $attribute_fk = $detail['attribute_fk'];
+                    $quantity = $detail['attribute_quantity'];
+                    
+                    // Get attribute details based on type
+                    switch ($attribute_type) {
+                        case 'grade':
+                            $attribute_detail = $this->model_order->getgradedetail($attribute_fk);
+                            break;
+                            case 'model':
+                                $attribute_detail = $this->model_order->getmodeldetail($attribute_fk);
+                                break;
+                                case 'size':
+                                    $attribute_detail = $this->model_order->getsizedetail($attribute_fk);
+                                    break;
+                                    case 'type':
+                                        $attribute_detail = $this->model_order->gettypedetail($attribute_fk);
+                                        break;
+                                        case 'colour':
+                                            $attribute_detail = $this->model_order->getcolourdetail($attribute_fk);
+                                            break;
+                                            case 'unit':
+                                                $attribute_detail = $this->model_order->getunitdetail($attribute_fk);
+                                                break;
+                                                case 'packing':
+                                                    $attribute_detail = $this->model_order->getPackingOptionDetail($attribute_fk);
+                                                    break;
+                                                    default:
+                                                    $attribute_detail = array();
+                                                }
+                                                
+                                                if (!isset($organized_details[$attribute_type])) {
+                                                    $organized_details[$attribute_type] = array();
+                                                }
+                                                $organized_details[$attribute_type][] = array(
+                                                    'detail' => $attribute_detail,
+                                                    'quantity' => $quantity
+                                                );
+                                            }
+                                            
+                                            $this->data['order_details'][$item_id] = array(
+                                                'item_detail' => $item_detail[0],
+                                                'attributes' => $organized_details
+                                            );
+                                        }
+                                    }
+                                    
+                                    // Fetch ledger entries for the order
+                                    $this->data['order_ledger'] = $this->model_order->getOrderLedger($order_number);
+                                    
+                                    // Fetch shop ledger entries if shop info is available
+                                    $this->data['shop_ledger'] = array();
+                                    if (isset($this->data['order_info'][0]['shop_id']) && $this->data['order_info'][0]['shop_id']) {
+                                        $this->data['shop_ledger'] = $this->model_order->getShopLedger($this->data['order_info'][0]['shop_id']);
+                                    }
+                                    
+                                  $html =  $this->load->view("orders/invoice_ajax", $this->data,true);
+                                  echo json_encode($html);
+    }
+    public function neworderupdate(){
+        $order_number = $this->input->post('order_number');
+        $this->model_order->deleteorder($order_number);
+           
         $item_ids = $this->input->post('item_ids');
+        $order_number = $this->input->post('order_number');
         $qty = $this->input->post('item_qty');
         $item_price = $this->input->post('item_price');
         $shop_id = $this->input->post('shopid'); // get selected shop
@@ -295,7 +394,136 @@ class orders extends CI_Controller {
             $item_id = $item_ids[$i];
             $data = $this->allattributes($item_id);
             $packing_id = $this->input->post('packing_option_' . $item_id);
-            $this->model_order->insertdraftorder($order_number, $item_id, $qty[$i], $item_price[$i], $shop_id, $packing_id); // pass shop_id
+                   $packing_id = $this->input->post('packing_option_' . $item_id);
+$packing_quantity = $this->input->post('packing_quantity');
+            $bigpolythenelimit = $this->input->post('bigpolythenelimit');
+            $this->model_order->insertdraftorder($order_number, $item_id, $qty[$i], $item_price[$i], $shop_id, $packing_id,$packing_quantity[$i],$bigpolythenelimit[$i]); // pass shop_id
+            if ($data['grades']) {
+                $grade_quantity = 0;
+                foreach ($data['grades'] as $value) {
+                    $value['grade_id'];
+                    $grade_quantity = $this->input->post("grade-" . $value['grade_id'] . "-" . $item_id);
+                    $this->model_order->insertdraftorderdetail($order_number, $value['grade_id'], $grade_quantity, $item_id, 'grade');
+                }
+            }
+            //   print_r($grade_quantity);
+            if ($data['models']) {
+                foreach ($data['models'] as $value) {
+                    $model_quantity = $this->input->post("model-" . $value['model_id'] . "-" . $item_id);
+                    if ($model_quantity && $model_quantity > 0) {
+                        $this->model_order->insertdraftorderdetail($order_number, $value['model_id'], $model_quantity, $item_id, 'model');
+                    }
+                }
+            }
+            /// print_r($model_quantity);
+            if ($data['sizes']) {
+                foreach ($data['sizes'] as $value) {
+                    $size_quantity = $this->input->post("size-" . $value['size_id'] . "-" . $item_id);
+                    if ($size_quantity && $size_quantity > 0) {
+                        $this->model_order->insertdraftorderdetail($order_number, $value['size_id'], $size_quantity, $item_id, 'size');
+                    }
+                }
+            }
+            // print_r($size_quantity);
+            if ($data['types']) {
+                foreach ($data['types'] as $value) {
+                    $type_quantity = $this->input->post("type-" . $value['type_id'] . "-" . $item_id);
+                    if ($type_quantity && $type_quantity > 0) {
+                        $this->model_order->insertdraftorderdetail($order_number, $value['type_id'], $type_quantity, $item_id, 'type');
+                    }
+                }
+            }
+            /// print_r($type_quantity);
+            if ($data['colours']) {
+                foreach ($data['colours'] as $value) {
+                    $colour_quantity = $this->input->post("colour-" . $value['colour_id'] . "-" . $item_id);
+                    if ($colour_quantity && $colour_quantity > 0) {
+                        $this->model_order->insertdraftorderdetail($order_number, $value['colour_id'], $colour_quantity, $item_id, 'colour');
+                    }
+                }
+            }
+        }
+
+        // Order created successfully (stock will be deducted when order is completed)
+        $this->session->set_flashdata('success', 'Draft order created successfully. Stock will be deducted when order is completed.');
+
+        if (!empty($stock_errors)) {
+            $this->session->set_flashdata('stock_errors', $stock_errors);
+        }
+echo json_encode('Success');
+    }
+    public function draft_order() {
+        
+        $item_ids = $this->input->post('item_ids');
+        $order_number = $this->input->post('order_number');
+        $qty = $this->input->post('item_qty');
+        $item_price = $this->input->post('item_price');
+        $shop_id = $this->input->post('shopid'); // get selected shop
+        // Server-side validation for required fields
+        $validation_errors = array();
+
+        // Validate shop selection
+        if (empty($shop_id) || $shop_id === '') {
+            $validation_errors[] = 'Please select a shop';
+        }
+
+        // Validate that items are added
+        if (empty($item_ids) || !is_array($item_ids) || count($item_ids) === 0) {
+            $validation_errors[] = 'Please add at least one item to the order';
+        }
+
+        // Validate quantities
+        if (!empty($qty) && is_array($qty)) {
+            foreach ($qty as $index => $quantity) {
+                if (empty($quantity) || $quantity <= 0) {
+                    $validation_errors[] = 'Please enter valid quantities for all items';
+                    break;
+                }
+            }
+        } else {
+            $validation_errors[] = 'Please enter valid quantities for all items';
+        }
+
+        // If validation fails, redirect back with errors
+        if (!empty($validation_errors)) {
+            $this->session->set_flashdata('validation_errors', $validation_errors);
+            redirect(site_url() . 'orders');
+            return;
+        }
+
+        $stock_errors = array();
+        $has_stock_issues = false;
+
+        // Check stock for all items first
+        for ($i = 0; $i < sizeof($item_ids); $i++) {
+            $item_id = $item_ids[$i];
+
+            // Check stock availability
+            $stock_check = $this->model_order->checkStockAvailability($item_id, $qty[$i]);
+            if (!$stock_check['sufficient']) {
+                $item_detail = $this->model_order->getitemdetail($item_id);
+                $item_name = isset($item_detail[0]['item_name']) ? $item_detail[0]['item_name'] : 'Item';
+                $stock_errors[] = "Insufficient stock for {$item_name}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
+                $has_stock_issues = true;
+            }
+        }
+
+        // If there are stock issues, don't create the order
+        if ($has_stock_issues) {
+            $this->session->set_flashdata('stock_errors', $stock_errors);
+            redirect(site_url() . 'orders');
+            return;
+        }
+
+        // If stock is sufficient, create the order
+        for ($i = 0; $i < sizeof($item_ids); $i++) {
+            $item_id = $item_ids[$i];
+            $data = $this->allattributes($item_id);
+            $packing_quantity = $this->input->post('packing_quantity');
+            $bigpolythenelimit = $this->input->post('bigpolythenelimit');
+                   $packing_id = $this->input->post('packing_option_' . $item_id);
+
+          //  $this->model_order->insertdraftorder($order_number, $item_id, $qty[$i], $item_price[$i], $shop_id, $packing_id,$packing_quantity[$i],$bigpolythenelimit[$i]); // pass shop_id
             if ($data['grades']) {
                 $grade_quantity = 0;
                 foreach ($data['grades'] as $value) {
@@ -470,6 +698,8 @@ class orders extends CI_Controller {
         $item_ids = $this->input->post('item_ids');
         $item_qty = $this->input->post('item_qty');
         $item_price = $this->input->post('item_price');
+        $packing_quantity = $this->input->post('packing_quantity');
+        $bigpolythenelimit = $this->input->post('bigpolythenelimit');
 
 
         // Server-side validation for required fields
@@ -504,12 +734,21 @@ class orders extends CI_Controller {
             redirect(site_url() . 'orders/editorder/' . $order_number);
             return;
         }
+      //  print_r($packing_quantity);
+      //   print_r($item_ids);
         if (isset($item_ids) && sizeof($item_ids) > 0) {
+            $index1=0;   
             foreach ($item_ids as $key => $value) {
                 $item_id = $value;
                 $quantity = isset($item_qty[$key]) ? $item_qty[$key] : 1;
                 $price = isset($item_price[$key]) ? $item_price[$key] : 0;
-
+                $packing_quantity1 = $packing_quantity[$index1];
+                $packing_limit = isset($bigpolythenelimit[$key]) ? $bigpolythenelimit[$key] : 0;
+             //   echo $packing_quantity1;
+             //    echo '----';
+              //  echo $index1;
+                //echo $packing_quantity[$index];
+//echo $packing_quantity.'----';
                 // Check stock availability before updating
                 $stock_check = $this->model_order->checkStockAvailability($item_id, $quantity);
                 if (!$stock_check['sufficient']) {
@@ -523,64 +762,9 @@ class orders extends CI_Controller {
 
                 // Update order quantity
                 $packing_id = $this->input->post('packing_option_' . $item_id);
-                $this->model_order->updateOrderQuantityAndPrice($shop_id, $order_number, $item_id, $quantity, $price, $packing_id);
-
-                // Delete existing order details for this item
-                $this->model_order->deleteOrderDetails($order_number, $item_id);
-
-                // Get attributes for this item
-                $data = $this->allattributes($item_id);
-
-                // Insert grades
-                if ($data['grades']) {
-                    foreach ($data['grades'] as $grade) {
-                        $grade_quantity = $this->input->post("grade-" . $grade['grade_id'] . "-" . $item_id);
-                        if ($grade_quantity && $grade_quantity > 0) {
-                            $this->model_order->insertdraftorderdetail($order_number, $grade['grade_id'], $grade_quantity, $item_id, 'grade');
-                        }
-                    }
-                }
-
-                // Insert models
-                if ($data['models']) {
-                    foreach ($data['models'] as $model) {
-                        $model_quantity = $this->input->post("model-" . $model['model_id'] . "-" . $item_id);
-
-                        if ($model_quantity && $model_quantity > 0) {
-                            $this->model_order->insertdraftorderdetail($order_number, $model['model_id'], $model_quantity, $item_id, 'model');
-                        }
-                    }
-                }
-
-                // Insert sizes
-                if ($data['sizes']) {
-                    foreach ($data['sizes'] as $size) {
-                        $size_quantity = $this->input->post("size-" . $size['size_id'] . "-" . $item_id);
-                        if ($size_quantity && $size_quantity > 0) {
-                            $this->model_order->insertdraftorderdetail($order_number, $size['size_id'], $size_quantity, $item_id, 'size');
-                        }
-                    }
-                }
-
-                // Insert types
-                if ($data['types']) {
-                    foreach ($data['types'] as $type) {
-                        $type_quantity = $this->input->post("type-" . $type['type_id'] . "-" . $item_id);
-                        if ($type_quantity && $type_quantity > 0) {
-                            $this->model_order->insertdraftorderdetail($order_number, $type['type_id'], $type_quantity, $item_id, 'type');
-                        }
-                    }
-                }
-
-                // Insert colours
-                if ($data['colours']) {
-                    foreach ($data['colours'] as $colour) {
-                        $colour_quantity = $this->input->post("colour-" . $colour['colour_id'] . "-" . $item_id);
-                        if ($colour_quantity && $colour_quantity > 0) {
-                            $this->model_order->insertdraftorderdetail($order_number, $colour['colour_id'], $colour_quantity, $item_id, 'colour');
-                        }
-                    }
-                }
+                 
+                $this->model_order->updateOrderQuantityAndPrice($shop_id, $order_number, $item_id, $quantity, $price, $packing_id,$packing_quantity1,$packing_limit);
+                $index1++;
             }
         } else {
             $this->model_order->deleteorder($order_number);
@@ -589,7 +773,14 @@ class orders extends CI_Controller {
         // Order updated successfully (stock will be deducted when order is completed)
         $this->session->set_flashdata('success', 'Draft order updated successfully. Stock will be deducted when order is completed.');
 
-        redirect(site_url() . 'orders/draftorders');
+       redirect(site_url() . 'orders/draftorders');
+    }
+    public function showlastprice(){
+         $shop_id = $this->input->post('shop_id');
+         $item_id = $this->input->post('item_id');
+         $order_number = $this->input->post('order_number');
+        $lastprice =$this->model_order->showlastprice($shop_id,$item_id,$order_number);
+        echo json_encode ($lastprice);
     }
 
     public function review($order_number) {
@@ -704,7 +895,7 @@ class orders extends CI_Controller {
 
         // Deduct stock after successful order completion
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
-        $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id);
+        $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
         // Insert ledger entry
         // exit;
         $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
