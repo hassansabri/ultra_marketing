@@ -92,7 +92,7 @@
                                                         <p><strong>Invoice Number:</strong> <?php echo $order_number; ?></p>
                                                         <p><strong>Review Date:</strong> <?php echo date('l, F j, Y'); ?></p>
                                                         <p><strong>Total Items:</strong> <?php echo count($order_info); ?></p>
-                                                         <p><strong>Packing Option:</strong> <?php echo $packing_info['packing_title']; ?></p>
+                                                         <!-- <p><strong>Packing Option:</strong> <?php echo $packing_info['packing_title']; ?></p> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,11 +130,19 @@
                                                                                       if(isset($order_info[$index]['order_status'])) echo $order_info[0]['order_status'];?>
                                                                                  </span>
                                                                              </p>
+                                                                             </div>
                                                                              <label for="price"><strong>price:</strong> 
                                                                                  <span" id="price">
-                                                                                 <?php echo $order_info[$index]['order_price']; $index++;?>
+                                                                                 <?php echo $order_info[$index]['order_price'];?>
                                                                                  </span>
                                                                              </label>
+                                                                             <br/>
+                                                                             <label for="price"><strong>packing:</strong> 
+                                                                                 <span" id="price">
+                                                                                 <?php echo $order_info[$index]['packing_title']; $index++;?>
+                                                                                 </span>
+                                                                             </label>
+                                                                             
                                                                          </div>
                                                                      </div>
 

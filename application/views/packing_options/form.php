@@ -54,7 +54,7 @@
                                         <label class="col-md-2 control-label">Cost</label>
                                         <div class="col-md-8">
                                             <div class="input-group">
-                                                <span class="input-group-addon">$</span>
+                                                <span class="input-group-addon">PKR</span>
                                                 <input type="number" name="packing_cost" class="form-control" 
                                                        value="<?php echo set_value('packing_cost', isset($packing_option['packing_cost']) ? $packing_option['packing_cost'] : '0.00'); ?>" 
                                                        placeholder="0.00" step="0.01" min="0">

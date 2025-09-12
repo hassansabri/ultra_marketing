@@ -52,6 +52,14 @@
                                             }
                                             ?>">
                                         </div>
+                                        <div class="form-group">
+                                            <label> Item Price</label>
+                                            <input name="item_price" id="item_price" class="form-control" type="text" value="<?php
+                                            if (isset($_POST["item_price"])) {
+                                                echo $_POST["item_price"];
+                                            }
+                                            ?>">
+                                        </div>
                                     
                                         <div class="form-group">
                                             <label> Item code</label>

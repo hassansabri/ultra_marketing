@@ -49,6 +49,10 @@
                                             <input name="item_name" id="item_name" class="form-control" type="text" value="<?php echo $item_detail[0]["item_name"]; ?>">
                                         </div>
                                         <div class="form-group">
+                                            <label> Item Price</label>
+                                            <input name="item_price" id="item_price" class="form-control" type="text" value="<?php echo $item_detail[0]["item_price"]; ?>">
+                                        </div>
+                                        <div class="form-group">
                                             <label> Item code</label>
                                             <input name="item_code" id="item_code " class="form-control" type="text" value="<?php echo $item_detail[0]["item_code"]; ?>">
                                         </div>

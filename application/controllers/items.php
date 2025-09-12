@@ -105,6 +105,7 @@ public function getstates(){
          }
          public function updateitem($item_id=false){
              $sdat['item_name'] = $this->input->post('item_name');
+             $sdat['item_price'] = $this->input->post('item_price');
              $sdat['item_code'] = $this->input->post('item_code');
              $sdat['item_weight'] = $this->input->post('item_weight');
              $sdat['item_description'] = $this->input->post('item_description');

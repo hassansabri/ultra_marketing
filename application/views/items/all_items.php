@@ -57,7 +57,7 @@
                                                 <tr>
                                                     <th data-class="expand">Item Name</th>
                                              
-                                                    <th>Item Code</th>
+                                                    <th>Item Price</th>
                                                     <th data-hide="phone">expire Date</th>
                                                     <th data-hide="phone,tablet"><?php echo $this->lang->line("status"); ?></th>
                                                     <th data-hide=""><?php echo $this->lang->line("option"); ?></th>
@@ -73,7 +73,7 @@
                                                             <tr>
                                                                 <td><?php echo $value["item_name"]; ?></td>
                                          
-                                                                <td><?php echo $value["item_code"]; ?></td>
+                                                                <td><?php echo $value["item_price"]; ?></td>
                                                                 <td><?php echo $value["item_expire_date"]; ?></td>
                                                                 <td>
                                                                     <span class="onoffswitch">

@@ -69,7 +69,7 @@
                                                         </td>
                                                         <td>
                                                             <?php if ($option['packing_cost'] > 0): ?>
-                                                                $<?php echo number_format($option['packing_cost'], 2); ?>
+                                                                PKR <?php echo number_format($option['packing_cost'], 2); ?>
                                                             <?php else: ?>
                                                                 <span class="text-success">Free</span>
                                                             <?php endif; ?>
@@ -87,7 +87,7 @@
                                                                 <a href="<?php echo site_url('packing_options/edit/' . $option['packing_id']); ?>" class="btn btn-xs btn-primary">
                                                                     <i class="fa fa-edit"></i> Edit
                                                                 </a>
-                                                                <a href="<?php echo site_url('packing_options/toggle_status/' . $option['packing_id']); ?>" class="btn btn-xs btn-warning" onclick="return confirm('Are you sure you want to change the status?')">
+                                                                <!-- <a href="<?php echo site_url('packing_options/toggle_status/' . $option['packing_id']); ?>" class="btn btn-xs btn-warning" onclick="return confirm('Are you sure you want to change the status?')">
                                                                     <?php if ($option['status']): ?>
                                                                         <i class="fa fa-ban"></i> Disable
                                                                     <?php else: ?>
@@ -96,7 +96,7 @@
                                                                 </a>
                                                                 <a href="<?php echo site_url('packing_options/delete/' . $option['packing_id']); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this packing option?')">
                                                                     <i class="fa fa-trash"></i> Delete
-                                                                </a>
+                                                                </a> -->
                                                             </div>
                                                         </td>
                                                     </tr>

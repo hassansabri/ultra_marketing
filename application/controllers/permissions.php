@@ -24,9 +24,18 @@ class Permissions extends CI_Controller {
     // =====================================================
     // DASHBOARD
     // =====================================================
-    
-    public function index() {
+    public function dashboard(){
         $data['title'] = 'Permission Management Dashboard';
+        
+        $data['summary'] = $this->m_permissions->getPermissionSummary();
+        $data['roles'] = $this->m_permissions->getRolesWithPermissionCount();
+        $data['modules'] = $this->m_permissions->getModulesWithPermissionCount();
+        $data['users'] = $this->m_permissions->getUsersWithRoleCount();
+        // $data['recent_assignments'] = $this->m_permissions->getRecentRoleAssignments();
+        $this->load->view('permissions/dashboard', $data);
+    }
+
+    public function index() {
         $data['summary'] = $this->m_permissions->getPermissionSummary();
         $data['roles'] = $this->m_permissions->getRolesWithPermissionCount();
         $data['modules'] = $this->m_permissions->getModulesWithPermissionCount();
@@ -336,7 +345,7 @@ class Permissions extends CI_Controller {
                     'permission_description' => $this->input->post('permission_description'),
                     'permission_type' => $this->input->post('permission_type'),
                     'is_active' => $this->input->post('is_active') ? 1 : 0,
-                    'updated_by' => $this->session->userdata('user_id'),
+                    // 'updated_by' => $this->session->userdata('user_id'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ];
                 
@@ -358,8 +367,8 @@ class Permissions extends CI_Controller {
             $this->session->set_flashdata('error', 'Permission not found.');
             redirect('permissions/permissions');
 
+        }
         $this->load->view('permissions/edit_permission', $data);
-    }
 }
     public function delete_permission($permission_id) {
         // Check if permission is assigned to any roles

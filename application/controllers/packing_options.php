@@ -10,24 +10,25 @@ class Packing_options extends CI_Controller {
     }
     
     public function index() {
-        $this->data['packing_options'] = $this->model_order->getAllPackingOptions();
+        $this->data['packing_options'] = $this->model_order->getAllPackingOptions2();
         $this->load->view('packing_options/index', $this->data);
     }
     
     public function add() {
+        $this->data = array();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->form_validation->set_rules('packing_title', 'Packing Title', 'required|trim');
             $this->form_validation->set_rules('packing_cost', 'Packing Cost', 'numeric');
             
             if ($this->form_validation->run() == TRUE) {
-                $data = array(
+                $this->data = array(
                     'packing_title' => $this->input->post('packing_title'),
                     'packing_description' => $this->input->post('packing_description'),
                     'packing_cost' => $this->input->post('packing_cost') ?: 0.00,
                     'status' => 1
                 );
                 
-                $this->db->insert('packing_options', $data);
+                $this->db->insert('packing_options', $this->data);
                 $this->session->set_flashdata('success', 'Packing option added successfully.');
                 redirect(site_url('packing_options'));
             }
@@ -56,7 +57,7 @@ class Packing_options extends CI_Controller {
             }
         }
         
-        $this->data['packing_option'] = $this->model_order->getPackingOptionDetail($packing_id);
+        $this->data['packing_option'] = $this->model_order->getpackingdetail($packing_id);
         $this->load->view('packing_options/form', $this->data);
     }
     

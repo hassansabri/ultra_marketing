@@ -41,6 +41,9 @@ class m_packing_stocks extends CI_Model {
         if ($available_stock < $quantity) {
             return false; // Insufficient stock
         }
+        if($packing_limit==0){
+            $packing_limit=10;
+        }
             $big = ceil($packing_quantity/$packing_limit) ;
             $small = $packing_quantity;
             $new_balance = $available_stock - $big;
@@ -150,6 +153,9 @@ $this->db->select_sum('balance');
 if($data['packing_fk']=='4'){
    
                 $available_stock = $quantity;
+                 if($packing_limit==0){
+            $packing_limit=10;
+        }
                  $big = ceil($available_stock/$packing_limit) ;
             $small = $quantity;
             // restore stock for big polythene

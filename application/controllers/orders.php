@@ -876,8 +876,8 @@ echo json_encode('Success');
             }
         }
         $stock_check = $this->model_order->checkPackingStockAvailability($packing_id, $quantity);
+        $packing_detail = $this->model_order->getpackingdetail($packing_id);
         if (!$stock_check['sufficient']) {
-            $packing_detail = $this->model_order->getpackingdetail($packing_id);
             $packing_title = isset($packing_detail[0]['packing_title']) ? $packing_detail[0]['packing_title'] : 'Packing';
             $stock_errors[] = "Insufficient1 stock for {$packing_title}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
             $has_stock_issues = true;
@@ -897,12 +897,16 @@ echo json_encode('Success');
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
         $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
         // Insert ledger entry
-        // exit;
         $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
         if (!$stock_deduction_success) {
 
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
         } else {
+            // insert cost logs
+            $item_detail = $this->model_order->getitemdetail($item_id);
+            $this->model_order->insertCostLogs($item_id,$item_detail[0]['item_price'],$order_number);
+            $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_cost'],$order_number);
+
             $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');
         }
 
@@ -1054,6 +1058,7 @@ echo json_encode('Success');
                 // Update stock restoration status
                 $this->model_order->updateStockRestorationStatus($order_number);
                 echo json_encode(array('success' => true, 'message' => 'Order cancelled successfully and stock restored'));
+            $this->model_order->updateOrderLedgerNew($order_number);
             } else {
                 echo json_encode(array('success' => true, 'message' => 'Order cancelled but failed to restore stock. Please contact administrator.'));
             }

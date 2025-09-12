@@ -17,7 +17,10 @@ class m_orders extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
- public function getallshops(){
+public function getPackingOptionDetail($packing_id){
+
+}
+    public function getallshops(){
      $this->db->where('shop_status',1);
      $this->db->where('shop_type','supplier');
         $query = $this->db->get("shops");
@@ -87,7 +90,14 @@ $this->db->where("item_id", $items_id);
 $this->db->select("*");
 $this->db->where("packing_id", $packing_id);
         $query = $this->db->get("packing_options");
-        return $query->result_array();
+        $data =  $query->result_array();
+        if (sizeof($query->result_array()) > 0) {
+          return $data[0];
+    } else {
+            
+        return array();
+        }
+    
 
   }
   public function gettypedetail($type_id,$status=false){
@@ -423,7 +433,8 @@ $this->db->where("packing_id", $packing_id);
                     "packing_limit" => $value["packing_limit"],
                     "shop_id" => isset($value["shop_id"]) ? $value["shop_id"] : null,
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
-                    "item_detail" => $this->getitemdetail($value["item_fk"])
+                    "item_detail" => $this->getitemdetail($value["item_fk"]),
+                    "packing_title" => getpackingtitle($value["packing_id"])
                 );
              $dat[]=$data;
             }
@@ -468,6 +479,42 @@ $this->db->where("packing_id", $packing_id);
             'created_by'=>$this->session->userdata('uid')
         );
          $this->db->insert('orders',$data);
+        
+    }
+    public function insertPackingCostLogs($packing_id,$packing_price,$order_number){
+        if($packing_id == '4'){
+$packing_detail = $this->model_order->getpackingdetail(2);
+            $data=array(
+                'packing_fk'=>2,
+                'packing_price'=>$packing_detail['packing_cost'],
+                'order_number'=>$order_number,
+            );
+             $this->db->insert('packingstock_cost_logs',$data);
+             $packing_detail = $this->model_order->getpackingdetail(3);
+            $data=array(
+                'packing_fk'=>3,
+                'packing_price'=>$packing_detail['packing_cost'],
+                'order_number'=>$order_number,
+            );
+             $this->db->insert('packingstock_cost_logs',$data);
+        }else{
+
+            $data=array(
+                'packing_fk'=>$packing_id,
+                'packing_price'=>$packing_price,
+                'order_number'=>$order_number,
+            );
+             $this->db->insert('packingstock_cost_logs',$data);
+        }
+        
+    }
+    public function insertCostLogs($item_id,$item_price,$order_number){
+        $data=array(
+            'item_fk'=>$item_id,
+            'item_price'=>$item_price,
+            'order_number'=>$order_number,
+        );
+         $this->db->insert('stock_cost_logs',$data);
         
     }
 public function insertdraftorderdetail($order_number,$attribute_fk,$quantity,$item_id,$type){
@@ -628,6 +675,10 @@ public function updateorder($order_number){
         $this->db->where('ledger_id', $ledger_id);
         return $this->db->delete('order_ledger');
     }
+    public function updateOrderLedgerNew($order_number) {
+        $this->db->where('order_number', $order_number);
+        return $this->db->update('order_ledger', array('status' => 2));
+    }
 
     // Get all ledger entries (include type)
     public function getAllOrderLedger() {
@@ -635,6 +686,7 @@ public function updateorder($order_number){
         $this->db->from('order_ledger');
         $this->db->join('orders', 'orders.order_number = order_ledger.order_number', 'left');
         $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
+        $this->db->where('order_ledger.status != ', 2);
         $this->db->order_by('order_ledger.date', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -647,6 +699,7 @@ public function updateorder($order_number){
         $this->db->join('orders', 'orders.order_number = order_ledger.order_number', 'left');
         $this->db->join('shops', 'shops.shop_id = orders.shop_id', 'left');
         $this->db->where('order_ledger.ledger_id', $ledger_id);
+        $this->db->where('order_ledger.status', 1);
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -1010,11 +1063,20 @@ public function updateorder($order_number){
      */
     public function getAllPaymentOptions() {
         $this->db->where('status', 1);
+        
         $query = $this->db->get('payment_options');
         return $query->result_array();
     }
     public function getallpackingoptions(){
         $this->db->where('status', 1);
+        $this->db->order_by('packing_title', 'ASC');
+        $query = $this->db->get('packing_options');
+        return $query->result_array();
+    }
+    public function getallpackingoptions2(){
+        $this->db->where('status', 1);
+        $this->db->where('packing_id !=', 4);
+        $this->db->order_by('packing_title', 'ASC');
         $query = $this->db->get('packing_options');
         return $query->result_array();
     }

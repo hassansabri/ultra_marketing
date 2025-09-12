@@ -306,24 +306,70 @@ $(".dp").datepicker({
     
 
     $(document).on('click','#ou',function(){
+        var flag =true;
         // Check if any items are added to order
     var itemIds = $("input[name='item_ids[]']");
     if (itemIds.length === 0) {
         alert('Please add at least one item to the order');
         //  $(this).css('border-color', 'red');
-        return false;
+        flag = false;
     }
         var shopSelect = $('#shopid');
   if (!shopSelect.val() || shopSelect.val() === '') {
       $('#shop-error').show();
       shopSelect.css('border-color', 'red');
-      return false
+      flag = false;
       
   } else {
       $('#shop-error').hide();
       shopSelect.css('border-color', '');
   }
-  $.LoadingOverlay("show");
+  $('input[name="packing_quantity[]"]').each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+         flag = false;
+        }else{
+
+            $(el).css('border-color', '');
+        }
+        
+    });
+    $('input[name="item_qty[]"]').each(function() {
+
+       var qty = $(this).val();
+       
+               if (!qty || qty <= 0) {
+                   $(this).css('border-color', 'red');
+                   flag =  false;
+                } else {
+                    $(this).css('border-color', '');
+                }
+            });
+            $("select.packing-select").each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+            flag = false;
+        }else{
+
+            $(el).css('border-color', '');
+        }
+        
+    });
+    $('input[name="packing_quantity[]"]').each(function(index, el) {
+        var val = $(el).val();
+        if (!val || val === "") {
+            $(el).css('border-color', 'red');
+            flag = false;
+        }else{
+
+            $(el).css('border-color', '');
+        }
+        
+    });
+            if(flag){
+                  $.LoadingOverlay("show");
         $.ajax({
             url: baseurl + '/orders/neworderupdate',
              data: $("#orderForm").serialize(),
@@ -334,7 +380,11 @@ $(".dp").datepicker({
             //alert(obj);
         });
         $('#of').prop('disabled',false);
+
+            }
+
     });
+
     $(document).on('click','#or',function(event){
         $('#ou').click();
         flag=true;
@@ -418,19 +468,30 @@ $(".dp").datepicker({
     $(document).on('click','#of',function(){
         var flag=true;
         var shopSelect = $('#shopid');
-  if (!shopSelect.val() || shopSelect.val() === '') {
-      $('#shop-error').show();
-      shopSelect.css('border-color', 'red');
-      return false
-      
-  } else {
-      $('#shop-error').hide();
-      shopSelect.css('border-color', '');
-  }
-   $('input[name="item_qty[]"]').each(function() {
-
+        if (!shopSelect.val() || shopSelect.val() === '') {
+            $('#shop-error').show();
+            shopSelect.css('border-color', 'red');
+            return false;
+            
+        } else {
+            $('#shop-error').hide();
+            shopSelect.css('border-color', '');
+        }
+        $('input[name="item_qty[]"]').each(function() {
+            
+            var qty = $(this).val();
+            
+            if (!qty || qty <= 0) {
+                $(this).css('border-color', 'red');
+                flag=false;
+            } else {
+                $(this).css('border-color', '');
+            }
+        });
+        $('input[name="item_price[]"]').each(function() {
+            
+            // alert('em here1');
        var qty = $(this).val();
-       
                if (!qty || qty <= 0) {
                    $(this).css('border-color', 'red');
                    flag=false;
@@ -438,8 +499,8 @@ $(".dp").datepicker({
                    $(this).css('border-color', '');
                }
    });
-   $('input[name="item_price[]"]').each(function() {
-
+   $('input[name="packing_quantity[]"').each(function() {
+// alert('em here');
        var qty = $(this).val();
                if (!qty || qty <= 0) {
                    $(this).css('border-color', 'red');
@@ -466,7 +527,7 @@ $(".dp").datepicker({
             
             if(flag){
                 $('#ou').click();
-                $('#orderForm').trigger('submit');
+                 $('#orderForm').trigger('submit');
 
             }
             // Submit the form (stock validation will be done when order is completed)

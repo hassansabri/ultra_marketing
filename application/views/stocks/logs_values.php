@@ -3,7 +3,7 @@
                                                     if (sizeof($all_logs) > 0) { 
                                                         $length = count($all_logs);
                                                         $counter = 0; 
-                                                        $cb = 0; 
+                                                        $cb = $current_ballance[0]['balance']; 
                                                         ?>
                                                         <?php foreach ($all_logs as $value) {  
                                                                 $counter++;
@@ -37,11 +37,12 @@
                                                                 <td><?php echo $value["stock_type"]; ?></td>
                                                                 <td><?php echo $value["balance"]; ?></td>
                                                                 <td><?php 
+                                                               // print_r($current_ballance);
                                                                 if($value["stock_type"]=='stock_deduction'){
                                                                     
-                                                                    $cb=$cb-$value["balance"];
+                                                                    $cb - $value["balance"];
                                                                 }else{
-                                                                    $cb=$cb+$value["balance"];
+                                                                    $cb+ $value["balance"];
 
                                                                 }
                                                                     // This is the last iteration

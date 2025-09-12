@@ -80,7 +80,8 @@
     <div class="main-div" >
         <div class="sub-div" style="position:relative;"><?php $itemname=get_item_name($oi['item_id']); echo $itemname;?>&nbsp;<i class="shopLastPrice fa fa-info" style="cursor:pointer;width: 15px;font-weight: bold;"></i>
         <input class="number iq<?php echo $oi['item_id']?>" placeholder="item quantity" style="color: #000;max-width:15%" name="item_qty[]" type="number" min="1" value="<?php echo isset($oi['order_quantity']) ? $oi['order_quantity'] : 1; ?>"/>
-      <input class="number" placeholder="item price" style="color: #000;max-width:15%" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>"/>
+      <input class="number" placeholder="item price" style="color: #000;max-width:15%" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>" disabled/>
+      <input class="number" name="item_price[]" value="<?php echo isset($oi['order_price']) ? $oi['order_price'] : 0; ?>" hidden/>
       <select name="packing_option_<?php echo $oi['item_id']; ?>" class="packing-select" data-item-id="<?php echo $oi['item_id']; ?>" style="color: #000;">
           <option value="">Select packing option</option>
           <?php if (isset($all_packing_options) && $all_packing_options) { ?>

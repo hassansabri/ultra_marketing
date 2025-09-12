@@ -204,6 +204,19 @@
 
                        <?php  if ($this->session->userdata('logged_in')){ ?>
                         <li class="">      
+                            <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage packing Options</span></a>
+                            <ul>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/packing_options" title=""><span class="menu-item-parent">All packings</span></a>
+                                </li>
+                                <li class="">
+                                    <a href="<?php echo site_url(); ?>/packing_options/add" title=""><span class="menu-item-parent">Add packing</span></a>
+                                </li>
+                            </ul>	
+                        </li> 
+                    <?php } ?> 
+                       <?php  if ($this->session->userdata('logged_in')){ ?>
+                        <li class="">      
                             <a href="#" title="Users"><i class="fa fa-lg fa-fw fa-shopping-basket"></i> <span class="menu-item-parent">manage all Suppliers</span></a>
                             <ul>
                                 <li class="">
