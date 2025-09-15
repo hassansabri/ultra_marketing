@@ -77,6 +77,7 @@
                                         </tr>
                                         <?php 
                                         $total_price = 0;
+                                        $packing_price = 0;
                                         $currency = 'PKR'; // Change to your preferred currency symbol
                                         if(isset($order_details) && count($order_details) > 0): ?>
                                             <?php foreach($order_details as $item_id => $item_data): 
@@ -87,11 +88,12 @@
                                                         if($oi['item_id'] == $item_id) {
                                                             $item_price = $oi['order_price'];
                                                             $item_qty = $oi['order_quantity'];
+                                                            $packing_price = $oi['packing_price'];
                                                             break;
                                                         }
                                                     }
                                                 }
-                                                $item_subtotal = $item_price * $item_qty;
+                                                $item_subtotal = $item_price * $item_qty+$oi['packing_price'];
                                                 $total_price += $item_subtotal;
                                                 
                                                 // Get packing information for this item
@@ -128,7 +130,7 @@
                                                         <?php $title=getpackingtitle($oi['packing_id']);
                                                          if($title): ?>
                                                             <span class="label label-info">
-                                                                <i class="fa fa-box"></i> <?php echo $title; ?>
+                                                                <i class="fa fa-box"></i> <?php echo $title = getpackingtitle($oi['packing_id']); echo $packing_price ?>
                                                               
                                                             </span>
                                                         <?php else: ?>

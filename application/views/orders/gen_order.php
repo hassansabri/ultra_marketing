@@ -6,8 +6,7 @@
             <div class="sub-div"><?php echo $item_detail[0]['item_name']?>&nbsp;<i class="shopLastPrice fa fa-info" style="cursor:pointer;width: 15px;font-weight: bold;"></i>
 			<input style="color: #000;cursor: not-allowed;" name="item_ids[]" type="hidden" value="<?php echo $item_detail[0]['item_id']?>"/>
 			<input class="number iq<?php echo $item_detail[0]['item_id']?>" placeholder="item quantity" style="color: #000;max-width:15%" name="item_qty[]" type="number" min="1" value=""/>
-			<input style="color: #000;max-width:15%" value="<?php echo $item_detail[0]['item_price']?>" disabled/>
-			<input class="number" placeholder="item price" name="item_price[]" value="<?php echo $item_detail[0]['item_price']?>" hidden/>
+			<input style="color: #000;max-width:15%" value="<?php echo $item_detail[0]['item_price']?>" name="item_price[]"/>
 			<select name="packing_option_<?php echo $item_detail[0]['item_id']; ?>" class="packing-select" data-item-id="<?php echo $item_detail[0]['item_id']; ?>" style="color: #000;">
 				<option value="">Select packing option</option>
 				<?php if (isset($all_packing_options) && $all_packing_options) { ?>

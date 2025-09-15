@@ -394,7 +394,6 @@ class orders extends CI_Controller {
             $item_id = $item_ids[$i];
             $data = $this->allattributes($item_id);
             $packing_id = $this->input->post('packing_option_' . $item_id);
-                   $packing_id = $this->input->post('packing_option_' . $item_id);
 $packing_quantity = $this->input->post('packing_quantity');
             $bigpolythenelimit = $this->input->post('bigpolythenelimit');
             $this->model_order->insertdraftorder($order_number, $item_id, $qty[$i], $item_price[$i], $shop_id, $packing_id,$packing_quantity[$i],$bigpolythenelimit[$i]); // pass shop_id
@@ -860,11 +859,12 @@ echo json_encode('Success');
         $order_info = $this->model_order->getOrder($order_number);
         $stock_errors = array();
         $has_stock_issues = false;
-
+$packing_price=0;
         foreach ($order_info as $oi) {
             $item_id = $oi['item_id'];
             $quantity = $oi['order_quantity'];
             $packing_id = $oi['packing_id'];
+            $packing_price = $oi['packing_price'];
 
             // Check stock availability
             $stock_check = $this->model_order->checkStockAvailability($item_id, $quantity);
@@ -897,14 +897,14 @@ echo json_encode('Success');
         $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
         $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
         // Insert ledger entry
-        $this->model_order->insertOrderLedger($oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
+        $this->model_order->insertOrderLedger($packing_price,$oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
         if (!$stock_deduction_success) {
 
             $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
         } else {
             // insert cost logs
             $item_detail = $this->model_order->getitemdetail($item_id);
-            $this->model_order->insertCostLogs($item_id,$item_detail[0]['item_price'],$order_number);
+            $this->model_order->insertCostLogs($item_id,$oi['order_price'],$order_number);
             $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_cost'],$order_number);
 
             $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');

@@ -431,6 +431,7 @@ $this->db->where("packing_id", $packing_id);
                     "packing_id" => $value["packing_id"],
                     "packing_quantity" => $value["packing_quantity"],
                     "packing_limit" => $value["packing_limit"],
+                    "packing_price" => $value["packing_price"],
                     "shop_id" => isset($value["shop_id"]) ? $value["shop_id"] : null,
                     "order_detail" => $this->getorderdetail($value["order_number"],$value["item_fk"]),
                     "item_detail" => $this->getitemdetail($value["item_fk"]),
@@ -467,6 +468,21 @@ $this->db->where("packing_id", $packing_id);
             return $query->result_array();
     }
     public function insertdraftorder($order_number,$item_id,$order_quantity,$order_price, $shop_id,$packing_id,$packing_quantity,$bigpolythenelimit){
+        $packing_price=0;
+        if($packing_id == '4'){
+            $packing_detail = $this->model_order->getpackingdetail(2);
+            $data=$packing_detail['packing_cost'];
+             $packing_detail = $this->model_order->getpackingdetail(3);
+            $data1 = $packing_detail['packing_cost'];
+            $packing_price=$data+$data1;
+        }else{
+            if($packing_id>0){
+
+                $packing_detail = $this->model_order->getpackingdetail($packing_id);
+                $data = $packing_detail['packing_cost'];
+                $packing_price=$data;                                                                                                                       
+            }
+        }
         $data=array(
             'order_number'=>$order_number,
             'item_fk'=>$item_id,
@@ -476,6 +492,7 @@ $this->db->where("packing_id", $packing_id);
             'packing_id'=>$packing_id,
             'packing_quantity'=>$packing_quantity,
             'packing_limit'=>$bigpolythenelimit,
+            'packing_price'=>$packing_price,
             'created_by'=>$this->session->userdata('uid')
         );
          $this->db->insert('orders',$data);
@@ -618,11 +635,11 @@ public function updateorder($order_number){
 }
 
     // Insert a ledger entry for an order (now with type)
-    public function insertOrderLedger($shop_id,$order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
+    public function insertOrderLedger($packing_price,$shop_id,$order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
         $data = array(
             'order_number' => $order_number,
             'date' => $date,
-            'amount' => $amount,
+            'amount' => $amount+$packing_price,
             'payment_method' => $payment_method,
             'remarks' => $remarks,
             'type' => $type,
