@@ -874,42 +874,43 @@ $packing_price=0;
                 $stock_errors[] = "Insufficient stock for {$item_name}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
                 $has_stock_issues = true;
             }
-        }
-        $stock_check = $this->model_order->checkPackingStockAvailability($packing_id, $quantity);
-        $packing_detail = $this->model_order->getpackingdetail($packing_id);
-        if (!$stock_check['sufficient']) {
-            $packing_title = isset($packing_detail[0]['packing_title']) ? $packing_detail[0]['packing_title'] : 'Packing';
-            $stock_errors[] = "Insufficient1 stock for {$packing_title}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
-            $has_stock_issues = true;
-        }
-   
-        // If there are stock issues, don't complete the order
-        if ($has_stock_issues) {
-            $this->session->set_flashdata('stock_errors', $stock_errors);
-            redirect(site_url() . 'orders/review/' . $order_number);
-            return;
-        }
-
-        // Update order status to confirmed
-        $this->model_order->updateorder($order_number);
-
-        // Deduct stock after successful order completion
-        $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
-        $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
-        // Insert ledger entry
-        $this->model_order->insertOrderLedger($packing_price,$oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
-        if (!$stock_deduction_success) {
-
-            $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
-        } else {
+            
+            $stock_check = $this->model_order->checkPackingStockAvailability($packing_id, $quantity);
+            $packing_detail = $this->model_order->getpackingdetail($packing_id);
+            if (!$stock_check['sufficient']) {
+                $packing_title = isset($packing_detail[0]['packing_title']) ? $packing_detail[0]['packing_title'] : 'Packing';
+                $stock_errors[] = "Insufficient1 stock for {$packing_title}. Available: {$stock_check['available']}, Requested: {$stock_check['requested']}";
+                $has_stock_issues = true;
+            }
+            
+            // If there are stock issues, don't complete the order
+            if ($has_stock_issues) {
+                $this->session->set_flashdata('stock_errors', $stock_errors);
+                redirect(site_url() . 'orders/review/' . $order_number);
+                return;
+            }
+            
+            // Update order status to confirmed
+            $this->model_order->updateorder($order_number);
+            
+            // Deduct stock after successful order completion
+            $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
+            $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
+            // Insert ledger entry
+            $this->model_order->insertOrderLedger($packing_price,$oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
+            if (!$stock_deduction_success) {
+                
+                $this->session->set_flashdata('stock_errors', ['Failed to deduct stock for completed order. Please contact administrator.']);
+            } else {
+                
+                $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');
+            }
             // insert cost logs
-            $item_detail = $this->model_order->getitemdetail($item_id);
-            $this->model_order->insertCostLogs($item_id,$oi['order_price'],$order_number);
-            $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_cost'],$order_number);
-
-            $this->session->set_flashdata('success', 'Order completed successfully and stock deducted.');
+$item_detail = $this->model_order->getitemdetail($item_id);
+$this->model_order->insertCostLogs($item_id,$oi['order_price'],$order_number,$item_detail[0]['item_price']);
+$this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_cost'],$order_number,$packing_detail['original_cost']);
+            
         }
-
         redirect(site_url() . 'orders/review/' . $order_number);
     }
 

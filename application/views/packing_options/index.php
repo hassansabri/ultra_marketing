@@ -47,7 +47,8 @@
                                                 <th>ID</th>
                                                 <th>Title</th>
                                                 <th>Description</th>
-                                                <th>Cost</th>
+                                                <th>Original Cost</th>
+                                                <th>Selling Cost</th>
                                                 <th>Status</th>
                                                 <th>Created Date</th>
                                                 <th>Actions</th>
@@ -65,6 +66,13 @@
                                                                 <?php if (strlen($option['packing_description']) > 50): ?>...<?php endif; ?>
                                                             <?php else: ?>
                                                                 <span class="text-muted">No description</span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($option['original_cost'] > 0): ?>
+                                                                PKR <?php echo number_format($option['original_cost'], 2); ?>
+                                                            <?php else: ?>
+                                                                <span class="text-success">Free</span>
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>

@@ -498,12 +498,13 @@ $this->db->where("packing_id", $packing_id);
          $this->db->insert('orders',$data);
         
     }
-    public function insertPackingCostLogs($packing_id,$packing_price,$order_number){
+    public function insertPackingCostLogs($packing_id,$packing_price,$order_number,$original_cost){
         if($packing_id == '4'){
 $packing_detail = $this->model_order->getpackingdetail(2);
             $data=array(
                 'packing_fk'=>2,
                 'packing_price'=>$packing_detail['packing_cost'],
+                'packing_original_price'=>$packing_detail['original_cost'],
                 'order_number'=>$order_number,
             );
              $this->db->insert('packingstock_cost_logs',$data);
@@ -511,6 +512,7 @@ $packing_detail = $this->model_order->getpackingdetail(2);
             $data=array(
                 'packing_fk'=>3,
                 'packing_price'=>$packing_detail['packing_cost'],
+                'packing_original_price'=>$packing_detail['original_cost'],
                 'order_number'=>$order_number,
             );
              $this->db->insert('packingstock_cost_logs',$data);
@@ -520,16 +522,18 @@ $packing_detail = $this->model_order->getpackingdetail(2);
                 'packing_fk'=>$packing_id,
                 'packing_price'=>$packing_price,
                 'order_number'=>$order_number,
+                'packing_original_price'=>$original_cost,
             );
              $this->db->insert('packingstock_cost_logs',$data);
         }
         
     }
-    public function insertCostLogs($item_id,$item_price,$order_number){
+    public function insertCostLogs($item_id,$item_price,$order_number,$original_cost){
         $data=array(
             'item_fk'=>$item_id,
             'item_price'=>$item_price,
             'order_number'=>$order_number,
+            'item_original_price'=>$original_cost,
         );
          $this->db->insert('stock_cost_logs',$data);
         

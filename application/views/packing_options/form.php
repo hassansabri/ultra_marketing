@@ -51,7 +51,19 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label">Cost</label>
+                                        <label class="col-md-2 control-label"> original  Cost</label>
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">PKR</span>
+                                                <input type="number" name="original_cost" class="form-control" 
+                                                       value="<?php echo set_value('original_cost', isset($packing_option['original_cost']) ? $packing_option['original_cost'] : '0.00'); ?>" 
+                                                       placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                            <small class="text-muted">Leave as 0.00 for free packing</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label"> Selling  Cost</label>
                                         <div class="col-md-8">
                                             <div class="input-group">
                                                 <span class="input-group-addon">PKR</span>

@@ -25,6 +25,7 @@ class Packing_options extends CI_Controller {
                     'packing_title' => $this->input->post('packing_title'),
                     'packing_description' => $this->input->post('packing_description'),
                     'packing_cost' => $this->input->post('packing_cost') ?: 0.00,
+                    'original_cost' => $this->input->post('original_cost') ?: 0.00,
                     'status' => 1
                 );
                 
@@ -47,6 +48,7 @@ class Packing_options extends CI_Controller {
                     'packing_title' => $this->input->post('packing_title'),
                     'packing_description' => $this->input->post('packing_description'),
                     'packing_cost' => $this->input->post('packing_cost') ?: 0.00,
+                    'original_cost' => $this->input->post('original_cost') ?: 0.00,
                     'modified_date' => date('Y-m-d H:i:s')
                 );
                 
