@@ -520,13 +520,13 @@
             var warning = document.getElementById('global-stock-warning');
             var main = document.getElementById('main');
             if (warning && main) {
-              main.parentNode.insertBefore(warning, main.nextSibling);
+      //        main.parentNode.insertBefore(warning, main.nextSibling);
             }
           });
         </script>
 
             <div id="warnings" style="overflow: hidden;
-  word-break: break-all;display:none;">
+  word-break: break-all;">
 
                 <?php
                 $CI =& get_instance();
@@ -560,7 +560,7 @@
             padding: 0;
             padding-bottom: 0px;
             padding-bottom: 52px;
-            position: relative;display:none">
+            position: relative;">
                     <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following items are Not In stock!</h4>
                     <ul style="margin-bottom:0;">
                         <?php foreach($not_exists_items as $item): ?>
@@ -595,7 +595,7 @@
             padding: 0;
             padding-bottom: 0px;
             padding-bottom: 52px;
-            position: relative;display:none">
+            position: relative;">
                     <h4><i class="fa fa-exclamation-triangle"></i> Warning: The following packings are not exits in stock!</h4>
                     <ul style="margin-bottom:0;">
                         <?php foreach($not_exists_packing as $packing): ?>

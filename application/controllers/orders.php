@@ -857,6 +857,8 @@ echo json_encode('Success');
     public function save($order_number) {
         // Check stock availability before completing the order
         $order_info = $this->model_order->getOrder($order_number);
+       // print_r($order_info);
+       // exit;
         $stock_errors = array();
         $has_stock_issues = false;
 $packing_price=0;
@@ -894,7 +896,7 @@ $packing_price=0;
             $this->model_order->updateorder($order_number);
             
             // Deduct stock after successful order completion
-            $stock_deduction_success = $this->model_order->deductStockForOrder($order_number);
+            $stock_deduction_success = $this->model_order->deductStockForOrder($order_number,$item_id);
             $stock_deduction_success = $this->model_order->deductStockForPacking($order_number,$packing_id,$oi['packing_quantity'],$oi['packing_limit']);
             // Insert ledger entry
             $this->model_order->insertOrderLedger($packing_price,$oi['shop_id'], $order_number, $oi['created_date'], $oi['order_price']*$oi['order_quantity'],'', 'xyz', 'debit');
@@ -1060,6 +1062,8 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
                 $this->model_order->updateStockRestorationStatus($order_number);
                 echo json_encode(array('success' => true, 'message' => 'Order cancelled successfully and stock restored'));
             $this->model_order->updateOrderLedgerNew($order_number);
+            $this->model_order->updateCostLogForItem($order_number);
+            $this->model_order->updateCostLogForPacking($order_number);
             } else {
                 echo json_encode(array('success' => true, 'message' => 'Order cancelled but failed to restore stock. Please contact administrator.'));
             }

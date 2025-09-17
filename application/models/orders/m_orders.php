@@ -413,10 +413,14 @@ $this->db->where("packing_id", $packing_id);
         // For now, return true until the cancelled_orders table is created
         return true;
     }
-    public function getOrder($order_number){
+    public function getOrder($order_number,$item_id=null){
         $this->db->where('order_number',$order_number);
-        
+        if($item_id){
+            $this->db->where('item_fk',$item_id);
+
+        }
         $query = $this->db->get("orders");
+        //echo $this->db->last_query();
         $dat=array();
       if (sizeof($query->result_array()) > 0) {
             foreach ($query->result_array() as $value) {
@@ -640,6 +644,11 @@ public function updateorder($order_number){
 
     // Insert a ledger entry for an order (now with type)
     public function insertOrderLedger($packing_price,$shop_id,$order_number, $date, $amount, $payment_method = null, $remarks = null, $type = 'credit') {
+        if($packing_price){
+            $packing_price = $packing_price;
+        }else{
+            $packing_price = 0;
+        }
         $data = array(
             'order_number' => $order_number,
             'date' => $date,
@@ -699,6 +708,14 @@ public function updateorder($order_number){
     public function updateOrderLedgerNew($order_number) {
         $this->db->where('order_number', $order_number);
         return $this->db->update('order_ledger', array('status' => 2));
+    }
+    public function updateCostLogForItem($order_number) {
+        $this->db->where('order_number', $order_number);
+        return $this->db->update('stock_cost_logs', array('status' => 2));
+    }
+    public function updateCostLogForPacking($order_number) {
+        $this->db->where('order_number', $order_number);
+        return $this->db->update('packingstock_cost_logs', array('status' => 2));
     }
 
     // Get all ledger entries (include type)
@@ -835,11 +852,11 @@ public function updateorder($order_number){
      * @param string $order_number Order number
      * @return bool Success status
      */
-    public function deductStockForOrder($order_number) {
+    public function deductStockForOrder($order_number,$item_id) {
         $this->load->model('stocks/m_stocks', 'model_stock');
         
         // Get order details
-        $order_info = $this->getOrder($order_number);
+        $order_info = $this->getOrder($order_number,$item_id);
         if (empty($order_info)) {
             return false;
         }
