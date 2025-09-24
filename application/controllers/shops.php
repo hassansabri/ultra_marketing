@@ -35,10 +35,18 @@
         
     }
 public function addnewsupplier(){
+    if (!has_permission_type('Shops','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
     $this->data["update"] = "no";   
     $this->load->view('shops/add_new_supplier', $this->data);
 }
 public function addnewcrediter(){
+    if (!has_permission_type('Shops','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
     $this->data["update"] = "no";   
     $this->load->view('shops/add_new_crediter', $this->data);
 }
@@ -78,6 +86,10 @@ public function getstates(){
    
                         }
          public function addshop(){
+            if (!has_permission_type('Shops','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
            $sdat['shop_name'] = $this->input->post('shop_name');
            $sdat['shop_owner'] =  $this->input->post('shop_owner');
             $sdat['shop_email'] = $this->input->post('shop_email');
@@ -97,16 +109,25 @@ public function getstates(){
         $this->load->view("shops/all_shops", $this->data);
          }
          public function crediters(){
+           
             $this->data["all_shops"] = $this->model_shops->getallcrediters();
         $this->load->view("shops/all_shops", $this->data);
          }
          
          public function editshop($shop_id=false){
+            if (!has_permission_type('Shops','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
             $this->data["update"]  = "no";
              $this->data["shop_detail"] =      $this->model_shops->getshopdetail($shop_id);
                $this->load->view('shops/editshop', $this->data);
          }
          public function updateshop($shop_id=false){
+            if (!has_permission_type('Shops','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
              $sdat['shop_name'] = $this->input->post('shop_name');
            $sdat['shop_owner'] =  $this->input->post('shop_owner');
             $sdat['shop_email'] = $this->input->post('shop_email');
@@ -121,6 +142,10 @@ public function getstates(){
                 redirect(site_url() . '/shops/editshop/'.$shop_id);
          }
   public function changestatus() {
+    if (!has_permission_type('Shops','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
         $shop_id = $this->input->post("shop_id");
         $status = $this->input->post("status");
         if ($shop_id != "") {
@@ -135,7 +160,10 @@ public function getstates(){
         }
     }
     public function ledger($shop_id) {
-        
+          if (!has_permission_type('Ledger','view',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
         $this->data['shop_ledger'] = $this->model_orders->getShopLedger($shop_id);
         $this->data['shop_detail'] = $this->model_shops->getshopdetail($shop_id);
         $this->load->view('shops/shop_ledger', $this->data);

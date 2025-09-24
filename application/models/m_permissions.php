@@ -542,7 +542,8 @@ class M_permissions extends CI_Model {
             'import' => 'Import',
             'approve' => 'Approve',
             'reject' => 'Reject',
-            'print' => 'Print'
+            'print' => 'Print',
+            'review' => 'Review'
         ];
     }
     

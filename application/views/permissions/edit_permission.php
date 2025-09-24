@@ -59,7 +59,7 @@
                                         <select class="form-control" name="permission_type" required>
                                             <option value="">-- Select Type --</option>
                                             <?php foreach ($permission_types as $type): ?>
-                                                <option value="<?php echo $type; ?>" <?php echo set_select('permission_type', $type, $permission['permission_type'] == $type); ?>><?php echo htmlspecialchars(ucfirst($type)); ?></option>
+                                                <option value="<?php echo  lcfirst($type)?>" <?php echo set_select('permission_type', lcfirst($type), $permission['permission_type'] == lcfirst($type)); ?>><?php echo htmlspecialchars(lcfirst($type)); ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <?php echo form_error('permission_type', '<span class="text-danger">', '</span>'); ?>

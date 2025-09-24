@@ -28,12 +28,19 @@
 
     }    
     public function index() {
- 
+ if (!has_permission_type('Categories','view',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data["all_categories"] = $this->model_category->getallcategories();
         $this->load->view("categories/all_categories", $this->data);
         
     }
 public function addcategory(){
+    if (!has_permission_type('Categories','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
     $this->data["update"] = "no";   
     $this->data["all_categories"] = $this->model_category->getallcategories('1');
     
@@ -75,6 +82,10 @@ public function getstates(){
    
                         }
          public function submitcategory(){
+            if (!has_permission_type('Categories','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
            $sdat['category_name'] = $this->input->post('category_name');
            $sdat['parent_id'] =  $this->input->post('parent_id');
            $this->model_category->adddcategory($sdat);
@@ -82,18 +93,30 @@ public function getstates(){
          }
          
          public function editcategory($category_id=false){
+            if (!has_permission_type('Categories','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
             $this->data["update"]  = "no";
             $this->data["all_categories"] = $this->model_category->getallcategories();
              $this->data["category_detail"] =      $this->model_category->getcategorydetail($category_id);
                $this->load->view('categories/editcategory', $this->data);
          }
          public function updatecategory($category_id=false){
+            if (!has_permission_type('Categories','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
              $sdat['category_name'] = $this->input->post('category_name');
            $sdat['parent_id'] =  $this->input->post('parent_id');
             $this->model_category->updatecategory($sdat,$category_id);
                 redirect(site_url() . '/categories/editcategory/'.$category_id);
          }
           public function changestatus() {
+             if (!has_permission_type('Categories','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $category_id = $this->input->post("category_id");
         $status = $this->input->post("status");
         if ($category_id != "") {

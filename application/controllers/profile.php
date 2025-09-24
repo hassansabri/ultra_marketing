@@ -22,6 +22,10 @@ class profile extends CI_Controller {
      * Display all profiles
      */
     public function index() {
+         if (!has_permission_type('Profile','view',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['all_profiles'] = $this->model_profile->getAllProfiles();
         $this->load->view('profile/all_profiles', $this->data);
     }
@@ -75,6 +79,10 @@ class profile extends CI_Controller {
      * Edit existing profile
      */
     public function editprofile($profile_id = false) {
+        if (!has_permission_type('Profile','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
         if (!$profile_id) {
             redirect(site_url() . 'profile');
         }

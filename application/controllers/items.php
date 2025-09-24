@@ -35,13 +35,21 @@
         
     }
 public function additem(){
-    $this->data["update"] = "no";   
-         $this->data["all_categories"] = $this->model_category->getallcategories();    
-         $this->data["all_brands"] = $this->model_item->getallbrands();
-    $this->load->view('items/add_new_item', $this->data);
-}
-public function addnewitem(){
-    
+    if (!has_permission_type('Items','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        } 
+        $this->data["update"] = "no";   
+        $this->data["all_categories"] = $this->model_category->getallcategories();    
+        $this->data["all_brands"] = $this->model_item->getallbrands();
+        $this->load->view('items/add_new_item', $this->data);
+    }
+    public function addnewitem(){
+        
+        if (!has_permission_type('Items','create',$this->session->userdata('uid'))) {
+                echo 'you dont have permissions';
+                exit;
+            } 
            $sdat['item_name'] = $this->input->post('item_name');
            $sdat['item_price'] = $this->input->post('item_price');
            $sdat['item_code'] = $this->input->post('item_code');
@@ -96,6 +104,10 @@ public function getstates(){
          }
          
          public function edititem($item_id=false){
+                 if (!has_permission_type('Items','edit',$this->session->userdata('uid'))) {
+                echo 'you dont have permissions';
+                exit;
+            } 
             $this->data["update"]  = "no";
             
             $this->data["all_categories"] = $this->model_category->getallcategories();
@@ -104,6 +116,10 @@ public function getstates(){
                $this->load->view('items/edititem', $this->data);
          }
          public function updateitem($item_id=false){
+             if (!has_permission_type('Items','edit',$this->session->userdata('uid'))) {
+                echo 'you dont have permissions';
+                exit;
+            }                                                                                                                               
              $sdat['item_name'] = $this->input->post('item_name');
              $sdat['item_price'] = $this->input->post('item_price');
              $sdat['item_code'] = $this->input->post('item_code');
@@ -116,6 +132,10 @@ public function getstates(){
                 redirect(site_url() . '/items/edititem/'.$item_id);
          }
           public function changestatus() {
+            if (!has_permission_type('Items','delete',$this->session->userdata('uid'))) {
+                echo 'you dont have permissions';
+                exit;
+            }
         $item_id = $this->input->post("item_id");
         $status = $this->input->post("status");
         if ($item_id != "") {

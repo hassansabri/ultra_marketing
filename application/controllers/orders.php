@@ -28,6 +28,11 @@ class orders extends CI_Controller {
     }
 
     public function index() {
+        
+        if (!has_permission_type('Orders','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['order_number'] = rand(0000,9999);
         $this->data['all_items'] = $this->model_order->getAllItems();
         $this->data["all_brands"] = $this->model_order->getallbrands();
@@ -38,6 +43,10 @@ class orders extends CI_Controller {
     }
     public function show_invoice($order_number = null) {
         // If no order number provided, redirect to draft orders
+        if (!has_permission_type('orders','review',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         if (!$order_number) {
             redirect(site_url() . 'orders/draftorders');
         }
@@ -586,11 +595,19 @@ echo json_encode('Success');
     }
 
     public function completeorders() {
+        if (!has_permission_type('Orders','approve',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['all_complete_orders'] = $this->model_order->getAllCompleteOrders();
         $this->load->view('orders/all_complete_orders', $this->data);
     }
 
     public function cancelledorders() {
+        if (!has_permission_type('Orders','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         // Get working cancellation data
         $this->data['all_cancelled_orders'] = $this->model_order->getAllCancelledOrders();
         $this->data['cancellation_stats'] = $this->model_order->getCancellationStats();
@@ -599,6 +616,10 @@ echo json_encode('Success');
     }
 
     public function editorder($order_number) {
+        if (!has_permission_type('Orders','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['order_info'] = $this->model_order->getOrder($order_number);
         $itemids = $this->model_order->getitemidsfromordernumber($order_number);
         foreach ($this->data['order_info'] as $oi) {
@@ -673,6 +694,10 @@ echo json_encode('Success');
     }
 
     public function deleteorderdetail() {
+         if (!has_permission_type('Orders','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $item_id = $this->input->post('item_id');
         $order_number = $this->input->post('order_number');
 
@@ -692,7 +717,10 @@ echo json_encode('Success');
     }
 
     public function draft_order_updater($order_number) {
-
+        if (!has_permission_type('Orders','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $item_ids = array();
         $item_ids = $this->input->post('item_ids');
         $item_qty = $this->input->post('item_qty');
@@ -783,6 +811,10 @@ echo json_encode('Success');
     }
 
     public function review($order_number) {
+         if (!has_permission_type('orders','review',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         // Get order information
         $this->data['order_info'] = $this->model_order->getOrder($order_number);
         $this->data['order_number'] = $order_number;
@@ -855,6 +887,10 @@ echo json_encode('Success');
     }
 
     public function save($order_number) {
+         if (!has_permission_type('Orders','approve',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         // Check stock availability before completing the order
         $order_info = $this->model_order->getOrder($order_number);
        // print_r($order_info);
@@ -918,6 +954,10 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
 
     // List all ledger entries for all orders
     public function ledger() {
+        if (!has_permission_type('ledger','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['ledger_entries'] = $this->model_order->getAllOrderLedger();
         $this->data['all_shops'] = $this->model_order->getallshops();
         $this->data['payment_options'] = $this->model_order->getAllPaymentOptions();
@@ -926,6 +966,10 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
 
     // Add a ledger entry (POST)
     public function add_ledger_entry() {
+        if (!has_permission_type('ledger','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $shop_id = $this->input->post('shop_id');
             $order_number = $this->input->post('order_number');
@@ -960,6 +1004,10 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
             
             // Edit a ledger entry (GET for form, POST for update)
             public function edit_ledger_entry($ledger_id) {
+                if (!has_permission_type('ledger','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $shop_id = $this->input->post('shop_id');
                     $order_number = $this->input->post('order_number');
@@ -994,6 +1042,10 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
 
     // Delete a ledger entry
     public function delete_ledger_entry($ledger_id) {
+        if (!has_permission_type('ledger','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->model_order->deleteOrderLedger($ledger_id);
         redirect(site_url('orders/ledger'));
     }
@@ -1023,6 +1075,10 @@ $this->model_order->insertPackingCostLogs($packing_id,$packing_detail['packing_c
      * Cancel an order via AJAX with reason
      */
     public function cancel_order_ajax() {
+         if (!has_permission_type('Orders','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode(array('success' => false, 'message' => 'Invalid request method'));
             return;

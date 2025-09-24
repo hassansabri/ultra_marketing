@@ -10,11 +10,19 @@ class Packing_options extends CI_Controller {
     }
     
     public function index() {
+        if (!has_permission_type('Packing Options','view',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data['packing_options'] = $this->model_order->getAllPackingOptions2();
         $this->load->view('packing_options/index', $this->data);
     }
     
     public function add() {
+          if (!has_permission_type('Packing Options','create',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->data = array();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->form_validation->set_rules('packing_title', 'Packing Title', 'required|trim');
@@ -39,6 +47,10 @@ class Packing_options extends CI_Controller {
     }
     
     public function edit($packing_id) {
+        if (!has_permission_type('Packing Options','edit',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->form_validation->set_rules('packing_title', 'Packing Title', 'required|trim');
             $this->form_validation->set_rules('packing_cost', 'Packing Cost', 'numeric');
@@ -64,6 +76,10 @@ class Packing_options extends CI_Controller {
     }
     
     public function delete($packing_id) {
+        if (!has_permission_type('Packing Options','delete',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         // Check if packing option is being used in orders
         $this->db->where('packing_id', $packing_id);
         $orders_count = $this->db->count_all_results('orders');
@@ -80,6 +96,10 @@ class Packing_options extends CI_Controller {
     }
     
     public function toggle_status($packing_id) {
+        if (!has_permission_type('Packing Options','approve',$this->session->userdata('uid'))) {
+            echo 'you dont have permissions';
+            exit;
+        }
         $this->db->select('status');
         $this->db->where('packing_id', $packing_id);
         $query = $this->db->get('packing_options');

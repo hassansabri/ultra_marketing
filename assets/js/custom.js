@@ -380,6 +380,7 @@ $(".dp").datepicker({
             //alert(obj);
         });
         $('#of').prop('disabled',false);
+        $('#or').prop('disabled',false);
 
             }
 
@@ -583,6 +584,8 @@ let myVariable = 4;
         });
     },
    initorder:function(value,flag,order_number){
+    $('#of').prop('disabled',true);
+    $('#or').prop('disabled',true);
     $.ajax({
             url: baseurl + '/orders/initorder',
             type: 'post',
