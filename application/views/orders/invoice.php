@@ -298,6 +298,7 @@
                                 <div class="row" style="margin-top: 30px;">
                                     <div class="col-md-12 text-center">
                                         <div class="btn-group">
+                                            <button type="button" class="btn btn-default" id="cb">cb</button>
                                             <button onclick="window.print()" class="btn btn-primary">
                                                 <i class="fa fa-print"></i> Print Invoice
                                             </button>
@@ -321,6 +322,42 @@
     </div>
     <!-- END MAIN CONTENT -->
 </div>
+
+<div class="modal fade" id="cbFieldsModal" tabindex="-1" role="dialog" aria-labelledby="cbFieldsModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cbFieldsModalLabel">cb</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="cb-field-1">1</label>
+                    <input type="text" class="form-control" id="cb-field-1">
+                </div>
+                <div class="form-group">
+                    <label for="cb-field-2">2</label>
+                    <input type="text" class="form-control" id="cb-field-2">
+                </div>
+                <div class="form-group">
+                    <label for="cb-field-3">3</label>
+                    <input type="text" class="form-control" id="cb-field-3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).on('click', '#cb', function (e) {
+        e.preventDefault();
+        $('#cbFieldsModal').modal('show');
+    });
+</script>
 
 <style>
     .invoice-box table tr.information table td{
